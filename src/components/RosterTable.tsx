@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
+import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Trash2, Plus } from 'lucide-react';
