@@ -1,0 +1,147 @@
+
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { Player, CustomerInfo, ProductInfo, BulkOptions } from '@/types';
+import { v4 as uuidv4 } from 'uuid';
+
+interface RosterContextType {
+  players: Player[];
+  customerInfo: CustomerInfo;
+  productInfo: ProductInfo;
+  bulkOptions: BulkOptions;
+  addPlayers: (count: number) => void;
+  removePlayer: (id: string) => void;
+  updatePlayer: (id: string, data: Partial<Player>) => void;
+  updateCustomerInfo: (data: Partial<CustomerInfo>) => void;
+  updateProductInfo: (data: Partial<ProductInfo>) => void;
+  updateBulkOptions: (data: Partial<BulkOptions>) => void;
+  addImage: (image: string) => void;
+  removeImage: (index: number) => void;
+}
+
+const RosterContext = createContext<RosterContextType | undefined>(undefined);
+
+// Helper function to generate random numbers
+const generateNumber = (fillType: 'odd' | 'even' | 'random', index: number): string => {
+  if (fillType === 'odd') {
+    return `${index * 2 + 1}`;
+  } else if (fillType === 'even') {
+    return `${(index + 1) * 2}`;
+  } else {
+    return `${Math.floor(Math.random() * 99) + 1}`;
+  }
+};
+
+export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
+    teamName: '',
+    contactName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+  });
+  const [productInfo, setProductInfo] = useState<ProductInfo>({
+    name: '',
+    pricePerItem: 0,
+    notes: '',
+    images: [],
+  });
+  const [bulkOptions, setBulkOptions] = useState<BulkOptions>({
+    defaultGender: 'Male',
+    defaultSize: 'M',
+    numberFillType: 'manual',
+    showShortsSize: false,
+    showSockSize: false,
+    showInitials: false,
+  });
+
+  const addPlayers = (count: number) => {
+    const newPlayers = Array.from({ length: count }, (_, index) => {
+      const existingCount = players.length;
+      return {
+        id: uuidv4(),
+        name: '',
+        number: bulkOptions.numberFillType !== 'manual' 
+          ? generateNumber(bulkOptions.numberFillType, existingCount + index) 
+          : '',
+        size: bulkOptions.defaultSize,
+        gender: bulkOptions.defaultGender,
+        shortsSize: bulkOptions.defaultSize,
+        sockSize: bulkOptions.defaultSize,
+        initials: '',
+      };
+    });
+
+    setPlayers([...players, ...newPlayers]);
+  };
+
+  const removePlayer = (id: string) => {
+    setPlayers(players.filter(player => player.id !== id));
+  };
+
+  const updatePlayer = (id: string, data: Partial<Player>) => {
+    setPlayers(players.map(player => 
+      player.id === id ? { ...player, ...data } : player
+    ));
+  };
+
+  const updateCustomerInfo = (data: Partial<CustomerInfo>) => {
+    setCustomerInfo({ ...customerInfo, ...data });
+  };
+
+  const updateProductInfo = (data: Partial<ProductInfo>) => {
+    setProductInfo({ ...productInfo, ...data });
+  };
+
+  const updateBulkOptions = (data: Partial<BulkOptions>) => {
+    setBulkOptions({ ...bulkOptions, ...data });
+  };
+
+  const addImage = (image: string) => {
+    if (productInfo.images.length < 4) {
+      setProductInfo({
+        ...productInfo,
+        images: [...productInfo.images, image]
+      });
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const newImages = [...productInfo.images];
+    newImages.splice(index, 1);
+    setProductInfo({
+      ...productInfo,
+      images: newImages
+    });
+  };
+
+  return (
+    <RosterContext.Provider value={{
+      players,
+      customerInfo,
+      productInfo,
+      bulkOptions,
+      addPlayers,
+      removePlayer,
+      updatePlayer,
+      updateCustomerInfo,
+      updateProductInfo,
+      updateBulkOptions,
+      addImage,
+      removeImage
+    }}>
+      {children}
+    </RosterContext.Provider>
+  );
+};
+
+export const useRoster = (): RosterContextType => {
+  const context = useContext(RosterContext);
+  if (context === undefined) {
+    throw new Error('useRoster must be used within a RosterProvider');
+  }
+  return context;
+};
