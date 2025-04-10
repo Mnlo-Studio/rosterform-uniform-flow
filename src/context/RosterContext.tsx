@@ -30,14 +30,29 @@ const generateNumber = (fillType: 'odd' | 'even' | 'random', index: number): str
   }
 };
 
-// Helper function to generate player names
-const generateName = (prefixType: 'none' | 'player' | 'custom', prefix: string, index: number): string => {
+// Update the helper function to handle name casing
+const generateName = (
+  prefixType: 'none' | 'player' | 'custom', 
+  prefix: string, 
+  index: number, 
+  caseType: 'normal' | 'uppercase' | 'lowercase'
+): string => {
+  let name = '';
   if (prefixType === 'none') {
-    return '';
+    name = '';
   } else if (prefixType === 'player') {
-    return `Player ${index + 1}`;
+    name = `Player ${index + 1}`;
   } else {
-    return `${prefix} ${index + 1}`;
+    name = `${prefix} ${index + 1}`;
+  }
+
+  switch(caseType) {
+    case 'uppercase':
+      return name.toUpperCase();
+    case 'lowercase':
+      return name.toLowerCase();
+    default:
+      return name;
   }
 };
 
@@ -65,6 +80,7 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     numberFillType: 'manual',
     namePrefixType: 'none',
     namePrefix: '',
+    nameCaseType: 'normal',
     showShortsSize: false,
     showSockSize: false,
     showInitials: false,
@@ -75,7 +91,12 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       const existingCount = players.length;
       return {
         id: uuidv4(),
-        name: generateName(bulkOptions.namePrefixType, bulkOptions.namePrefix, existingCount + index),
+        name: generateName(
+          bulkOptions.namePrefixType, 
+          bulkOptions.namePrefix, 
+          existingCount + index,
+          bulkOptions.nameCaseType
+        ),
         number: bulkOptions.numberFillType !== 'manual' 
           ? generateNumber(bulkOptions.numberFillType, existingCount + index) 
           : '',

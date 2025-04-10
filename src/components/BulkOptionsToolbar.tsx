@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { 
@@ -35,6 +34,10 @@ const BulkOptionsToolbar: React.FC = () => {
 
   const handleNamePrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateBulkOptions({ namePrefix: e.target.value });
+  };
+
+  const handleNameCaseChange = (value: 'normal' | 'uppercase' | 'lowercase') => {
+    updateBulkOptions({ nameCaseType: value });
   };
 
   const toggleOption = (option: keyof Pick<typeof bulkOptions, 'showShortsSize' | 'showSockSize' | 'showInitials'>) => {
@@ -109,6 +112,23 @@ const BulkOptionsToolbar: React.FC = () => {
               <SelectItem value="none">None</SelectItem>
               <SelectItem value="player">Player #</SelectItem>
               <SelectItem value="custom">Custom</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <div>
+          <Label htmlFor="nameCaseType" className="text-sm">Name Case</Label>
+          <Select 
+            value={bulkOptions.nameCaseType} 
+            onValueChange={(value) => handleNameCaseChange(value as any)}
+          >
+            <SelectTrigger id="nameCaseType" className="w-full">
+              <SelectValue placeholder="Select name case" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="normal">Normal</SelectItem>
+              <SelectItem value="uppercase">UPPERCASE</SelectItem>
+              <SelectItem value="lowercase">lowercase</SelectItem>
             </SelectContent>
           </Select>
         </div>
