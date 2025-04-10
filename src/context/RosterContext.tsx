@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Player, CustomerInfo, ProductInfo, BulkOptions } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,6 +30,17 @@ const generateNumber = (fillType: 'odd' | 'even' | 'random', index: number): str
   }
 };
 
+// Helper function to generate player names
+const generateName = (prefixType: 'none' | 'player' | 'custom', prefix: string, index: number): string => {
+  if (prefixType === 'none') {
+    return '';
+  } else if (prefixType === 'player') {
+    return `Player ${index + 1}`;
+  } else {
+    return `${prefix} ${index + 1}`;
+  }
+};
+
 export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
@@ -53,6 +63,8 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     defaultGender: 'Male',
     defaultSize: 'M',
     numberFillType: 'manual',
+    namePrefixType: 'none',
+    namePrefix: '',
     showShortsSize: false,
     showSockSize: false,
     showInitials: false,
@@ -63,7 +75,7 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       const existingCount = players.length;
       return {
         id: uuidv4(),
-        name: '',
+        name: generateName(bulkOptions.namePrefixType, bulkOptions.namePrefix, existingCount + index),
         number: bulkOptions.numberFillType !== 'manual' 
           ? generateNumber(bulkOptions.numberFillType, existingCount + index) 
           : '',

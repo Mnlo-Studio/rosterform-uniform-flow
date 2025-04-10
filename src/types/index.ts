@@ -32,6 +32,8 @@ export type BulkOptions = {
   defaultGender: string;
   defaultSize: string;
   numberFillType: 'manual' | 'odd' | 'even' | 'random';
+  namePrefixType: 'none' | 'player' | 'custom';
+  namePrefix: string;
   showShortsSize: boolean;
   showSockSize: boolean;
   showInitials: boolean;

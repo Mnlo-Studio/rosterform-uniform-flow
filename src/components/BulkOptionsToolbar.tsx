@@ -10,9 +10,12 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const BulkOptionsToolbar: React.FC = () => {
   const { bulkOptions, updateBulkOptions } = useRoster();
+  const isMobile = useIsMobile();
 
   const handleGenderChange = (value: string) => {
     updateBulkOptions({ defaultGender: value });
@@ -24,6 +27,14 @@ const BulkOptionsToolbar: React.FC = () => {
 
   const handleNumberFillChange = (value: 'manual' | 'odd' | 'even' | 'random') => {
     updateBulkOptions({ numberFillType: value });
+  };
+
+  const handleNamePrefixTypeChange = (value: 'none' | 'player' | 'custom') => {
+    updateBulkOptions({ namePrefixType: value });
+  };
+
+  const handleNamePrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateBulkOptions({ namePrefix: e.target.value });
   };
 
   const toggleOption = (option: keyof Pick<typeof bulkOptions, 'showShortsSize' | 'showSockSize' | 'showInitials'>) => {
@@ -84,9 +95,39 @@ const BulkOptionsToolbar: React.FC = () => {
             </SelectContent>
           </Select>
         </div>
+        
+        <div>
+          <Label htmlFor="namePrefixType" className="text-sm">Name Auto-Fill</Label>
+          <Select 
+            value={bulkOptions.namePrefixType} 
+            onValueChange={(value) => handleNamePrefixTypeChange(value as any)}
+          >
+            <SelectTrigger id="namePrefixType" className="w-full">
+              <SelectValue placeholder="Select name pattern" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">None</SelectItem>
+              <SelectItem value="player">Player #</SelectItem>
+              <SelectItem value="custom">Custom</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       
-      <div className="space-y-3 sm:space-y-0 sm:flex sm:space-x-8">
+      {bulkOptions.namePrefixType === 'custom' && (
+        <div className="mb-4">
+          <Label htmlFor="namePrefix" className="text-sm">Custom Name Prefix</Label>
+          <Input 
+            id="namePrefix" 
+            value={bulkOptions.namePrefix} 
+            onChange={handleNamePrefixChange} 
+            placeholder="Enter prefix (e.g. 'Team Member')"
+            className="w-full"
+          />
+        </div>
+      )}
+      
+      <div className={`${isMobile ? 'space-y-3' : 'flex space-x-8'}`}>
         <div className="flex items-center space-x-2">
           <Switch 
             id="showShortsSize" 
