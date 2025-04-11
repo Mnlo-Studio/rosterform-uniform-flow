@@ -16,6 +16,13 @@ const RosterHeader: React.FC<RosterHeaderProps> = ({ onAddPlayers }) => {
         <Button 
           variant="outline" 
           size="sm"
+          onClick={() => onAddPlayers(1)}
+        >
+          <Plus size={16} className="mr-1" /> 1
+        </Button>
+        <Button 
+          variant="outline" 
+          size="sm"
           onClick={() => onAddPlayers(5)}
         >
           <Plus size={16} className="mr-1" /> 5
