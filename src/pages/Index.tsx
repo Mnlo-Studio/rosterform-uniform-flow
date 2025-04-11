@@ -6,7 +6,6 @@ import ProductInfoForm from '@/components/ProductInfoForm';
 import { BulkOptionsToolbar } from '@/components/bulk-options';
 import RosterTable from '@/components/RosterTable';
 import OrderSummary from '@/components/OrderSummary';
-import SubmitOrderButton from '@/components/SubmitOrderButton';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
@@ -25,10 +24,6 @@ const Index = () => {
             <RosterTable />
             <OrderSummary />
           </div>
-          
-          <div className="mt-8 flex justify-center">
-            <SubmitOrderButton />
-          </div>
         </div>
       </div>
     </RosterProvider>
@@ -36,3 +31,4 @@ const Index = () => {
 };
 
 export default Index;
+

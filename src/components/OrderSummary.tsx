@@ -1,16 +1,87 @@
 
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Send } from 'lucide-react';
 import { calculateTotalCost, calculateSizeBreakdown, calculateGenderBreakdown, formatCurrency } from '@/utils/calculations';
+import { useToast } from '@/hooks/use-toast';
 
 const OrderSummary: React.FC = () => {
-  const { players, productInfo } = useRoster();
+  const { players, customerInfo, productInfo } = useRoster();
+  const { toast } = useToast();
   
   const totalPlayers = players.length;
   const totalCost = calculateTotalCost(players, productInfo.pricePerItem);
   const sizeBreakdown = calculateSizeBreakdown(players);
   const genderBreakdown = calculateGenderBreakdown(players);
+
+  const validateForm = () => {
+    // Validate customer info
+    if (!customerInfo.teamName || !customerInfo.contactName || 
+        !customerInfo.email || !customerInfo.phone || 
+        !customerInfo.address || !customerInfo.city || 
+        !customerInfo.state || !customerInfo.zipCode) {
+      toast({
+        title: "Missing customer information",
+        description: "Please fill in all required customer fields.",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    // Validate product info
+    if (!productInfo.name || productInfo.pricePerItem <= 0) {
+      toast({
+        title: "Missing product information",
+        description: "Please fill in all required product fields.",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    // Validate roster
+    if (players.length === 0) {
+      toast({
+        title: "Empty roster",
+        description: "Please add at least one player to the roster.",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    const invalidPlayers = players.filter(player => 
+      !player.name || !player.number || !player.size || !player.gender
+    );
+    
+    if (invalidPlayers.length > 0) {
+      toast({
+        title: "Incomplete player information",
+        description: `${invalidPlayers.length} player(s) are missing required information.`,
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    return true;
+  };
+  
+  const handleSubmit = () => {
+    if (!validateForm()) return;
+    
+    // In a real app, we would submit the order data to a server
+    console.log('Submitting order:', {
+      customerInfo,
+      productInfo,
+      players
+    });
+    
+    // Show success message
+    toast({
+      title: "Order submitted successfully!",
+      description: "Your uniform order has been submitted. Thank you!",
+    });
+  };
 
   return (
     <Card>
@@ -63,8 +134,19 @@ const OrderSummary: React.FC = () => {
           )}
         </div>
       </CardContent>
+      <CardFooter>
+        <Button 
+          onClick={handleSubmit}
+          size="lg" 
+          className="w-full bg-blue-600 hover:bg-blue-700"
+        >
+          <Send className="mr-2 h-5 w-5" />
+          Submit Order
+        </Button>
+      </CardFooter>
     </Card>
   );
 };
 
 export default OrderSummary;
+
