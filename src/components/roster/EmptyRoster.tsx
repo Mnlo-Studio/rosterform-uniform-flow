@@ -31,7 +31,7 @@ const EmptyRoster: React.FC<EmptyRosterProps> = ({ totalColumns, isMobile, onAdd
         </TableRow>
       )}
       
-      <div className="mt-4 flex justify-center">
+      <div className="mt-4 mb-4 flex justify-end">
         <Button 
           onClick={() => onAddPlayers(5)}
           className="bg-blue-600 hover:bg-blue-700"

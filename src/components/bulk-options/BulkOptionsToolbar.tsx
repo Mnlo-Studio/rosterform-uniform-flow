@@ -66,7 +66,7 @@ const BulkOptionsToolbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 p-5 rounded-lg shadow-sm relative">
+    <div className="bg-gray-50 p-5 rounded-lg shadow-sm relative mb-14">
       <h3 className="text-lg font-semibold text-gray-800 mb-5">Bulk Options</h3>
       
       <div className="space-y-5">
@@ -100,11 +100,11 @@ const BulkOptionsToolbar: React.FC = () => {
         />
       </div>
       
-      <div className="absolute bottom-5 right-5">
+      <div className="absolute -bottom-12 right-0">
         <Button 
           onClick={handleApplyChanges} 
           size="sm" 
-          className="bg-green-600 hover:bg-green-700"
+          className="bg-blue-600 hover:bg-blue-700"
         >
           <Check size={16} className="mr-1" />
           Apply
