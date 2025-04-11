@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Send, Download } from 'lucide-react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
-import { generateOrderZip } from '@/utils/exportUtils';
+import { generateOrderZip } from '@/utils/export'; // Updated import path
 
 const SubmitOrderButton: React.FC = () => {
   const { players, customerInfo, productInfo } = useRoster();
