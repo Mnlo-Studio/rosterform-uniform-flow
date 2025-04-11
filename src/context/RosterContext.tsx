@@ -15,6 +15,7 @@ interface RosterContextType {
   updateBulkOptions: (data: Partial<BulkOptions>) => void;
   addImage: (image: string) => void;
   removeImage: (index: number) => void;
+  applyBulkOptions: () => void;
 }
 
 const RosterContext = createContext<RosterContextType | undefined>(undefined);
@@ -151,6 +152,43 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     });
   };
 
+  const applyBulkOptions = () => {
+    if (players.length === 0) return;
+    
+    setPlayers(players.map(player => {
+      const updatedPlayer = { ...player };
+      
+      updatedPlayer.gender = bulkOptions.defaultGender;
+      
+      updatedPlayer.size = bulkOptions.defaultSize;
+      
+      if (bulkOptions.showShortsSize) {
+        updatedPlayer.shortsSize = bulkOptions.defaultSize;
+      }
+      
+      if (bulkOptions.showSockSize) {
+        updatedPlayer.sockSize = bulkOptions.defaultSize;
+      }
+      
+      if (bulkOptions.numberFillType !== 'manual') {
+        const index = players.findIndex(p => p.id === player.id);
+        updatedPlayer.number = generateNumber(bulkOptions.numberFillType, index);
+      }
+      
+      if (bulkOptions.namePrefixType !== 'none') {
+        const index = players.findIndex(p => p.id === player.id);
+        updatedPlayer.name = generateName(
+          bulkOptions.namePrefixType,
+          bulkOptions.namePrefix,
+          index,
+          bulkOptions.nameCaseType
+        );
+      }
+      
+      return updatedPlayer;
+    }));
+  };
+
   return (
     <RosterContext.Provider value={{
       players,
@@ -164,7 +202,8 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       updateProductInfo,
       updateBulkOptions,
       addImage,
-      removeImage
+      removeImage,
+      applyBulkOptions
     }}>
       {children}
     </RosterContext.Provider>
