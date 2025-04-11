@@ -1,4 +1,3 @@
-
 import React, { useState, ReactNode } from 'react';
 import { Player, CustomerInfo, ProductInfo, BulkOptions } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -32,7 +31,7 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
     defaultSize: 'M',
     numberFillType: 'custom',
     numberPrefix: '',
-    namePrefixType: 'none',
+    namePrefixType: 'custom',
     namePrefix: '',
     nameCaseType: 'normal',
     showShortsSize: false,

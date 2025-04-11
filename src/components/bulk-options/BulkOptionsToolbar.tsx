@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -78,6 +79,7 @@ const BulkOptionsToolbar: React.FC = () => {
           onNameCaseChange={handleNameCaseChange}
         />
         
+        {/* 5. Custom Name Prefix */}
         {bulkOptions.namePrefixType === 'custom' && (
           <CustomNamePrefixInput 
             prefix={bulkOptions.namePrefix} 
@@ -85,6 +87,7 @@ const BulkOptionsToolbar: React.FC = () => {
           />
         )}
         
+        {/* 6. Custom Number Prefix */}
         {bulkOptions.numberFillType === 'custom' && (
           <CustomNumberPrefixInput 
             prefix={bulkOptions.numberPrefix || ''} 

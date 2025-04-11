@@ -29,6 +29,7 @@ const DefaultOptionsSection: React.FC<DefaultOptionsSectionProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      {/* 1. Gender */}
       <div>
         <Label htmlFor="defaultGender" className="text-sm font-medium">Default Gender</Label>
         <Select value={bulkOptions.defaultGender} onValueChange={onGenderChange}>
@@ -44,6 +45,7 @@ const DefaultOptionsSection: React.FC<DefaultOptionsSectionProps> = ({
         </Select>
       </div>
       
+      {/* 2. Size */}
       <div>
         <Label htmlFor="defaultSize" className="text-sm font-medium">Default Size</Label>
         <Select value={bulkOptions.defaultSize} onValueChange={onSizeChange}>
@@ -62,6 +64,25 @@ const DefaultOptionsSection: React.FC<DefaultOptionsSectionProps> = ({
         </Select>
       </div>
       
+      {/* 3. Name Auto-Fill */}
+      <div>
+        <Label htmlFor="namePrefixType" className="text-sm font-medium">Name Auto-Fill</Label>
+        <Select 
+          value={bulkOptions.namePrefixType} 
+          onValueChange={(value) => onNamePrefixTypeChange(value as any)}
+        >
+          <SelectTrigger id="namePrefixType" className="w-full mt-1">
+            <SelectValue placeholder="Select name pattern" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="custom">Custom</SelectItem>
+            <SelectItem value="player">Player #</SelectItem>
+            <SelectItem value="none">None</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      
+      {/* 4. Number Auto-Fill */}
       <div>
         <Label htmlFor="numberFill" className="text-sm font-medium">Number Auto-Fill</Label>
         <Select 
@@ -80,23 +101,7 @@ const DefaultOptionsSection: React.FC<DefaultOptionsSectionProps> = ({
         </Select>
       </div>
       
-      <div>
-        <Label htmlFor="namePrefixType" className="text-sm font-medium">Name Auto-Fill</Label>
-        <Select 
-          value={bulkOptions.namePrefixType} 
-          onValueChange={(value) => onNamePrefixTypeChange(value as any)}
-        >
-          <SelectTrigger id="namePrefixType" className="w-full mt-1">
-            <SelectValue placeholder="Select name pattern" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">None</SelectItem>
-            <SelectItem value="player">Player #</SelectItem>
-            <SelectItem value="custom">Custom</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      
+      {/* 5. Name Case */}
       <div>
         <Label htmlFor="nameCaseType" className="text-sm font-medium">Name Case</Label>
         <Select 
