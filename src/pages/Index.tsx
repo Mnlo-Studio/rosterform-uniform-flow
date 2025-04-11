@@ -3,7 +3,7 @@ import React from 'react';
 import { RosterProvider } from '@/context/RosterContext';
 import CustomerInfoForm from '@/components/CustomerInfoForm';
 import ProductInfoForm from '@/components/ProductInfoForm';
-import BulkOptionsToolbar from '@/components/BulkOptionsToolbar';
+import { BulkOptionsToolbar } from '@/components/bulk-options';
 import RosterTable from '@/components/RosterTable';
 import OrderSummary from '@/components/OrderSummary';
 import SubmitOrderButton from '@/components/SubmitOrderButton';
