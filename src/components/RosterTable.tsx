@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { Player } from '@/types';
@@ -30,7 +29,7 @@ const RosterTable: React.FC = () => {
   const totalColumns = 5 + additionalColumnsCount; // #, Name, Number, Size, Gender + additional + Action
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm mb-20">
+    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm mb-24">
       <RosterHeader onAddPlayers={addPlayers} />
       
       {isMobile ? (

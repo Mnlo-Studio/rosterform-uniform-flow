@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -66,7 +65,7 @@ const BulkOptionsToolbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 p-5 rounded-lg shadow-sm relative mb-16">
+    <div className="bg-gray-50 p-5 rounded-lg shadow-sm relative mb-20">
       <h3 className="text-lg font-semibold text-gray-800 mb-5">Bulk Options</h3>
       
       <div className="space-y-5">
@@ -100,7 +99,7 @@ const BulkOptionsToolbar: React.FC = () => {
         />
       </div>
       
-      <div className="absolute -bottom-14 right-0">
+      <div className="absolute -bottom-16 right-0">
         <Button 
           onClick={handleApplyChanges} 
           size="sm" 
