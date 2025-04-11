@@ -15,6 +15,8 @@ import {
 interface PlayerCardProps {
   player: Player;
   index: number;
+  showName: boolean;
+  showNumber: boolean;
   showShortsSize: boolean;
   showSockSize: boolean;
   showInitials: boolean;
@@ -26,6 +28,8 @@ interface PlayerCardProps {
 const PlayerCard: React.FC<PlayerCardProps> = ({
   player,
   index,
+  showName,
+  showNumber,
   showShortsSize,
   showSockSize,
   showInitials,
@@ -48,25 +52,29 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
       </div>
       
       <div className="grid grid-cols-1 gap-2">
-        <div>
-          <label className="block text-xs text-gray-500 mb-1">Name*</label>
-          <Input
-            value={player.name}
-            onChange={(e) => onInputChange(player.id, 'name', e.target.value)}
-            placeholder="Player name"
-            className="h-8"
-          />
-        </div>
+        {showName && (
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">Name</label>
+            <Input
+              value={player.name}
+              onChange={(e) => onInputChange(player.id, 'name', e.target.value)}
+              placeholder="Player name"
+              className="h-8"
+            />
+          </div>
+        )}
         
-        <div>
-          <label className="block text-xs text-gray-500 mb-1">Number*</label>
-          <Input
-            value={player.number}
-            onChange={(e) => onInputChange(player.id, 'number', e.target.value)}
-            placeholder="#"
-            className="h-8"
-          />
-        </div>
+        {showNumber && (
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">Number</label>
+            <Input
+              value={player.number}
+              onChange={(e) => onInputChange(player.id, 'number', e.target.value)}
+              placeholder="#"
+              className="h-8"
+            />
+          </div>
+        )}
         
         <div>
           <label className="block text-xs text-gray-500 mb-1">Size*</label>

@@ -19,6 +19,8 @@ import {
 interface PlayerRowProps {
   player: Player;
   index: number;
+  showName: boolean;
+  showNumber: boolean;
   showShortsSize: boolean;
   showSockSize: boolean;
   showInitials: boolean;
@@ -30,6 +32,8 @@ interface PlayerRowProps {
 const PlayerRow: React.FC<PlayerRowProps> = ({
   player,
   index,
+  showName,
+  showNumber,
   showShortsSize,
   showSockSize,
   showInitials,
@@ -40,22 +44,29 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
   return (
     <TableRow>
       <TableCell>{index + 1}</TableCell>
-      <TableCell>
-        <Input
-          value={player.name}
-          onChange={(e) => onInputChange(player.id, 'name', e.target.value)}
-          placeholder="Player name"
-          className="h-8"
-        />
-      </TableCell>
-      <TableCell>
-        <Input
-          value={player.number}
-          onChange={(e) => onInputChange(player.id, 'number', e.target.value)}
-          placeholder="#"
-          className="h-8"
-        />
-      </TableCell>
+      
+      {showName && (
+        <TableCell>
+          <Input
+            value={player.name}
+            onChange={(e) => onInputChange(player.id, 'name', e.target.value)}
+            placeholder="Player name"
+            className="h-8"
+          />
+        </TableCell>
+      )}
+      
+      {showNumber && (
+        <TableCell>
+          <Input
+            value={player.number}
+            onChange={(e) => onInputChange(player.id, 'number', e.target.value)}
+            placeholder="#"
+            className="h-8"
+          />
+        </TableCell>
+      )}
+      
       <TableCell>
         <Select
           value={player.size}
@@ -75,6 +86,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
           </SelectContent>
         </Select>
       </TableCell>
+      
       <TableCell>
         <Select
           value={player.gender}

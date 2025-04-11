@@ -1,18 +1,18 @@
 
 import React from 'react';
-import {
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface RosterTableHeaderProps {
+  showName: boolean;
+  showNumber: boolean;
   showShortsSize: boolean;
   showSockSize: boolean;
   showInitials: boolean;
 }
 
 const RosterTableHeader: React.FC<RosterTableHeaderProps> = ({
+  showName,
+  showNumber,
   showShortsSize,
   showSockSize,
   showInitials
@@ -20,25 +20,15 @@ const RosterTableHeader: React.FC<RosterTableHeaderProps> = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead className="w-[40px]">#</TableHead>
-        <TableHead>Name*</TableHead>
-        <TableHead className="w-[80px]">Number*</TableHead>
-        <TableHead className="w-[100px]">Size*</TableHead>
-        <TableHead className="w-[100px]">Gender*</TableHead>
-        
-        {showShortsSize && (
-          <TableHead className="w-[100px]">Shorts</TableHead>
-        )}
-        
-        {showSockSize && (
-          <TableHead className="w-[100px]">Socks</TableHead>
-        )}
-        
-        {showInitials && (
-          <TableHead className="w-[100px]">Initials</TableHead>
-        )}
-        
-        <TableHead className="w-[60px]">Action</TableHead>
+        <TableHead className="w-[50px]">#</TableHead>
+        {showName && <TableHead>Name</TableHead>}
+        {showNumber && <TableHead>Number</TableHead>}
+        <TableHead>Size</TableHead>
+        <TableHead>Gender</TableHead>
+        {showShortsSize && <TableHead>Shorts Size</TableHead>}
+        {showSockSize && <TableHead>Sock Size</TableHead>}
+        {showInitials && <TableHead>Initials</TableHead>}
+        <TableHead className="w-[50px]">Actions</TableHead>
       </TableRow>
     </TableHeader>
   );

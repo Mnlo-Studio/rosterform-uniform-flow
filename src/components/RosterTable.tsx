@@ -27,7 +27,12 @@ const RosterTable: React.FC = () => {
     (bulkOptions.showInitials ? 1 : 0);
 
   // Calculate total columns (base columns + additional columns)
-  const totalColumns = 5 + additionalColumnsCount; // #, Name, Number, Size, Gender + additional + Action
+  // Base depends on whether name and number are shown
+  const baseColumnsCount = 3 + // # (index), size, gender
+    (bulkOptions.showName ? 1 : 0) +
+    (bulkOptions.showNumber ? 1 : 0);
+  
+  const totalColumns = baseColumnsCount + additionalColumnsCount + 1; // +1 for action column
 
   return (
     <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm mb-8">
@@ -36,6 +41,8 @@ const RosterTable: React.FC = () => {
       {isMobile ? (
         <MobilePlayerList 
           players={players}
+          showName={bulkOptions.showName}
+          showNumber={bulkOptions.showNumber}
           showShortsSize={bulkOptions.showShortsSize}
           showSockSize={bulkOptions.showSockSize}
           showInitials={bulkOptions.showInitials}
@@ -46,6 +53,8 @@ const RosterTable: React.FC = () => {
       ) : (
         <DesktopPlayerList 
           players={players}
+          showName={bulkOptions.showName}
+          showNumber={bulkOptions.showNumber}
           showShortsSize={bulkOptions.showShortsSize}
           showSockSize={bulkOptions.showSockSize}
           showInitials={bulkOptions.showInitials}
@@ -60,6 +69,7 @@ const RosterTable: React.FC = () => {
         <EmptyRoster 
           totalColumns={totalColumns} 
           isMobile={isMobile} 
+          onAddPlayers={addPlayers}
         />
       )}
     </div>

@@ -11,6 +11,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface DesktopPlayerListProps {
   players: Player[];
+  showName: boolean;
+  showNumber: boolean;
   showShortsSize: boolean;
   showSockSize: boolean;
   showInitials: boolean;
@@ -22,6 +24,8 @@ interface DesktopPlayerListProps {
 
 const DesktopPlayerList: React.FC<DesktopPlayerListProps> = ({
   players,
+  showName,
+  showNumber,
   showShortsSize,
   showSockSize,
   showInitials,
@@ -35,6 +39,8 @@ const DesktopPlayerList: React.FC<DesktopPlayerListProps> = ({
       <div className="w-full min-w-[640px]">
         <Table>
           <RosterTableHeader 
+            showName={showName}
+            showNumber={showNumber}
             showShortsSize={showShortsSize} 
             showSockSize={showSockSize} 
             showInitials={showInitials} 
@@ -46,6 +52,8 @@ const DesktopPlayerList: React.FC<DesktopPlayerListProps> = ({
                   key={player.id}
                   player={player}
                   index={index}
+                  showName={showName}
+                  showNumber={showNumber}
                   showShortsSize={showShortsSize}
                   showSockSize={showSockSize}
                   showInitials={showInitials}

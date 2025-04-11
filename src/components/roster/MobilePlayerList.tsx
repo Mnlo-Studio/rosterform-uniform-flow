@@ -5,6 +5,8 @@ import PlayerCard from './PlayerCard';
 
 interface MobilePlayerListProps {
   players: Player[];
+  showName: boolean;
+  showNumber: boolean;
   showShortsSize: boolean;
   showSockSize: boolean;
   showInitials: boolean;
@@ -15,6 +17,8 @@ interface MobilePlayerListProps {
 
 const MobilePlayerList: React.FC<MobilePlayerListProps> = ({
   players,
+  showName,
+  showNumber,
   showShortsSize,
   showSockSize,
   showInitials,
@@ -33,6 +37,8 @@ const MobilePlayerList: React.FC<MobilePlayerListProps> = ({
           key={player.id}
           player={player}
           index={index}
+          showName={showName}
+          showNumber={showNumber}
           showShortsSize={showShortsSize}
           showSockSize={showSockSize}
           showInitials={showInitials}
