@@ -7,7 +7,7 @@ import { BulkOptions } from '@/types';
 interface ToggleOptionsSectionProps {
   bulkOptions: BulkOptions;
   isMobile: boolean;
-  onToggleOption: (option: keyof Pick<BulkOptions, 'showShortsSize' | 'showSockSize' | 'showInitials'>) => void;
+  onToggleOption: (option: keyof Pick<BulkOptions, 'showName' | 'showNumber' | 'showShortsSize' | 'showSockSize' | 'showInitials'>) => void;
 }
 
 const ToggleOptionsSection: React.FC<ToggleOptionsSectionProps> = ({ 
@@ -17,6 +17,24 @@ const ToggleOptionsSection: React.FC<ToggleOptionsSectionProps> = ({
 }) => {
   return (
     <div className="flex flex-wrap gap-6 pt-2">
+      <div className="flex items-center space-x-2">
+        <Switch 
+          id="showName" 
+          checked={bulkOptions.showName}
+          onCheckedChange={() => onToggleOption('showName')}
+        />
+        <Label htmlFor="showName" className="text-sm font-medium">Name</Label>
+      </div>
+      
+      <div className="flex items-center space-x-2">
+        <Switch 
+          id="showNumber" 
+          checked={bulkOptions.showNumber}
+          onCheckedChange={() => onToggleOption('showNumber')}
+        />
+        <Label htmlFor="showNumber" className="text-sm font-medium">Number</Label>
+      </div>
+      
       <div className="flex items-center space-x-2">
         <Switch 
           id="showShortsSize" 

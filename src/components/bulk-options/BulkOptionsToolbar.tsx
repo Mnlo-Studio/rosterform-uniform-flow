@@ -4,14 +4,14 @@ import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Check, Plus } from 'lucide-react';
+import { Check } from 'lucide-react';
 import DefaultOptionsSection from './DefaultOptionsSection';
 import CustomNamePrefixInput from './CustomNamePrefixInput';
 import CustomNumberPrefixInput from './CustomNumberPrefixInput';
 import ToggleOptionsSection from './ToggleOptionsSection';
 
 const BulkOptionsToolbar: React.FC = () => {
-  const { bulkOptions, updateBulkOptions, players, applyBulkOptions, addPlayers } = useRoster();
+  const { bulkOptions, updateBulkOptions, players, applyBulkOptions } = useRoster();
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
@@ -43,7 +43,7 @@ const BulkOptionsToolbar: React.FC = () => {
     updateBulkOptions({ nameCaseType: value });
   };
 
-  const toggleOption = (option: keyof Pick<typeof bulkOptions, 'showShortsSize' | 'showSockSize' | 'showInitials'>) => {
+  const toggleOption = (option: keyof Pick<typeof bulkOptions, 'showName' | 'showNumber' | 'showShortsSize' | 'showSockSize' | 'showInitials'>) => {
     updateBulkOptions({ [option]: !bulkOptions[option] });
   };
 
@@ -101,15 +101,7 @@ const BulkOptionsToolbar: React.FC = () => {
           onToggleOption={toggleOption}
         />
 
-        <div className="flex justify-end mt-4 space-x-2">
-          <Button 
-            onClick={() => addPlayers(5)}
-            variant="outline"
-            size="sm"
-          >
-            <Plus size={16} className="mr-2" />
-            Add Initial Players
-          </Button>
+        <div className="flex justify-end mt-4">
           <Button 
             onClick={handleApplyChanges} 
             size="sm" 
