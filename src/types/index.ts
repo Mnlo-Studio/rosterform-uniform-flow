@@ -31,7 +31,8 @@ export type ProductInfo = {
 export type BulkOptions = {
   defaultGender: string;
   defaultSize: string;
-  numberFillType: 'manual' | 'odd' | 'even' | 'random';
+  numberFillType: 'custom' | 'odd' | 'even' | 'random';
+  numberPrefix?: string;
   namePrefixType: 'none' | 'player' | 'custom';
   namePrefix: string;
   nameCaseType: 'normal' | 'uppercase' | 'lowercase';

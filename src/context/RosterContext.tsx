@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Player, CustomerInfo, ProductInfo, BulkOptions } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,14 +22,18 @@ interface RosterContextType {
 const RosterContext = createContext<RosterContextType | undefined>(undefined);
 
 // Helper function to generate random numbers
-const generateNumber = (fillType: 'odd' | 'even' | 'random', index: number): string => {
+const generateNumber = (fillType: 'odd' | 'even' | 'random', index: number, prefix?: string): string => {
+  let baseNumber = '';
+  
   if (fillType === 'odd') {
-    return `${index * 2 + 1}`;
+    baseNumber = `${index * 2 + 1}`;
   } else if (fillType === 'even') {
-    return `${(index + 1) * 2}`;
+    baseNumber = `${(index + 1) * 2}`;
   } else {
-    return `${Math.floor(Math.random() * 99) + 1}`;
+    baseNumber = `${Math.floor(Math.random() * 99) + 1}`;
   }
+  
+  return prefix ? `${prefix}${baseNumber}` : baseNumber;
 };
 
 // Update the helper function to handle name casing
@@ -78,7 +83,8 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [bulkOptions, setBulkOptions] = useState<BulkOptions>({
     defaultGender: 'Male',
     defaultSize: 'M',
-    numberFillType: 'manual',
+    numberFillType: 'custom',
+    numberPrefix: '',
     namePrefixType: 'none',
     namePrefix: '',
     nameCaseType: 'normal',
@@ -98,8 +104,8 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           existingCount + index,
           bulkOptions.nameCaseType
         ),
-        number: bulkOptions.numberFillType !== 'manual' 
-          ? generateNumber(bulkOptions.numberFillType, existingCount + index) 
+        number: bulkOptions.numberFillType !== 'custom' 
+          ? generateNumber(bulkOptions.numberFillType, existingCount + index, bulkOptions.numberPrefix) 
           : '',
         size: bulkOptions.defaultSize,
         gender: bulkOptions.defaultGender,
@@ -155,7 +161,7 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const applyBulkOptions = () => {
     if (players.length === 0) return;
     
-    setPlayers(players.map(player => {
+    setPlayers(players.map((player, index) => {
       const updatedPlayer = { ...player };
       
       updatedPlayer.gender = bulkOptions.defaultGender;
@@ -170,13 +176,15 @@ export const RosterProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         updatedPlayer.sockSize = bulkOptions.defaultSize;
       }
       
-      if (bulkOptions.numberFillType !== 'manual') {
-        const index = players.findIndex(p => p.id === player.id);
-        updatedPlayer.number = generateNumber(bulkOptions.numberFillType, index);
+      if (bulkOptions.numberFillType !== 'custom') {
+        updatedPlayer.number = generateNumber(
+          bulkOptions.numberFillType, 
+          index, 
+          bulkOptions.numberPrefix
+        );
       }
       
       if (bulkOptions.namePrefixType !== 'none') {
-        const index = players.findIndex(p => p.id === player.id);
         updatedPlayer.name = generateName(
           bulkOptions.namePrefixType,
           bulkOptions.namePrefix,

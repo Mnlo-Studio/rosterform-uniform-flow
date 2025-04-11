@@ -9,8 +9,8 @@ interface ToolbarHeaderProps {
 
 const ToolbarHeader: React.FC<ToolbarHeaderProps> = ({ onApplyChanges }) => {
   return (
-    <div className="flex justify-between items-center mb-3">
-      <h3 className="text-md font-medium text-gray-700">Bulk Options</h3>
+    <div className="flex justify-between items-center mb-5">
+      <h3 className="text-lg font-semibold text-gray-800">Bulk Options</h3>
       <Button 
         onClick={onApplyChanges} 
         size="sm" 

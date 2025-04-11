@@ -5,8 +5,10 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import DefaultOptionsSection from './DefaultOptionsSection';
 import CustomNamePrefixInput from './CustomNamePrefixInput';
+import CustomNumberPrefixInput from './CustomNumberPrefixInput';
 import ToggleOptionsSection from './ToggleOptionsSection';
 import ToolbarHeader from './ToolbarHeader';
+import ToolbarFooter from './ToolbarFooter';
 
 const BulkOptionsToolbar: React.FC = () => {
   const { bulkOptions, updateBulkOptions, players, applyBulkOptions } = useRoster();
@@ -21,7 +23,7 @@ const BulkOptionsToolbar: React.FC = () => {
     updateBulkOptions({ defaultSize: value });
   };
 
-  const handleNumberFillChange = (value: 'manual' | 'odd' | 'even' | 'random') => {
+  const handleNumberFillChange = (value: 'custom' | 'odd' | 'even' | 'random') => {
     updateBulkOptions({ numberFillType: value });
   };
 
@@ -31,6 +33,10 @@ const BulkOptionsToolbar: React.FC = () => {
 
   const handleNamePrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateBulkOptions({ namePrefix: e.target.value });
+  };
+
+  const handleNumberPrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateBulkOptions({ numberPrefix: e.target.value });
   };
 
   const handleNameCaseChange = (value: 'normal' | 'uppercase' | 'lowercase') => {
@@ -60,30 +66,43 @@ const BulkOptionsToolbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+    <div className="bg-gray-50 p-5 rounded-lg shadow-sm">
       <ToolbarHeader onApplyChanges={handleApplyChanges} />
       
-      <DefaultOptionsSection 
-        bulkOptions={bulkOptions}
-        onGenderChange={handleGenderChange}
-        onSizeChange={handleSizeChange}
-        onNumberFillChange={handleNumberFillChange}
-        onNamePrefixTypeChange={handleNamePrefixTypeChange}
-        onNameCaseChange={handleNameCaseChange}
-      />
-      
-      {bulkOptions.namePrefixType === 'custom' && (
-        <CustomNamePrefixInput 
-          prefix={bulkOptions.namePrefix} 
-          onChange={handleNamePrefixChange} 
+      <div className="space-y-5">
+        <DefaultOptionsSection 
+          bulkOptions={bulkOptions}
+          onGenderChange={handleGenderChange}
+          onSizeChange={handleSizeChange}
+          onNumberFillChange={handleNumberFillChange}
+          onNamePrefixTypeChange={handleNamePrefixTypeChange}
+          onNameCaseChange={handleNameCaseChange}
         />
-      )}
+        
+        {bulkOptions.namePrefixType === 'custom' && (
+          <CustomNamePrefixInput 
+            prefix={bulkOptions.namePrefix} 
+            onChange={handleNamePrefixChange} 
+          />
+        )}
+        
+        {bulkOptions.numberFillType === 'custom' && (
+          <CustomNumberPrefixInput 
+            prefix={bulkOptions.numberPrefix || ''} 
+            onChange={handleNumberPrefixChange} 
+          />
+        )}
+        
+        <ToggleOptionsSection 
+          bulkOptions={bulkOptions}
+          isMobile={isMobile}
+          onToggleOption={toggleOption}
+        />
+      </div>
       
-      <ToggleOptionsSection 
-        bulkOptions={bulkOptions}
-        isMobile={isMobile}
-        onToggleOption={toggleOption}
-      />
+      <div className="mt-6 pt-4 border-t border-gray-200">
+        <ToolbarFooter />
+      </div>
     </div>
   );
 };

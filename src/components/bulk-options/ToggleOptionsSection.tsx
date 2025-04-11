@@ -16,14 +16,14 @@ const ToggleOptionsSection: React.FC<ToggleOptionsSectionProps> = ({
   onToggleOption 
 }) => {
   return (
-    <div className={`${isMobile ? 'space-y-3' : 'flex space-x-8'}`}>
+    <div className="flex flex-wrap gap-6 pt-2">
       <div className="flex items-center space-x-2">
         <Switch 
           id="showShortsSize" 
           checked={bulkOptions.showShortsSize}
           onCheckedChange={() => onToggleOption('showShortsSize')}
         />
-        <Label htmlFor="showShortsSize" className="text-sm">Shorts Size</Label>
+        <Label htmlFor="showShortsSize" className="text-sm font-medium">Shorts Size</Label>
       </div>
       
       <div className="flex items-center space-x-2">
@@ -32,7 +32,7 @@ const ToggleOptionsSection: React.FC<ToggleOptionsSectionProps> = ({
           checked={bulkOptions.showSockSize}
           onCheckedChange={() => onToggleOption('showSockSize')}
         />
-        <Label htmlFor="showSockSize" className="text-sm">Sock Size</Label>
+        <Label htmlFor="showSockSize" className="text-sm font-medium">Sock Size</Label>
       </div>
       
       <div className="flex items-center space-x-2">
@@ -41,7 +41,7 @@ const ToggleOptionsSection: React.FC<ToggleOptionsSectionProps> = ({
           checked={bulkOptions.showInitials}
           onCheckedChange={() => onToggleOption('showInitials')}
         />
-        <Label htmlFor="showInitials" className="text-sm">Initials</Label>
+        <Label htmlFor="showInitials" className="text-sm font-medium">Initials</Label>
       </div>
     </div>
   );

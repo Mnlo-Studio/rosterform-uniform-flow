@@ -10,14 +10,14 @@ interface CustomNamePrefixInputProps {
 
 const CustomNamePrefixInput: React.FC<CustomNamePrefixInputProps> = ({ prefix, onChange }) => {
   return (
-    <div className="mb-4">
-      <Label htmlFor="namePrefix" className="text-sm">Custom Name Prefix</Label>
+    <div>
+      <Label htmlFor="namePrefix" className="text-sm font-medium">Custom Name Prefix</Label>
       <Input 
         id="namePrefix" 
         value={prefix} 
         onChange={onChange} 
         placeholder="Enter prefix (e.g. 'Team Member')"
-        className="w-full"
+        className="w-full mt-1"
       />
     </div>
   );
