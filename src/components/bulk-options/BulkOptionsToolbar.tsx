@@ -3,12 +3,12 @@ import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Check } from 'lucide-react';
 import DefaultOptionsSection from './DefaultOptionsSection';
 import CustomNamePrefixInput from './CustomNamePrefixInput';
 import CustomNumberPrefixInput from './CustomNumberPrefixInput';
 import ToggleOptionsSection from './ToggleOptionsSection';
-import ToolbarHeader from './ToolbarHeader';
-import ToolbarFooter from './ToolbarFooter';
 
 const BulkOptionsToolbar: React.FC = () => {
   const { bulkOptions, updateBulkOptions, players, applyBulkOptions } = useRoster();
@@ -66,8 +66,8 @@ const BulkOptionsToolbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 p-5 rounded-lg shadow-sm">
-      <ToolbarHeader onApplyChanges={handleApplyChanges} />
+    <div className="bg-gray-50 p-5 rounded-lg shadow-sm relative">
+      <h3 className="text-lg font-semibold text-gray-800 mb-5">Bulk Options</h3>
       
       <div className="space-y-5">
         <DefaultOptionsSection 
@@ -100,8 +100,15 @@ const BulkOptionsToolbar: React.FC = () => {
         />
       </div>
       
-      <div className="mt-6 pt-4 border-t border-gray-200">
-        <ToolbarFooter />
+      <div className="absolute bottom-5 right-5">
+        <Button 
+          onClick={handleApplyChanges} 
+          size="sm" 
+          className="bg-green-600 hover:bg-green-700"
+        >
+          <Check size={16} className="mr-1" />
+          Apply
+        </Button>
       </div>
     </div>
   );
