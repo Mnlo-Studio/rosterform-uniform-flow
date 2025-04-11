@@ -10,11 +10,15 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Check } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useToast } from '@/hooks/use-toast';
 
 const BulkOptionsToolbar: React.FC = () => {
-  const { bulkOptions, updateBulkOptions } = useRoster();
+  const { bulkOptions, updateBulkOptions, players, applyBulkOptions } = useRoster();
   const isMobile = useIsMobile();
+  const { toast } = useToast();
 
   const handleGenderChange = (value: string) => {
     updateBulkOptions({ defaultGender: value });
@@ -44,9 +48,37 @@ const BulkOptionsToolbar: React.FC = () => {
     updateBulkOptions({ [option]: !bulkOptions[option] });
   };
 
+  const handleApplyChanges = () => {
+    if (players.length === 0) {
+      toast({
+        title: "No players to update",
+        description: "Add players to the roster first before applying bulk options.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    applyBulkOptions();
+    
+    toast({
+      title: "Bulk options applied",
+      description: "Changes have been applied to all players in the roster.",
+    });
+  };
+
   return (
     <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-      <h3 className="text-md font-medium mb-3 text-gray-700">Bulk Options</h3>
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-md font-medium text-gray-700">Bulk Options</h3>
+        <Button 
+          onClick={handleApplyChanges} 
+          size="sm" 
+          className="bg-green-600 hover:bg-green-700"
+        >
+          <Check size={16} className="mr-1" />
+          Apply
+        </Button>
+      </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
         <div>

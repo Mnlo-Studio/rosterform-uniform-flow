@@ -58,7 +58,7 @@ const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
   return (
     <div 
       className={cn(
-        "relative w-24 h-24 sm:w-32 sm:h-32 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors",
+        "relative w-full h-40 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors",
         isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300 hover:border-blue-400",
         imageSrc ? "border-solid border-gray-300" : "border-dashed"
       )}
@@ -86,8 +86,8 @@ const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
         </>
       ) : (
         <>
-          <Image size={20} className="text-gray-400 mb-1" />
-          <span className="text-xs text-gray-500">Upload</span>
+          <Image size={24} className="text-gray-400 mb-2" />
+          <span className="text-sm text-gray-500">Upload</span>
           <input
             type="file"
             ref={fileInputRef}

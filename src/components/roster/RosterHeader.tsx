@@ -12,7 +12,7 @@ const RosterHeader: React.FC<RosterHeaderProps> = ({ onAddPlayers }) => {
     <div className="flex flex-wrap justify-between items-center mb-4">
       <h2 className="text-xl font-semibold text-gray-800">Roster Table</h2>
       
-      <div className="flex space-x-2 mt-2 sm:mt-0">
+      <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
         <Button 
           variant="outline" 
           size="sm"

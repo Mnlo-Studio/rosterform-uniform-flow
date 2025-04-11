@@ -18,23 +18,18 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Rosterform</h1>
           
-          <div className={`grid grid-cols-1 ${isMobile ? '' : 'lg:grid-cols-3'} gap-6`}>
-            <div className={`${isMobile ? '' : 'lg:col-span-2'} space-y-6`}>
-              <CustomerInfoForm />
-              <ProductInfoForm />
-              <BulkOptionsToolbar />
-              <RosterTable />
-            </div>
-            
-            <div className={`${isMobile ? '' : 'lg:col-span-1'}`}>
-              <div className={`${isMobile ? '' : 'sticky top-8'}`}>
-                <OrderSummary />
-              </div>
-            </div>
+          <div className="space-y-6">
+            <CustomerInfoForm />
+            <ProductInfoForm />
+            <BulkOptionsToolbar />
+            <RosterTable />
+            <OrderSummary />
+          </div>
+          
+          <div className="mt-8 flex justify-center">
+            <SubmitOrderButton />
           </div>
         </div>
-        
-        <SubmitOrderButton />
       </div>
     </RosterProvider>
   );

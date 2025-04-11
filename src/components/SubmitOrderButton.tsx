@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Send } from 'lucide-react';
@@ -77,16 +76,14 @@ const SubmitOrderButton: React.FC = () => {
   };
   
   return (
-    <div className="fixed bottom-6 right-6 z-10">
-      <Button 
-        onClick={handleSubmit}
-        size="lg" 
-        className="px-6 bg-blue-600 hover:bg-blue-700"
-      >
-        <Send className="mr-2 h-5 w-5" />
-        Submit Order
-      </Button>
-    </div>
+    <Button 
+      onClick={handleSubmit}
+      size="lg" 
+      className="px-6 bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
+    >
+      <Send className="mr-2 h-5 w-5" />
+      Submit Order
+    </Button>
   );
 };
 

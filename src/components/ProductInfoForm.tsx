@@ -45,7 +45,7 @@ const ProductInfoForm: React.FC = () => {
       
       <div className="mb-6">
         <p className="text-sm font-medium mb-3 text-gray-700">Upload Product Images</p>
-        <div className="flex flex-wrap gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {imageSlots.map((img, index) => (
             <ImageUploadBox
               key={index}
