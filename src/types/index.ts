@@ -36,6 +36,8 @@ export type BulkOptions = {
   namePrefixType: 'none' | 'player' | 'custom';
   namePrefix: string;
   nameCaseType: 'normal' | 'uppercase' | 'lowercase';
+  showName: boolean;
+  showNumber: boolean;
   showShortsSize: boolean;
   showSockSize: boolean;
   showInitials: boolean;
