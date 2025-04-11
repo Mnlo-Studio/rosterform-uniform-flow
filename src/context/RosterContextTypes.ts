@@ -15,4 +15,7 @@ export interface RosterContextType {
   addImage: (image: string) => void;
   removeImage: (index: number) => void;
   applyBulkOptions: () => void;
+  resetRoster: () => void;
+  resetCustomerInfo: () => void;
+  resetProductInfo: () => void;
 }

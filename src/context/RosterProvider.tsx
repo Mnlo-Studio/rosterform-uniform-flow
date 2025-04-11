@@ -1,4 +1,3 @@
-
 import React, { useState, ReactNode } from 'react';
 import { Player, CustomerInfo, ProductInfo, BulkOptions } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -146,6 +145,32 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
     }));
   };
 
+  const resetRoster = () => {
+    setPlayers([]);
+  };
+
+  const resetCustomerInfo = () => {
+    setCustomerInfo({
+      teamName: '',
+      contactName: '',
+      email: '',
+      phone: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
+    });
+  };
+
+  const resetProductInfo = () => {
+    setProductInfo({
+      name: '',
+      pricePerItem: 0,
+      notes: '',
+      images: [],
+    });
+  };
+
   return (
     <RosterContext.Provider value={{
       players,
@@ -160,7 +185,10 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
       updateBulkOptions,
       addImage,
       removeImage,
-      applyBulkOptions
+      applyBulkOptions,
+      resetRoster,
+      resetCustomerInfo,
+      resetProductInfo
     }}>
       {children}
     </RosterContext.Provider>
