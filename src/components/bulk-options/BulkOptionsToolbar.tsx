@@ -1,17 +1,16 @@
-
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import { Check, Plus } from 'lucide-react';
 import DefaultOptionsSection from './DefaultOptionsSection';
 import CustomNamePrefixInput from './CustomNamePrefixInput';
 import CustomNumberPrefixInput from './CustomNumberPrefixInput';
 import ToggleOptionsSection from './ToggleOptionsSection';
 
 const BulkOptionsToolbar: React.FC = () => {
-  const { bulkOptions, updateBulkOptions, players, applyBulkOptions } = useRoster();
+  const { bulkOptions, updateBulkOptions, players, applyBulkOptions, addPlayers } = useRoster();
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
@@ -99,7 +98,15 @@ const BulkOptionsToolbar: React.FC = () => {
           onToggleOption={toggleOption}
         />
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-4 space-x-2">
+          <Button 
+            onClick={() => addPlayers(5)}
+            variant="outline"
+            size="sm"
+          >
+            <Plus size={16} className="mr-2" />
+            Add Initial Players
+          </Button>
           <Button 
             onClick={handleApplyChanges} 
             size="sm" 
