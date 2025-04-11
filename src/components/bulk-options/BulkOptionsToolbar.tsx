@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -65,7 +66,7 @@ const BulkOptionsToolbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 p-5 rounded-lg shadow-sm relative mb-20">
+    <div className="bg-gray-50 p-5 rounded-lg shadow-sm mb-8">
       <h3 className="text-lg font-semibold text-gray-800 mb-5">Bulk Options</h3>
       
       <div className="space-y-5">
@@ -97,17 +98,17 @@ const BulkOptionsToolbar: React.FC = () => {
           isMobile={isMobile}
           onToggleOption={toggleOption}
         />
-      </div>
-      
-      <div className="absolute -bottom-16 right-0">
-        <Button 
-          onClick={handleApplyChanges} 
-          size="sm" 
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Check size={16} className="mr-1" />
-          Apply
-        </Button>
+
+        <div className="flex justify-end mt-4">
+          <Button 
+            onClick={handleApplyChanges} 
+            size="sm" 
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            <Check size={16} className="mr-1" />
+            Apply
+          </Button>
+        </div>
       </div>
     </div>
   );
