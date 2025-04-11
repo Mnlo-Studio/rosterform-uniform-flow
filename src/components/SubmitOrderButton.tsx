@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Send, Download } from 'lucide-react';
 import { useRoster } from '@/context/RosterContext';
@@ -10,6 +11,7 @@ const SubmitOrderButton: React.FC = () => {
   const { players, customerInfo, productInfo } = useRoster();
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
+  const navigate = useNavigate();
   
   const validateForm = () => {
     // Validate customer info
@@ -83,6 +85,9 @@ const SubmitOrderButton: React.FC = () => {
         title: "Order files generated successfully!",
         description: "Your uniform order files have been downloaded. Thank you!",
       });
+      
+      // Navigate to success page
+      navigate('/success', { state: { fromSuccess: true } });
     } catch (error) {
       console.error('Error generating order files:', error);
       toast({
