@@ -1,7 +1,5 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 import {
   TableCell,
   TableRow,
@@ -10,10 +8,9 @@ import {
 interface EmptyRosterProps {
   totalColumns: number;
   isMobile: boolean;
-  onAddPlayers: (count: number) => void;
 }
 
-const EmptyRoster: React.FC<EmptyRosterProps> = ({ totalColumns, isMobile, onAddPlayers }) => {
+const EmptyRoster: React.FC<EmptyRosterProps> = ({ totalColumns, isMobile }) => {
   return (
     <>
       {isMobile ? (
@@ -30,16 +27,6 @@ const EmptyRoster: React.FC<EmptyRosterProps> = ({ totalColumns, isMobile, onAdd
           </TableCell>
         </TableRow>
       )}
-      
-      <div className="mt-4 mb-4 flex justify-end">
-        <Button 
-          onClick={() => onAddPlayers(5)}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus size={16} className="mr-2" />
-          Add Initial Players
-        </Button>
-      </div>
     </>
   );
 };

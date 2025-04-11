@@ -60,7 +60,6 @@ const RosterTable: React.FC = () => {
         <EmptyRoster 
           totalColumns={totalColumns} 
           isMobile={isMobile} 
-          onAddPlayers={addPlayers} 
         />
       )}
     </div>
