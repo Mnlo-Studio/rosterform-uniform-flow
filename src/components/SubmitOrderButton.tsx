@@ -1,13 +1,15 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Send } from 'lucide-react';
+import { Send, Download } from 'lucide-react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
+import { generateOrderZip } from '@/utils/exportUtils';
 
 const SubmitOrderButton: React.FC = () => {
   const { players, customerInfo, productInfo } = useRoster();
   const { toast } = useToast();
+  const [isGenerating, setIsGenerating] = useState(false);
   
   const validateForm = () => {
     // Validate customer info
@@ -59,7 +61,7 @@ const SubmitOrderButton: React.FC = () => {
     return true;
   };
   
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) return;
     
     // In a real app, we would submit the order data to a server
@@ -69,11 +71,27 @@ const SubmitOrderButton: React.FC = () => {
       players
     });
     
-    // Show success message
-    toast({
-      title: "Order submitted successfully!",
-      description: "Your uniform order has been submitted. Thank you!",
-    });
+    setIsGenerating(true);
+    
+    try {
+      // Generate and download the order zip
+      await generateOrderZip(customerInfo, players, productInfo);
+      
+      // Show success message
+      toast({
+        title: "Order submitted successfully!",
+        description: "Your uniform order has been submitted and files have been downloaded. Thank you!",
+      });
+    } catch (error) {
+      console.error('Error generating order files:', error);
+      toast({
+        title: "Failed to generate files",
+        description: "There was an error generating the order files. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
   
   return (
@@ -82,9 +100,19 @@ const SubmitOrderButton: React.FC = () => {
         onClick={handleSubmit}
         size="lg" 
         className="bg-blue-600 hover:bg-blue-700"
+        disabled={isGenerating}
       >
-        <Send className="mr-2 h-5 w-5" />
-        Submit Order
+        {isGenerating ? (
+          <>
+            <Download className="mr-2 h-5 w-5 animate-pulse" />
+            Generating Files...
+          </>
+        ) : (
+          <>
+            <Send className="mr-2 h-5 w-5" />
+            Submit Order
+          </>
+        )}
       </Button>
     </div>
   );
