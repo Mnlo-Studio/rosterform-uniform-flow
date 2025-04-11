@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Send, Download } from 'lucide-react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
-import { generateOrderZip } from '@/utils/export'; // Updated import path
+import { generateOrderZip } from '@/utils/export';
 
 const SubmitOrderButton: React.FC = () => {
   const { players, customerInfo, productInfo } = useRoster();
@@ -64,7 +64,7 @@ const SubmitOrderButton: React.FC = () => {
   const handleSubmit = async () => {
     if (!validateForm()) return;
     
-    // In a real app, we would submit the order data to a server
+    // Log the order data for debugging
     console.log('Submitting order:', {
       customerInfo,
       productInfo,
@@ -74,13 +74,14 @@ const SubmitOrderButton: React.FC = () => {
     setIsGenerating(true);
     
     try {
+      console.log('Attempting to generate order zip...');
       // Generate and download the order zip
       await generateOrderZip(customerInfo, players, productInfo);
       
       // Show success message
       toast({
-        title: "Order submitted successfully!",
-        description: "Your uniform order has been submitted and files have been downloaded. Thank you!",
+        title: "Order files generated successfully!",
+        description: "Your uniform order files have been downloaded. Thank you!",
       });
     } catch (error) {
       console.error('Error generating order files:', error);
