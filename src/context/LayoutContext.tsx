@@ -17,7 +17,8 @@ export function useLayout() {
 }
 
 // These are pages that should always use the clean layout (no sidebar)
-const PUBLIC_ROUTES = ['/', '/success'];
+// Note: We're removing "/" from PUBLIC_ROUTES because the Order Form should have the sidebar
+const PUBLIC_ROUTES = ['/success'];
 
 // URLs with these parameters should use the clean layout
 const PUBLIC_PARAMS = ['share=true', 'embed=true'];
