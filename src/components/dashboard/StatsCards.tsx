@@ -44,14 +44,14 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon }) => {
   return (
-    <Card className="shadow-card card-hover">
+    <Card className="shadow-card">
       <CardContent className="flex items-center p-6">
         <div className="mr-4 rounded-full bg-neutral-50 p-2">
           {icon}
         </div>
         <div>
-          <p className="text-sm font-medium text-neutral-500">{title}</p>
-          <h3 className="text-h3 font-bold">{value}</h3>
+          <p className="text-sm font-medium text-gray-500">{title}</p>
+          <h3 className="text-xl font-bold text-gray-900">{value}</h3>
         </div>
       </CardContent>
     </Card>
@@ -59,3 +59,4 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon }) => {
 };
 
 export default StatsCards;
+
