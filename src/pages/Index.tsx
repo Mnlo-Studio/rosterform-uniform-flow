@@ -21,7 +21,7 @@ const Index = () => {
     setShowBackLink(fromSuccess || location.key !== 'default');
   }, [location]);
   return <div className="bg-neutral-50 pb-8">
-      <div className="max-w-4xl mx-auto bg-[#fefffe]/0">
+      <div className="max-w-4xl mx-auto bg-white/[0.99]">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-h2 font-bold text-neutral-800">Roster Form</h1>
           {!isDashboardLayout && <Link to="/orders">
