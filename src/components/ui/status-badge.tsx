@@ -33,7 +33,7 @@ const getStatusStyles = (status: StatusType) => {
   }
 };
 
-const getStatusLabel = (status: StatusType) => {
+const getStatusLabel = (status: StatusType): string => {
   switch (status) {
     case "success":
       return "Success";
@@ -52,6 +52,7 @@ const getStatusLabel = (status: StatusType) => {
     case "unpaid":
       return "Unpaid";
     default:
+      // Ensure we return a string here to avoid the 'never' type
       return status.charAt(0).toUpperCase() + status.slice(1);
   }
 };
