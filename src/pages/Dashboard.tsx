@@ -25,7 +25,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg">
-      <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">Dashboard</h1>
+      <h1 className="mb-2">Dashboard</h1>
       <p className="text-gray-600 mb-6">Manage your account, forms, and roster tools.</p>
       
       {/* User Info Card */}
@@ -33,7 +33,7 @@ const Dashboard: React.FC = () => {
         <CardContent className="pt-6">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">{user.name}</h2>
+              <h2>{user.name}</h2>
               <p className="text-gray-600">{user.email}</p>
             </div>
             <Button variant="ghost" size="sm" className="gap-2 text-primary-700">
@@ -54,7 +54,7 @@ const Dashboard: React.FC = () => {
       {/* Saved Rosters */}
       <Card className="mb-6 shadow-card">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-900">Saved Rosters</CardTitle>
+          <CardTitle>Saved Rosters</CardTitle>
         </CardHeader>
         <CardContent>
           {user.savedRosters.length === 0 ? (
@@ -81,7 +81,7 @@ const Dashboard: React.FC = () => {
       {/* Embed Form */}
       <Card className="mb-6 shadow-card">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-900">Embed Form</CardTitle>
+          <CardTitle>Embed Form</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex justify-between items-center">
@@ -96,7 +96,7 @@ const Dashboard: React.FC = () => {
       {/* Account Settings */}
       <Card className="shadow-card">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-900">Account Settings</CardTitle>
+          <CardTitle>Account Settings</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

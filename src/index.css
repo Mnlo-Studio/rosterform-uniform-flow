@@ -69,20 +69,21 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 
+  /* Typography system with better hierarchy */
   h1 {
-    @apply text-xl font-semibold text-gray-900 tracking-tight;
+    @apply text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight;
   }
 
   h2 {
-    @apply text-xl font-semibold text-gray-900 tracking-tight;
+    @apply text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight;
   }
 
   h3 {
-    @apply text-xl font-semibold text-gray-900 tracking-tight;
+    @apply text-lg sm:text-xl font-semibold text-gray-900 tracking-tight;
   }
 
   h4 {
-    @apply text-xl font-semibold text-gray-900 tracking-tight;
+    @apply text-base sm:text-lg font-semibold text-gray-900 tracking-tight;
   }
 
   p {

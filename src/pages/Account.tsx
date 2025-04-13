@@ -59,12 +59,12 @@ const Account: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-h2 font-bold tracking-tight mb-2">Account</h1>
+      <h1 className="mb-2">Account</h1>
       <p className="text-muted-foreground mb-6">Manage your account settings and preferences.</p>
       
       <Card className="mb-6 shadow-card">
         <CardHeader>
-          <CardTitle className="text-h4">Profile Information</CardTitle>
+          <CardTitle>Profile Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <Form {...profileForm}>
@@ -105,7 +105,7 @@ const Account: React.FC = () => {
       
       <Card className="shadow-card">
         <CardHeader>
-          <CardTitle className="text-h4">Password</CardTitle>
+          <CardTitle>Password</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <Form {...passwordForm}>
