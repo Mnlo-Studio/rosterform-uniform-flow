@@ -4,8 +4,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// Import RosterProvider directly from the provider file, not through RosterContext
 import { RosterProvider } from "@/context/RosterProvider";
+import { LayoutProvider } from "@/context/LayoutContext";
+import MainLayout from "@/components/layout/MainLayout";
 import Index from "./pages/Index";
 import Success from "./pages/Success";
 import NotFound from "./pages/NotFound";
@@ -13,6 +14,9 @@ import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import ShareEmbed from "./pages/ShareEmbed";
 import Dashboard from "./pages/Dashboard";
+import Payments from "./pages/Payments";
+import Design from "./pages/Design";
+import Account from "./pages/Account";
 
 const queryClient = new QueryClient();
 
@@ -22,18 +26,29 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <RosterProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/success" element={<Success />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/orders/:orderId" element={<OrderDetails />} />
-            <Route path="/share" element={<ShareEmbed />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </RosterProvider>
+        <LayoutProvider>
+          <RosterProvider>
+            <Routes>
+              <Route path="*" element={
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/success" element={<Success />} />
+                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/orders/:orderId" element={<OrderDetails />} />
+                    <Route path="/share" element={<ShareEmbed />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/payments" element={<Payments />} />
+                    <Route path="/design" element={<Design />} />
+                    <Route path="/account" element={<Account />} />
+                    {/* Catch-all route */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </MainLayout>
+              } />
+            </Routes>
+          </RosterProvider>
+        </LayoutProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

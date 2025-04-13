@@ -10,11 +10,13 @@ import BackToSuccessLink from '@/components/BackToSuccessLink';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { ClipboardList } from 'lucide-react';
+import { useLayout } from '@/context/LayoutContext';
 
 const Index = () => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const [showBackLink, setShowBackLink] = useState(false);
+  const { isDashboardLayout } = useLayout();
   
   useEffect(() => {
     // Check if user came from success page (has state)
@@ -27,12 +29,14 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-center text-gray-800">Rosterform</h1>
-          <Link to="/orders">
-            <Button variant="outline" className="flex items-center gap-2">
-              <ClipboardList className="h-4 w-4" />
-              View Orders
-            </Button>
-          </Link>
+          {!isDashboardLayout && (
+            <Link to="/orders">
+              <Button variant="outline" className="flex items-center gap-2">
+                <ClipboardList className="h-4 w-4" />
+                View Orders
+              </Button>
+            </Link>
+          )}
         </div>
         
         {showBackLink && <BackToSuccessLink />}
