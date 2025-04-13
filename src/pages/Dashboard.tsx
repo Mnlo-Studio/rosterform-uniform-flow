@@ -24,17 +24,17 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-h2 font-bold tracking-tight mb-2">Dashboard</h1>
-      <p className="text-muted-foreground mb-6">Manage your account, forms, and roster tools.</p>
+    <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg">
+      <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">Dashboard</h1>
+      <p className="text-gray-600 mb-6">Manage your account, forms, and roster tools.</p>
       
       {/* User Info Card */}
       <Card className="mb-6 shadow-card">
         <CardContent className="pt-6">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-h3 font-semibold">{user.name}</h2>
-              <p className="text-muted-foreground">{user.email}</p>
+              <h2 className="text-xl font-semibold text-gray-900">{user.name}</h2>
+              <p className="text-gray-600">{user.email}</p>
             </div>
             <Button variant="ghost" size="sm" className="gap-2 text-primary-700">
               <Edit className="h-4 w-4" />
@@ -54,18 +54,18 @@ const Dashboard: React.FC = () => {
       {/* Saved Rosters */}
       <Card className="mb-6 shadow-card">
         <CardHeader>
-          <CardTitle className="text-h4">Saved Rosters</CardTitle>
+          <CardTitle className="text-lg font-semibold text-gray-900">Saved Rosters</CardTitle>
         </CardHeader>
         <CardContent>
           {user.savedRosters.length === 0 ? (
-            <p className="text-muted-foreground">You don't have any saved rosters yet.</p>
+            <p className="text-gray-600">You don't have any saved rosters yet.</p>
           ) : (
             <div className="space-y-4">
               {user.savedRosters.map((roster) => (
                 <div key={roster.id} className="flex justify-between items-center">
                   <div>
-                    <p className="font-medium">{roster.name}</p>
-                    <p className="text-sm text-muted-foreground">Created: {roster.createdAt}</p>
+                    <p className="font-medium text-gray-900">{roster.name}</p>
+                    <p className="text-sm text-gray-600">Created: {roster.createdAt}</p>
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">Edit</Button>
@@ -81,11 +81,11 @@ const Dashboard: React.FC = () => {
       {/* Embed Form */}
       <Card className="mb-6 shadow-card">
         <CardHeader>
-          <CardTitle className="text-h4">Embed Form</CardTitle>
+          <CardTitle className="text-lg font-semibold text-gray-900">Embed Form</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex justify-between items-center">
-            <p>Embed your order form into your website</p>
+            <p className="text-gray-800">Embed your order form into your website</p>
             <Button asChild className="bg-primary-700 hover:bg-primary-800">
               <Link to="/share">Get Embed Code</Link>
             </Button>
@@ -96,12 +96,12 @@ const Dashboard: React.FC = () => {
       {/* Account Settings */}
       <Card className="shadow-card">
         <CardHeader>
-          <CardTitle className="text-h4">Account Settings</CardTitle>
+          <CardTitle className="text-lg font-semibold text-gray-900">Account Settings</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Key className="h-4 w-4 text-muted-foreground" />
+              <Key className="h-4 w-4 text-gray-600" />
               <Button variant="link" className="h-auto p-0 text-primary-700">Change Password</Button>
             </div>
             <Separator />
