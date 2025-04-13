@@ -13,7 +13,7 @@ import {
   addProductInfoTable, 
   addRosterTable, 
   addOrderSummaryTable 
-} from './tableUtils';
+} from './tables';
 
 // Generate PDF with all information
 export const generatePDF = async (
