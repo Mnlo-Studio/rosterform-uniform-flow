@@ -10,4 +10,4 @@ export * from './sidebar-core';
 export * from './sidebar-wrapper';
 export * from './sidebar-mobile';
 export * from './sidebar-inset';
-
+export * from './use-sidebar-state';
