@@ -1,0 +1,114 @@
+
+import React, { useState } from 'react';
+import { useRoster } from '@/context/RosterContext';
+import OrdersHeader from '@/components/orders/OrdersHeader';
+import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
+import OrdersTable from '@/components/orders/OrdersTable';
+import OrderDetailsModal from '@/components/orders/OrderDetailsModal';
+import { Order } from '@/types/orders';
+import { mockOrders } from '@/data/mockOrders';
+
+const Orders = () => {
+  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>(mockOrders);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    filterOrders(query, statusFilter);
+  };
+
+  const handleStatusFilter = (status: string) => {
+    setStatusFilter(status);
+    filterOrders(searchQuery, status);
+  };
+
+  const filterOrders = (query: string, status: string) => {
+    let filtered = orders;
+    
+    if (query) {
+      const lowercaseQuery = query.toLowerCase();
+      filtered = filtered.filter(order => 
+        order.teamName.toLowerCase().includes(lowercaseQuery) || 
+        order.orderId.toLowerCase().includes(lowercaseQuery)
+      );
+    }
+    
+    if (status !== 'all') {
+      filtered = filtered.filter(order => order.status.toLowerCase() === status.toLowerCase());
+    }
+    
+    setFilteredOrders(filtered);
+  };
+
+  const handleOrderClick = (order: Order) => {
+    setSelectedOrder(order);
+    setOrderDetailsOpen(true);
+    setIsEditMode(false);
+  };
+
+  const handleCloseDetails = () => {
+    setOrderDetailsOpen(false);
+    setSelectedOrder(null);
+    setIsEditMode(false);
+  };
+
+  const handleToggleEditMode = () => {
+    setIsEditMode(!isEditMode);
+  };
+
+  const handleSendInvoice = (orderId: string) => {
+    console.log(`Sending invoice for order: ${orderId}`);
+    // Implementation for sending invoice would go here
+  };
+
+  const getTotalPlayers = () => {
+    return orders.reduce((total, order) => total + order.players.length, 0);
+  };
+
+  const getTotalRevenue = () => {
+    return orders.reduce((total, order) => total + order.total, 0);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <OrdersHeader 
+          searchQuery={searchQuery} 
+          onSearch={handleSearch} 
+          statusFilter={statusFilter} 
+          onStatusFilter={handleStatusFilter} 
+        />
+        
+        <OrdersSummaryCards 
+          totalOrders={orders.length} 
+          totalRevenue={getTotalRevenue()} 
+          totalPlayers={getTotalPlayers()} 
+        />
+        
+        <OrdersTable 
+          orders={filteredOrders} 
+          onOrderClick={handleOrderClick} 
+          onSendInvoice={handleSendInvoice} 
+        />
+        
+        {selectedOrder && (
+          <OrderDetailsModal 
+            order={selectedOrder}
+            isOpen={orderDetailsOpen}
+            onClose={handleCloseDetails}
+            isEditMode={isEditMode}
+            onToggleEditMode={handleToggleEditMode}
+            onSendInvoice={() => handleSendInvoice(selectedOrder.orderId)}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Orders;
