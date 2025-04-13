@@ -17,7 +17,10 @@ export function useLayout() {
 }
 
 // These are pages that should always use the clean layout (no sidebar)
-const PUBLIC_ROUTES = ['/', '/success', '/share/embed'];
+const PUBLIC_ROUTES = ['/', '/success'];
+
+// URLs with these parameters should use the clean layout
+const PUBLIC_PARAMS = ['share=true', 'embed=true'];
 
 export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -25,10 +28,12 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   
   useEffect(() => {
     // Check if current path should use dashboard layout
-    const shouldUseDashboardLayout = !PUBLIC_ROUTES.includes(location.pathname) && 
-      // If the URL has a share parameter or is explicitly a shared view, don't show dashboard
-      !location.search.includes('share=true') && 
-      !location.pathname.startsWith('/share/');
+    const isPublicRoute = PUBLIC_ROUTES.includes(location.pathname);
+    const hasPublicParam = PUBLIC_PARAMS.some(param => location.search.includes(param));
+    const isSharePath = location.pathname.startsWith('/share/');
+    
+    // Show dashboard layout unless it's a public route, has public parameters, or is a share path
+    const shouldUseDashboardLayout = !isPublicRoute && !hasPublicParam && !isSharePath;
     
     setIsDashboardLayout(shouldUseDashboardLayout);
   }, [location]);

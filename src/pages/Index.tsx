@@ -7,13 +7,11 @@ import { BulkOptionsToolbar } from '@/components/bulk-options';
 import RosterTable from '@/components/RosterTable';
 import OrderSummary from '@/components/OrderSummary';
 import BackToSuccessLink from '@/components/BackToSuccessLink';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { ClipboardList } from 'lucide-react';
 import { useLayout } from '@/context/LayoutContext';
 
 const Index = () => {
-  const isMobile = useIsMobile();
   const location = useLocation();
   const [showBackLink, setShowBackLink] = useState(false);
   const { isDashboardLayout } = useLayout();
@@ -25,10 +23,10 @@ const Index = () => {
   }, [location]);
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-20">
-      <div className="container mx-auto px-4 py-8">
+    <div className="bg-gray-100 pb-20">
+      <div className={isDashboardLayout ? "px-4 py-8" : "container mx-auto px-4 py-8"}>
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-center text-gray-800">Rosterform</h1>
+          <h1 className="text-3xl font-bold text-gray-800">Rosterform</h1>
           {!isDashboardLayout && (
             <Link to="/orders">
               <Button variant="outline" className="flex items-center gap-2">

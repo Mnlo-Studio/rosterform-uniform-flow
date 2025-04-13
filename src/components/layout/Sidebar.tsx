@@ -35,7 +35,15 @@ const MainSidebar = () => {
     { label: "Account", icon: UserCircle, path: "/account" },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    // Special case for the root path
+    if (path === "/" && location.pathname === "/") {
+      return true;
+    }
+    // For other paths, check if the current path starts with the menu path
+    // This will highlight parent routes when on child routes
+    return path !== "/" && location.pathname.startsWith(path);
+  };
 
   return (
     <Sidebar className="border-r border-gray-200">

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import OrdersHeader from '@/components/orders/OrdersHeader';
@@ -60,26 +59,24 @@ const Orders = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <OrdersHeader 
-          searchQuery={searchQuery} 
-          onSearch={handleSearch} 
-          statusFilter={statusFilter} 
-          onStatusFilter={handleStatusFilter} 
-        />
-        
-        <OrdersSummaryCards 
-          totalOrders={orders.length} 
-          totalRevenue={getTotalRevenue()} 
-          totalPlayers={getTotalPlayers()} 
-        />
-        
-        <OrdersTable 
-          orders={filteredOrders} 
-          onSendInvoice={handleSendInvoice} 
-        />
-      </div>
+    <div className="space-y-6">
+      <OrdersHeader 
+        searchQuery={searchQuery} 
+        onSearch={handleSearch} 
+        statusFilter={statusFilter} 
+        onStatusFilter={handleStatusFilter} 
+      />
+      
+      <OrdersSummaryCards 
+        totalOrders={orders.length} 
+        totalRevenue={getTotalRevenue()} 
+        totalPlayers={getTotalPlayers()} 
+      />
+      
+      <OrdersTable 
+        orders={filteredOrders} 
+        onSendInvoice={handleSendInvoice} 
+      />
     </div>
   );
 };
