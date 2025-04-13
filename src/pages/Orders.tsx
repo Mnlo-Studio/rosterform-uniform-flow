@@ -1,10 +1,9 @@
 
 import React, { useState } from 'react';
-import { useRoster } from '@/context/RosterContext';
+import { useToast } from '@/hooks/use-toast';
 import OrdersHeader from '@/components/orders/OrdersHeader';
 import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
 import OrdersTable from '@/components/orders/OrdersTable';
-import OrderDetailsModal from '@/components/orders/OrderDetailsModal';
 import { Order } from '@/types/orders';
 import { mockOrders } from '@/data/mockOrders';
 
@@ -13,9 +12,7 @@ const Orders = () => {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>(mockOrders);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const { toast } = useToast();
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -45,24 +42,12 @@ const Orders = () => {
     setFilteredOrders(filtered);
   };
 
-  const handleOrderClick = (order: Order) => {
-    setSelectedOrder(order);
-    setOrderDetailsOpen(true);
-    setIsEditMode(false);
-  };
-
-  const handleCloseDetails = () => {
-    setOrderDetailsOpen(false);
-    setSelectedOrder(null);
-    setIsEditMode(false);
-  };
-
-  const handleToggleEditMode = () => {
-    setIsEditMode(!isEditMode);
-  };
-
   const handleSendInvoice = (orderId: string) => {
     console.log(`Sending invoice for order: ${orderId}`);
+    toast({
+      title: "Invoice sent",
+      description: `Invoice for order ${orderId} has been sent to the customer.`,
+    });
     // Implementation for sending invoice would go here
   };
 
@@ -92,20 +77,8 @@ const Orders = () => {
         
         <OrdersTable 
           orders={filteredOrders} 
-          onOrderClick={handleOrderClick} 
           onSendInvoice={handleSendInvoice} 
         />
-        
-        {selectedOrder && (
-          <OrderDetailsModal 
-            order={selectedOrder}
-            isOpen={orderDetailsOpen}
-            onClose={handleCloseDetails}
-            isEditMode={isEditMode}
-            onToggleEditMode={handleToggleEditMode}
-            onSendInvoice={() => handleSendInvoice(selectedOrder.orderId)}
-          />
-        )}
       </div>
     </div>
   );

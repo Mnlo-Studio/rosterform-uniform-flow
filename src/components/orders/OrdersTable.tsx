@@ -13,18 +13,19 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatCurrency } from '@/utils/calculations';
 import { Order } from '@/types/orders';
+import { useNavigate } from 'react-router-dom';
 
 interface OrdersTableProps {
   orders: Order[];
-  onOrderClick: (order: Order) => void;
   onSendInvoice: (orderId: string) => void;
 }
 
 const OrdersTable: React.FC<OrdersTableProps> = ({
   orders,
-  onOrderClick,
   onSendInvoice
 }) => {
+  const navigate = useNavigate();
+  
   const getStatusBadgeClass = (status: string) => {
     switch (status.toLowerCase()) {
       case 'pending':
@@ -42,6 +43,10 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
     return isPaid 
       ? 'bg-green-100 text-green-800' 
       : 'bg-orange-100 text-orange-800';
+  };
+
+  const handleOrderClick = (orderId: string) => {
+    navigate(`/orders/${orderId}`);
   };
 
   return (
@@ -72,7 +77,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
                 <TableRow 
                   key={order.orderId}
                   className={`cursor-pointer hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
-                  onClick={() => onOrderClick(order)}
+                  onClick={() => handleOrderClick(order.orderId)}
                 >
                   <TableCell className="font-medium">{order.orderId}</TableCell>
                   <TableCell>{order.teamName}</TableCell>
