@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -54,7 +53,10 @@ export default {
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
+				foreground: {
+					DEFAULT: 'hsl(240, 10%, 20%)', // Darker charcoal
+					muted: 'hsl(240, 5%, 45%)', // Muted text color
+				},
 				// Standard color palette
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
