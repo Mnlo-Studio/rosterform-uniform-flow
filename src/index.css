@@ -118,7 +118,7 @@
 /* Design System Utility Classes */
 @layer components {
   .card {
-    @apply bg-card text-card-foreground rounded-lg border shadow-card p-6;
+    @apply bg-card text-card-foreground rounded-lg border border-neutral-200 shadow-sm p-6;
   }
 
   .card-hover {

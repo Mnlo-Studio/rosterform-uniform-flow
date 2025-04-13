@@ -58,9 +58,9 @@ const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
   return (
     <div 
       className={cn(
-        "relative w-full h-40 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors",
-        isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300 hover:border-blue-400",
-        imageSrc ? "border-solid border-gray-300" : "border-dashed"
+        "relative w-full h-40 border-2 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors",
+        isDragging ? "border-primary-500 bg-blue-50" : "border-neutral-200 hover:border-primary-400",
+        imageSrc ? "border-solid" : "border-dashed"
       )}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -75,7 +75,7 @@ const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
             className="w-full h-full object-cover rounded-md"
           />
           <button 
-            className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+            className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 border border-neutral-200"
             onClick={(e) => {
               e.stopPropagation();
               if (onRemove) onRemove();
