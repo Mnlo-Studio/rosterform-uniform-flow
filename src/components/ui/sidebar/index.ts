@@ -11,5 +11,5 @@ export * from './sidebar-wrapper';
 export * from './sidebar-mobile';
 export * from './sidebar-inset';
 export * from './use-sidebar-state';
-export * from './sidebar-rail';
-
+// Export SidebarRail from sidebar-rail.tsx file instead of re-exporting from sidebar-triggers
+export { SidebarRail } from './sidebar-rail';
