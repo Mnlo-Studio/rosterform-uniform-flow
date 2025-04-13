@@ -52,8 +52,8 @@ const getStatusLabel = (status: StatusType): string => {
     case "unpaid":
       return "Unpaid";
     default:
-      // Ensure we return a string here to avoid the 'never' type
-      return status.charAt(0).toUpperCase() + status.slice(1);
+      // Type assertion to string to ensure TypeScript knows we're working with a string
+      return (status as string).charAt(0).toUpperCase() + (status as string).slice(1);
   }
 };
 
