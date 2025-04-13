@@ -14,20 +14,20 @@ const Success = () => {
   const handleSameProduct = () => {
     resetRoster();
     resetCustomerInfo();
-    navigate('/');
+    navigate('/', { state: { fromSuccess: true } });
   };
 
   const handleSameRoster = () => {
     resetProductInfo();
     resetCustomerInfo();
-    navigate('/');
+    navigate('/', { state: { fromSuccess: true } });
   };
 
   const handleNewOrder = () => {
     resetRoster();
     resetProductInfo();
     resetCustomerInfo();
-    navigate('/');
+    navigate('/', { state: { fromSuccess: true } });
   };
 
   return (

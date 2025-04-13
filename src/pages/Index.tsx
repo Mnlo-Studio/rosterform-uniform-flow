@@ -19,9 +19,9 @@ const Index = () => {
   } = useLayout();
   
   useEffect(() => {
-    // Check if user came from success page (has state)
+    // Only show back link if explicitly navigated from success page
     const fromSuccess = location.state && location.state.fromSuccess;
-    setShowBackLink(fromSuccess || location.key !== 'default');
+    setShowBackLink(!!fromSuccess);
   }, [location]);
   
   return <div className="bg-neutral-50 pb-8">
