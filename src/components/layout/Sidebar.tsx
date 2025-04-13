@@ -4,8 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, 
   ClipboardList, 
-  CreditCard, 
-  Paintbrush, 
   Share2, 
   UserCircle 
 } from "lucide-react";
@@ -29,8 +27,6 @@ const MainSidebar = () => {
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     { label: "Order Form", icon: ClipboardList, path: "/" },
     { label: "Orders", icon: ClipboardList, path: "/orders" },
-    { label: "Payments", icon: CreditCard, path: "/payments" },
-    { label: "Design", icon: Paintbrush, path: "/design" },
     { label: "Share", icon: Share2, path: "/share" },
   ];
   

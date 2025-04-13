@@ -14,8 +14,6 @@ import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import ShareEmbed from "./pages/ShareEmbed";
 import Dashboard from "./pages/Dashboard";
-import Payments from "./pages/Payments";
-import Design from "./pages/Design";
 import Account from "./pages/Account";
 
 const queryClient = new QueryClient();
@@ -38,8 +36,6 @@ const App = () => (
                     <Route path="/orders/:orderId" element={<OrderDetails />} />
                     <Route path="/share" element={<ShareEmbed />} />
                     <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/payments" element={<Payments />} />
-                    <Route path="/design" element={<Design />} />
                     <Route path="/account" element={<Account />} />
                     {/* Catch-all route */}
                     <Route path="*" element={<NotFound />} />
