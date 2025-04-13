@@ -12,4 +12,5 @@ export const useRoster = (): RosterContextType => {
   return context;
 };
 
-export { RosterProvider } from './RosterProvider';
+// Remove circular import
+// export { RosterProvider } from './RosterProvider';
