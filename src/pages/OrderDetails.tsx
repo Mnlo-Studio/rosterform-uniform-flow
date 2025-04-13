@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Download, SendHorizontal, Edit2, Save } from 'lucide-react';
+import { ArrowLeft, Download, SendHorizontal, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,7 @@ import { formatCurrency } from '@/utils/calculations';
 import { mockOrders } from '@/data/mockOrders';
 import { Order } from '@/types/orders';
 import { useToast } from '@/hooks/use-toast';
+import ImageUploadBox from '@/components/ImageUploadBox';
 
 const OrderDetails = () => {
   const { orderId } = useParams<{ orderId: string }>();
@@ -98,6 +99,36 @@ const OrderDetails = () => {
     });
     // Implementation for sending invoice would go here
   };
+  
+  const handleImageUpload = (index: number, base64: string) => {
+    setEditedOrder(prev => {
+      if (!prev) return null;
+      const newImages = [...prev.productInfo.images];
+      newImages[index] = base64;
+      return {
+        ...prev,
+        productInfo: {
+          ...prev.productInfo,
+          images: newImages
+        }
+      };
+    });
+  };
+  
+  const handleImageRemove = (index: number) => {
+    setEditedOrder(prev => {
+      if (!prev) return null;
+      const newImages = [...prev.productInfo.images];
+      newImages.splice(index, 1);
+      return {
+        ...prev,
+        productInfo: {
+          ...prev.productInfo,
+          images: newImages
+        }
+      };
+    });
+  };
 
   if (!order || !editedOrder) {
     return (
@@ -105,6 +136,12 @@ const OrderDetails = () => {
         <p>Order not found</p>
       </div>
     );
+  }
+
+  // Ensure we have 4 image slots by filling with empty strings if needed
+  const productImages = [...editedOrder.productInfo.images];
+  while (productImages.length < 4) {
+    productImages.push('');
   }
 
   return (
@@ -132,209 +169,196 @@ const OrderDetails = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Left Column */}
-          <div className="space-y-6">
-            {/* Customer Info Card */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle>Customer Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="teamName">Team Name</Label>
-                    <Input 
-                      id="teamName"
-                      name="teamName"
-                      value={editedOrder.customerInfo.teamName}
-                      onChange={handleCustomerInfoChange}
-                      disabled={!isEditMode}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="contactName">Contact Name</Label>
-                    <Input 
-                      id="contactName"
-                      name="contactName"
-                      value={editedOrder.customerInfo.contactName}
-                      onChange={handleCustomerInfoChange}
-                      disabled={!isEditMode}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Input 
-                      id="email"
-                      name="email"
-                      value={editedOrder.customerInfo.email}
-                      onChange={handleCustomerInfoChange}
-                      disabled={!isEditMode}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input 
-                      id="phone"
-                      name="phone"
-                      value={editedOrder.customerInfo.phone}
-                      onChange={handleCustomerInfoChange}
-                      disabled={!isEditMode}
-                    />
-                  </div>
-                </div>
+        <div className="space-y-6">
+          {/* Product Images */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle>Product Images</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {productImages.map((image, index) => (
+                  <ImageUploadBox
+                    key={index}
+                    imageSrc={image || undefined}
+                    onImageUpload={(base64) => handleImageUpload(index, base64)}
+                    onRemove={image ? () => handleImageRemove(index) : undefined}
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Customer Info Card */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle>Customer Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="teamName">Team Name</Label>
                   <Input 
-                    id="address"
-                    name="address"
-                    value={editedOrder.customerInfo.address}
+                    id="teamName"
+                    name="teamName"
+                    value={editedOrder.customerInfo.teamName}
                     onChange={handleCustomerInfoChange}
                     disabled={!isEditMode}
                   />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="city">City</Label>
-                    <Input 
-                      id="city"
-                      name="city"
-                      value={editedOrder.customerInfo.city}
-                      onChange={handleCustomerInfoChange}
-                      disabled={!isEditMode}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="state">State</Label>
-                    <Input 
-                      id="state"
-                      name="state"
-                      value={editedOrder.customerInfo.state}
-                      onChange={handleCustomerInfoChange}
-                      disabled={!isEditMode}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="zipCode">Zip Code</Label>
-                    <Input 
-                      id="zipCode"
-                      name="zipCode"
-                      value={editedOrder.customerInfo.zipCode}
-                      onChange={handleCustomerInfoChange}
-                      disabled={!isEditMode}
-                    />
-                  </div>
+                <div>
+                  <Label htmlFor="contactName">Contact Name</Label>
+                  <Input 
+                    id="contactName"
+                    name="contactName"
+                    value={editedOrder.customerInfo.contactName}
+                    onChange={handleCustomerInfoChange}
+                    disabled={!isEditMode}
+                  />
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Product Info Card */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle>Product Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="productName">Product Name</Label>
-                    <Input 
-                      id="productName"
-                      name="name"
-                      value={editedOrder.productInfo.name}
-                      onChange={handleProductInfoChange}
-                      disabled={!isEditMode}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="pricePerItem">Price Per Item</Label>
-                    <Input 
-                      id="pricePerItem"
-                      name="pricePerItem"
-                      value={editedOrder.productInfo.pricePerItem.toString()}
-                      onChange={handleProductInfoChange}
-                      disabled={!isEditMode}
-                      type="number"
-                      step="0.01"
-                    />
-                  </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input 
+                    id="email"
+                    name="email"
+                    value={editedOrder.customerInfo.email}
+                    onChange={handleCustomerInfoChange}
+                    disabled={!isEditMode}
+                  />
                 </div>
                 <div>
-                  <Label htmlFor="notes">Notes</Label>
+                  <Label htmlFor="phone">Phone</Label>
                   <Input 
-                    id="notes"
-                    name="notes"
-                    value={editedOrder.productInfo.notes}
+                    id="phone"
+                    name="phone"
+                    value={editedOrder.customerInfo.phone}
+                    onChange={handleCustomerInfoChange}
+                    disabled={!isEditMode}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="address">Address</Label>
+                <Input 
+                  id="address"
+                  name="address"
+                  value={editedOrder.customerInfo.address}
+                  onChange={handleCustomerInfoChange}
+                  disabled={!isEditMode}
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="city">City</Label>
+                  <Input 
+                    id="city"
+                    name="city"
+                    value={editedOrder.customerInfo.city}
+                    onChange={handleCustomerInfoChange}
+                    disabled={!isEditMode}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="state">State</Label>
+                  <Input 
+                    id="state"
+                    name="state"
+                    value={editedOrder.customerInfo.state}
+                    onChange={handleCustomerInfoChange}
+                    disabled={!isEditMode}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="zipCode">Zip Code</Label>
+                  <Input 
+                    id="zipCode"
+                    name="zipCode"
+                    value={editedOrder.customerInfo.zipCode}
+                    onChange={handleCustomerInfoChange}
+                    disabled={!isEditMode}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Product Info Card */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle>Product Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="productName">Product Name</Label>
+                  <Input 
+                    id="productName"
+                    name="name"
+                    value={editedOrder.productInfo.name}
                     onChange={handleProductInfoChange}
                     disabled={!isEditMode}
                   />
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Product Images */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle>Product Images</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-3">
-                  {editedOrder.productInfo.images.length > 0 ? (
-                    editedOrder.productInfo.images.map((image, index) => (
-                      <div key={index} className="relative aspect-square overflow-hidden rounded-md bg-gray-100">
-                        <img 
-                          src={image} 
-                          alt={`Product ${index + 1}`} 
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <div className="col-span-2 h-32 flex items-center justify-center bg-gray-100 rounded-md">
-                      <p className="text-gray-500 text-sm">No images available</p>
-                    </div>
-                  )}
+                <div>
+                  <Label htmlFor="pricePerItem">Price Per Item</Label>
+                  <Input 
+                    id="pricePerItem"
+                    name="pricePerItem"
+                    value={editedOrder.productInfo.pricePerItem.toString()}
+                    onChange={handleProductInfoChange}
+                    disabled={!isEditMode}
+                    type="number"
+                    step="0.01"
+                  />
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+              <div>
+                <Label htmlFor="notes">Notes</Label>
+                <Input 
+                  id="notes"
+                  name="notes"
+                  value={editedOrder.productInfo.notes}
+                  onChange={handleProductInfoChange}
+                  disabled={!isEditMode}
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Right Column */}
-          <div className="space-y-6">
-            {/* Roster Table */}
-            <Card className="h-full flex flex-col">
-              <CardHeader className="pb-3">
-                <CardTitle>Roster Information</CardTitle>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <ScrollArea className="h-[500px] w-full">
-                  <Table>
-                    <TableHeader className="bg-gray-50">
-                      <TableRow>
-                        <TableHead className="w-[40px]">#</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Number</TableHead>
-                        <TableHead>Size</TableHead>
-                        <TableHead>Gender</TableHead>
+          {/* Roster Table */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle>Roster Information</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[500px] w-full">
+                <Table>
+                  <TableHeader className="bg-gray-50">
+                    <TableRow>
+                      <TableHead className="w-[40px]">#</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Number</TableHead>
+                      <TableHead>Size</TableHead>
+                      <TableHead>Gender</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {editedOrder.players.map((player, index) => (
+                      <TableRow key={player.id}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{player.name}</TableCell>
+                        <TableCell>{player.number}</TableCell>
+                        <TableCell>{player.size}</TableCell>
+                        <TableCell>{player.gender}</TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {editedOrder.players.map((player, index) => (
-                        <TableRow key={player.id}>
-                          <TableCell>{index + 1}</TableCell>
-                          <TableCell>{player.name}</TableCell>
-                          <TableCell>{player.number}</TableCell>
-                          <TableCell>{player.size}</TableCell>
-                          <TableCell>{player.gender}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-          </div>
+                    ))}
+                  </TableBody>
+                </Table>
+              </ScrollArea>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="flex flex-wrap justify-between items-center mt-8 bg-gray-50 p-6 rounded-lg border border-gray-100">
