@@ -11,6 +11,7 @@ import Success from "./pages/Success";
 import NotFound from "./pages/NotFound";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
+import ShareEmbed from "./pages/ShareEmbed";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/success" element={<Success />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:orderId" element={<OrderDetails />} />
+            <Route path="/share" element={<ShareEmbed />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
