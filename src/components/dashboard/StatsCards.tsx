@@ -20,17 +20,17 @@ const StatsCards: React.FC<StatsCardsProps> = ({
       <StatCard 
         title="Total Orders" 
         value={totalOrders.toString()} 
-        icon={<LayoutDashboard className="h-5 w-5 text-blue-500" />} 
+        icon={<LayoutDashboard className="h-5 w-5 text-primary-600" />} 
       />
       <StatCard 
         title="Total Players" 
         value={totalPlayers.toString()} 
-        icon={<Users className="h-5 w-5 text-purple-500" />} 
+        icon={<Users className="h-5 w-5 text-primary-600" />} 
       />
       <StatCard 
         title="Total Revenue" 
         value={formatCurrency(totalRevenue)} 
-        icon={<DollarSign className="h-5 w-5 text-green-500" />} 
+        icon={<DollarSign className="h-5 w-5 text-success-500" />} 
       />
     </div>
   );
@@ -44,14 +44,14 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon }) => {
   return (
-    <Card>
+    <Card className="shadow-card card-hover">
       <CardContent className="flex items-center p-6">
-        <div className="mr-4 rounded-full bg-gray-50 p-2">
+        <div className="mr-4 rounded-full bg-neutral-50 p-2">
           {icon}
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <h3 className="text-xl font-bold">{value}</h3>
+          <p className="text-sm font-medium text-neutral-500">{title}</p>
+          <h3 className="text-h3 font-bold">{value}</h3>
         </div>
       </CardContent>
     </Card>

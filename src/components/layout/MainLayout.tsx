@@ -17,8 +17,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   // Otherwise use a clean layout with just the content
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-neutral-50">
+      <div className="container mx-auto p-4 md:p-6 lg:p-8">
         {children}
       </div>
     </div>

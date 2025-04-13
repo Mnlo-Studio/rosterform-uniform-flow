@@ -23,10 +23,10 @@ const Index = () => {
   }, [location]);
 
   return (
-    <div className="bg-gray-100 pb-20">
-      <div className={isDashboardLayout ? "px-4 py-8" : "container mx-auto px-4 py-8"}>
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Rosterform</h1>
+    <div className="bg-neutral-50 pb-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-h2 font-bold text-neutral-800">Roster Form</h1>
           {!isDashboardLayout && (
             <Link to="/orders">
               <Button variant="outline" className="flex items-center gap-2">

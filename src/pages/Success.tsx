@@ -31,11 +31,11 @@ const Success = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-card">
         <CardHeader className="pb-3 flex flex-col items-center">
-          <CheckCircle className="h-24 w-24 text-green-500 mb-2" />
-          <CardTitle className="text-2xl font-bold text-center text-gray-800">
+          <CheckCircle className="h-24 w-24 text-success-500 mb-2" />
+          <CardTitle className="text-h2 font-bold text-center text-neutral-800">
             Your order has been submitted!
           </CardTitle>
         </CardHeader>
@@ -43,28 +43,25 @@ const Success = () => {
         <CardContent className="pt-6 space-y-4">
           <Button 
             onClick={handleSameProduct} 
-            className="w-full"
-            variant="default"
+            className="w-full bg-primary-700 hover:bg-primary-800"
           >
             Submit another order with the same product
           </Button>
           <Button 
             onClick={handleSameRoster} 
-            className="w-full" 
-            variant="default"
+            className="w-full bg-primary-700 hover:bg-primary-800"
           >
             Submit another order with the same roster
           </Button>
           <Button 
             onClick={handleNewOrder} 
-            className="w-full" 
-            variant="default"
+            className="w-full bg-primary-700 hover:bg-primary-800"
           >
             Submit a new order
           </Button>
         </CardContent>
         <CardFooter className="flex justify-center pt-0">
-          <p className="text-sm text-gray-500">Thank you for your business!</p>
+          <p className="text-sm text-neutral-500">Thank you for your business!</p>
         </CardFooter>
       </Card>
     </div>
