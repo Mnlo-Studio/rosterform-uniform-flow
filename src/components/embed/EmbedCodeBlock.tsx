@@ -1,17 +1,25 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface EmbedCodeBlockProps {
   code: string;
 }
 
 const EmbedCodeBlock: React.FC<EmbedCodeBlockProps> = ({ code }) => {
+  const [copied, setCopied] = useState(false);
+  
   const copyToClipboard = () => {
     navigator.clipboard.writeText(code);
+    setCopied(true);
     toast.success("Code copied to clipboard!");
+    
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   return (
@@ -22,11 +30,20 @@ const EmbedCodeBlock: React.FC<EmbedCodeBlockProps> = ({ code }) => {
       <Button
         variant="outline"
         size="sm"
-        className="absolute top-2 right-2 bg-background"
+        className="absolute top-2 right-2 bg-background gap-1"
         onClick={copyToClipboard}
       >
-        <Copy className="h-4 w-4 mr-1" />
-        Copy
+        {copied ? (
+          <>
+            <Check className="h-4 w-4 text-green-500" />
+            Copied
+          </>
+        ) : (
+          <>
+            <Copy className="h-4 w-4" />
+            Copy
+          </>
+        )}
       </Button>
     </div>
   );

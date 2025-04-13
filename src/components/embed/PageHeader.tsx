@@ -1,5 +1,6 @@
 
 import React from "react";
+import ShareLinkButton from "./ShareLinkButton";
 
 const PageHeader: React.FC = () => {
   return (
@@ -8,6 +9,9 @@ const PageHeader: React.FC = () => {
       <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
         Choose from different embedding options to integrate your roster form into your website or application.
       </p>
+      <div className="mt-4 flex justify-center">
+        <ShareLinkButton />
+      </div>
     </div>
   );
 };
