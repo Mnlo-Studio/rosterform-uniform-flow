@@ -1,7 +1,7 @@
 
 // Re-export all sidebar components from this file
 export * from './sidebar-provider';
-export * from './sidebar-content';
+export * from './sidebar-content.tsx'; // Note the .tsx extension
 export * from './sidebar-header-footer';
 export * from './sidebar-group';
 export * from './sidebar-menu';
