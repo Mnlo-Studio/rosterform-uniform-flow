@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import OrdersHeader from '@/components/orders/OrdersHeader';
@@ -59,7 +60,7 @@ const Orders = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white p-4 md:p-6 lg:p-8 min-h-screen text-gray-800">
       <OrdersHeader 
         searchQuery={searchQuery} 
         onSearch={handleSearch} 
