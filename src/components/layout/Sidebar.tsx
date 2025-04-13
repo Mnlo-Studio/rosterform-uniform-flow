@@ -57,7 +57,7 @@ const MainSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="bg-white">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
