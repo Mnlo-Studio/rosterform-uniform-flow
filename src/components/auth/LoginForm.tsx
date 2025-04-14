@@ -16,11 +16,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Login form schema
 const loginFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters" }),
+  rememberMe: z.boolean().optional().default(false)
 });
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
@@ -40,6 +42,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false
     },
   });
 
@@ -47,11 +50,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
-      // This would connect to your actual auth system
       console.log("Login attempt", data);
       
       // Simulate successful login
       await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Store user preferences if 'Remember me' is checked
+      if (data.rememberMe) {
+        localStorage.setItem('rememberedEmail', data.email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
       
       toast({
         title: "Success",
@@ -71,6 +80,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
       setIsLoading(false);
     }
   };
+
+  // Check for remembered email on component mount
+  React.useEffect(() => {
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    if (rememberedEmail) {
+      form.setValue('email', rememberedEmail);
+      form.setValue('rememberMe', true);
+    }
+  }, [form]);
 
   return (
     <Form {...form}>
@@ -129,7 +147,24 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
           )}
         />
 
-        <div className="flex justify-end">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <FormField
+              control={form.control}
+              name="rememberMe"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <span>Remember me</span>
+                </FormItem>
+              )}
+            />
+          </div>
           <a href="#" className="text-sm text-gray-600 hover:text-blue-600">
             Forgot Password?
           </a>
