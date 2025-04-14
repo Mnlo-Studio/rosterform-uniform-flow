@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { toast } from "sonner";
 import OrdersHeader from '@/components/orders/OrdersHeader';
 import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
 import OrdersTable from '@/components/orders/OrdersTable';
@@ -40,6 +41,36 @@ const Orders = () => {
     setFilteredOrders(filtered);
   };
 
+  const handleStatusChange = (orderId: string, newStatus: 'Pending' | 'Completed' | 'Cancelled') => {
+    const updatedOrders = orders.map(order => {
+      if (order.orderId === orderId) {
+        return { ...order, status: newStatus };
+      }
+      return order;
+    });
+    
+    setOrders(updatedOrders);
+    // Also update filtered orders
+    filterOrders(searchQuery, statusFilter);
+    
+    toast.success(`Order ${orderId} status updated to ${newStatus}`);
+  };
+
+  const handlePaymentChange = (orderId: string, isPaid: boolean) => {
+    const updatedOrders = orders.map(order => {
+      if (order.orderId === orderId) {
+        return { ...order, isPaid };
+      }
+      return order;
+    });
+    
+    setOrders(updatedOrders);
+    // Also update filtered orders
+    filterOrders(searchQuery, statusFilter);
+    
+    toast.success(`Order ${orderId} payment status updated to ${isPaid ? 'Paid' : 'Unpaid'}`);
+  };
+
   const getTotalPlayers = () => {
     return orders.reduce((total, order) => total + order.players.length, 0);
   };
@@ -63,7 +94,11 @@ const Orders = () => {
         totalPlayers={getTotalPlayers()} 
       />
       
-      <OrdersTable orders={filteredOrders} />
+      <OrdersTable 
+        orders={filteredOrders} 
+        onStatusChange={handleStatusChange}
+        onPaymentChange={handlePaymentChange}
+      />
     </div>
   );
 };

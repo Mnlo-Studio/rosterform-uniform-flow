@@ -9,16 +9,29 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatCurrency } from '@/utils/calculations';
 import { Order } from '@/types/orders';
+import { ChevronDown } from 'lucide-react';
+import { StatusBadge } from '@/components/ui/status-badge';
 
 interface OrdersTableProps {
   orders: Order[];
+  onStatusChange?: (orderId: string, status: 'Pending' | 'Completed' | 'Cancelled') => void;
+  onPaymentChange?: (orderId: string, isPaid: boolean) => void;
 }
 
 const OrdersTable: React.FC<OrdersTableProps> = ({
-  orders
+  orders,
+  onStatusChange,
+  onPaymentChange
 }) => {
   const navigate = useNavigate();
   
@@ -41,8 +54,11 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
       : 'bg-orange-100 text-orange-800';
   };
 
-  const handleOrderClick = (orderId: string) => {
-    navigate(`/orders/${orderId}`);
+  const handleOrderClick = (orderId: string, event: React.MouseEvent) => {
+    // Only navigate if the click is not on a dropdown
+    if (!(event.target as HTMLElement).closest('.dropdown-area')) {
+      navigate(`/orders/${orderId}`);
+    }
   };
 
   return (
@@ -72,7 +88,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
                 <TableRow 
                   key={order.orderId}
                   className={`cursor-pointer hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
-                  onClick={() => handleOrderClick(order.orderId)}
+                  onClick={(e) => handleOrderClick(order.orderId, e)}
                 >
                   <TableCell className="font-medium">{order.orderId}</TableCell>
                   <TableCell>{order.teamName}</TableCell>
@@ -80,14 +96,68 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
                   <TableCell className="text-center">{order.players.length}</TableCell>
                   <TableCell>{formatCurrency(order.total)}</TableCell>
                   <TableCell>
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(order.status)}`}>
-                      {order.status}
-                    </span>
+                    <div className="dropdown-area">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-8 p-0 flex items-center gap-1">
+                            <StatusBadge 
+                              status={order.status.toLowerCase() as any} 
+                              label={order.status}
+                            />
+                            <ChevronDown className="h-3 w-3 opacity-50" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-[120px]">
+                          <DropdownMenuItem 
+                            onClick={() => onStatusChange?.(order.orderId, 'Pending')}
+                            className="cursor-pointer"
+                          >
+                            <StatusBadge status="pending" />
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => onStatusChange?.(order.orderId, 'Completed')}
+                            className="cursor-pointer"
+                          >
+                            <StatusBadge status="success" label="Completed" />
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => onStatusChange?.(order.orderId, 'Cancelled')}
+                            className="cursor-pointer"
+                          >
+                            <StatusBadge status="error" label="Cancelled" />
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </TableCell>
                   <TableCell>
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getPaymentBadgeClass(order.isPaid)}`}>
-                      {order.isPaid ? 'Paid' : 'Unpaid'}
-                    </span>
+                    <div className="dropdown-area">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-8 p-0 flex items-center gap-1">
+                            <StatusBadge 
+                              status={order.isPaid ? "paid" : "unpaid"} 
+                              label={order.isPaid ? "Paid" : "Unpaid"}
+                            />
+                            <ChevronDown className="h-3 w-3 opacity-50" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-[120px]">
+                          <DropdownMenuItem 
+                            onClick={() => onPaymentChange?.(order.orderId, true)}
+                            className="cursor-pointer"
+                          >
+                            <StatusBadge status="paid" />
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => onPaymentChange?.(order.orderId, false)}
+                            className="cursor-pointer"
+                          >
+                            <StatusBadge status="unpaid" />
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
