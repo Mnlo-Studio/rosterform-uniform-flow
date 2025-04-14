@@ -3,7 +3,6 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
-import { Link } from "react-router-dom";
 import { mockOrders } from "@/data/mockOrders";
 import OrderStatusOverview from "@/components/dashboard/OrderStatusOverview";
 import SummaryStatistics from "@/components/dashboard/SummaryStatistics";
@@ -12,12 +11,7 @@ const Dashboard: React.FC = () => {
   // Mock user data - in a real application, this would come from context or API
   const user = {
     name: "Alex Johnson",
-    email: "alex@example.com",
-    savedRosters: [
-      { id: "rst-001", name: "Basketball Team 2025", createdAt: "Feb 15, 2025" },
-      { id: "rst-002", name: "Soccer Summer Camp", createdAt: "March 10, 2025" },
-      { id: "rst-003", name: "Track & Field Event", createdAt: "March 22, 2025" },
-    ]
+    email: "alex@example.com"
   };
 
   // Using mock orders for the dashboard stats
@@ -49,48 +43,6 @@ const Dashboard: React.FC = () => {
       
       {/* Summary Statistics */}
       <SummaryStatistics orders={orders} />
-      
-      {/* Saved Rosters */}
-      <Card className="mb-6 shadow-card">
-        <CardHeader>
-          <CardTitle>Saved Rosters</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {user.savedRosters.length === 0 ? (
-            <p className="text-gray-600">You don't have any saved rosters yet.</p>
-          ) : (
-            <div className="space-y-4">
-              {user.savedRosters.map((roster) => (
-                <div key={roster.id} className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium text-gray-900">{roster.name}</p>
-                    <p className="text-sm text-gray-600">Created: {roster.createdAt}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">Edit</Button>
-                    <Button variant="outline" size="sm">Duplicate</Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-      
-      {/* Embed Form */}
-      <Card className="mb-6 shadow-card">
-        <CardHeader>
-          <CardTitle>Embed Form</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex justify-between items-center">
-            <p className="text-gray-800">Embed your order form into your website</p>
-            <Button asChild className="bg-primary-700 hover:bg-primary-800">
-              <Link to="/share">Get Embed Code</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
