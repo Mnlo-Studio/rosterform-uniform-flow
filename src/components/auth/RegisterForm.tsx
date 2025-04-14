@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 import {
@@ -88,11 +88,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ isLoading, setIsLoading, sw
           render={({ field }) => (
             <FormItem>
               <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <FormControl>
                   <Input
                     placeholder="Full Name"
                     {...field}
-                    className="pl-4 pr-4 py-6 rounded-xl bg-white border-gray-200"
+                    className="pl-10 pr-4 py-3 rounded-md border border-gray-300"
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -108,11 +109,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ isLoading, setIsLoading, sw
           render={({ field }) => (
             <FormItem>
               <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <FormControl>
                   <Input
                     placeholder="Your e-mail address"
                     {...field}
-                    className="pl-4 pr-4 py-6 rounded-xl bg-white border-gray-200"
+                    className="pl-10 pr-4 py-3 rounded-md border border-gray-300"
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -128,12 +130,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ isLoading, setIsLoading, sw
           render={({ field }) => (
             <FormItem>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <FormControl>
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     {...field}
-                    className="pl-4 pr-10 py-6 rounded-xl bg-white border-gray-200"
+                    className="pl-10 pr-10 py-3 rounded-md border border-gray-300"
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -162,12 +165,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ isLoading, setIsLoading, sw
           render={({ field }) => (
             <FormItem>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <FormControl>
                   <Input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm Password"
                     {...field}
-                    className="pl-4 pr-10 py-6 rounded-xl bg-white border-gray-200"
+                    className="pl-10 pr-10 py-3 rounded-md border border-gray-300"
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -192,7 +196,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ isLoading, setIsLoading, sw
 
         <Button
           type="submit"
-          className="w-full py-6 bg-black hover:bg-gray-800 text-white rounded-full"
+          className="w-full py-5 bg-primary-700 hover:bg-primary-800 text-white rounded-md"
           disabled={isLoading}
         >
           {isLoading ? "Creating Account..." : "Create Account"}

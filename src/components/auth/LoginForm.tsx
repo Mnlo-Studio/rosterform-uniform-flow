@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, User, Lock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 import {
@@ -92,18 +92,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
               <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <FormControl>
                   <Input
-                    placeholder="Your e-mail address"
+                    placeholder="Enter your username/email"
                     {...field}
-                    className="pl-4 pr-4 py-6 rounded-xl bg-white border-gray-200"
+                    className="pl-10 pr-4 py-3 rounded-md border border-gray-300"
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -119,12 +120,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
           render={({ field }) => (
             <FormItem>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <FormControl>
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Password"
+                    placeholder="Enter your password"
                     {...field}
-                    className="pl-4 pr-10 py-6 rounded-xl bg-white border-gray-200"
+                    className="pl-10 pr-10 py-3 rounded-md border border-gray-300"
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -160,27 +162,23 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <span>Remember me</span>
+                  <span className="text-sm text-gray-600">Remember me</span>
                 </FormItem>
               )}
             />
           </div>
-          <a href="#" className="text-sm text-gray-600 hover:text-blue-600">
+          <a href="#" className="text-sm text-gray-600 hover:text-primary-700">
             Forgot Password?
           </a>
         </div>
 
         <Button
           type="submit"
-          className="w-full py-6 bg-black hover:bg-gray-800 text-white rounded-full"
+          className="w-full py-5 bg-primary-700 hover:bg-primary-800 text-white rounded-md"
           disabled={isLoading}
         >
-          {isLoading ? "Signing in..." : "Sign in"}
+          {isLoading ? "Signing in..." : "Login In"}
         </Button>
-        
-        <div className="text-center text-sm text-gray-600 mt-4">
-          Email us anytime at <a href="mailto:contact@rmarts.com" className="text-blue-600 hover:underline">contact@rmarts.com</a>
-        </div>
       </form>
     </Form>
   );
