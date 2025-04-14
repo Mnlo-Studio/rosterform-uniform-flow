@@ -1,13 +1,13 @@
 
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, ClipboardList, Share2, UserCircle, LogIn } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
 const MainSidebar = () => {
   const location = useLocation();
 
-  // Navigation items
+  // Navigation items - removed Login/Register item
   const navItems = [{
     label: "Dashboard",
     icon: LayoutDashboard,
@@ -26,15 +26,11 @@ const MainSidebar = () => {
     path: "/share"
   }];
 
-  // Account items (at bottom)
+  // Account items (at bottom) - removed Login/Register
   const accountItems = [{
     label: "Account",
     icon: UserCircle,
     path: "/account"
-  }, {
-    label: "Login/Register",
-    icon: LogIn,
-    path: "/auth"
   }];
 
   const isActive = (path: string) => {
