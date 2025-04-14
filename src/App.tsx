@@ -15,6 +15,7 @@ import OrderDetails from "./pages/OrderDetails";
 import ShareEmbed from "./pages/ShareEmbed";
 import Dashboard from "./pages/Dashboard";
 import Account from "./pages/Account";
+import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,8 @@ const App = () => (
         <LayoutProvider>
           <RosterProvider>
             <Routes>
+              {/* Auth page doesn't use MainLayout */}
+              <Route path="/auth" element={<Auth />} />
               <Route path="*" element={
                 <MainLayout>
                   <Routes>

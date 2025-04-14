@@ -1,7 +1,9 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Share2, UserCircle, LogIn } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+
 const MainSidebar = () => {
   const location = useLocation();
 
@@ -29,7 +31,12 @@ const MainSidebar = () => {
     label: "Account",
     icon: UserCircle,
     path: "/account"
+  }, {
+    label: "Login/Register",
+    icon: LogIn,
+    path: "/auth"
   }];
+
   const isActive = (path: string) => {
     // Special case for the root path
     if (path === "/" && location.pathname === "/") {
@@ -39,6 +46,7 @@ const MainSidebar = () => {
     // This will highlight parent routes when on child routes
     return path !== "/" && location.pathname.startsWith(path);
   };
+
   return <Sidebar className="border-r border-gray-200">
       <SidebarContent className="bg-white">
         <SidebarGroup>
@@ -75,4 +83,5 @@ const MainSidebar = () => {
       </SidebarFooter>
     </Sidebar>;
 };
+
 export default MainSidebar;
