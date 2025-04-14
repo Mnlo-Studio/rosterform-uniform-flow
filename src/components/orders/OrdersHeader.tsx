@@ -24,22 +24,22 @@ const OrdersHeader: React.FC<OrdersHeaderProps> = ({
   onStatusFilter
 }) => {
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">Orders</h1>
+    <div className="flex flex-wrap items-center justify-between gap-4">
+      <h1 className="text-2xl font-semibold text-gray-800">Orders</h1>
       
-      <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-        <div className="relative">
+      <div className="flex items-center gap-3 w-full md:w-auto">
+        <div className="relative flex-1 md:flex-none md:w-[250px]">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
             placeholder="Search team name or order ID"
             value={searchQuery}
             onChange={(e) => onSearch(e.target.value)}
-            className="pl-10 w-full sm:w-[250px] rounded-md"
+            className="pl-10 w-full h-10"
           />
         </div>
         
         <Select value={statusFilter} onValueChange={onStatusFilter}>
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-[180px] h-10">
             <SelectValue placeholder="All Orders" />
           </SelectTrigger>
           <SelectContent>

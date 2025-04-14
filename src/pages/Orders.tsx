@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
 import OrdersHeader from '@/components/orders/OrdersHeader';
 import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
 import OrdersTable from '@/components/orders/OrdersTable';
@@ -12,7 +11,6 @@ const Orders = () => {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>(mockOrders);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const { toast } = useToast();
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -42,15 +40,6 @@ const Orders = () => {
     setFilteredOrders(filtered);
   };
 
-  const handleSendInvoice = (orderId: string) => {
-    console.log(`Sending invoice for order: ${orderId}`);
-    toast({
-      title: "Invoice sent",
-      description: `Invoice for order ${orderId} has been sent to the customer.`,
-    });
-    // Implementation for sending invoice would go here
-  };
-
   const getTotalPlayers = () => {
     return orders.reduce((total, order) => total + order.players.length, 0);
   };
@@ -74,10 +63,7 @@ const Orders = () => {
         totalPlayers={getTotalPlayers()} 
       />
       
-      <OrdersTable 
-        orders={filteredOrders} 
-        onSendInvoice={handleSendInvoice} 
-      />
+      <OrdersTable orders={filteredOrders} />
     </div>
   );
 };
