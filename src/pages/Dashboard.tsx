@@ -2,20 +2,17 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Edit, Key, Trash2 } from "lucide-react";
+import { Edit } from "lucide-react";
 import { Link } from "react-router-dom";
-import StatsCards from "@/components/dashboard/StatsCards";
+import { mockOrders } from "@/data/mockOrders";
+import OrderStatusOverview from "@/components/dashboard/OrderStatusOverview";
+import SummaryStatistics from "@/components/dashboard/SummaryStatistics";
 
 const Dashboard: React.FC = () => {
   // Mock user data - in a real application, this would come from context or API
   const user = {
     name: "Alex Johnson",
     email: "alex@example.com",
-    totalOrders: 12,
-    totalPlayers: 48,
-    totalRevenue: 3600,
-    lastOrderDate: "March 25, 2025",
     savedRosters: [
       { id: "rst-001", name: "Basketball Team 2025", createdAt: "Feb 15, 2025" },
       { id: "rst-002", name: "Soccer Summer Camp", createdAt: "March 10, 2025" },
@@ -23,10 +20,13 @@ const Dashboard: React.FC = () => {
     ]
   };
 
+  // Using mock orders for the dashboard stats
+  const orders = mockOrders;
+
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg">
       <h1 className="mb-2">Dashboard</h1>
-      <p className="text-gray-600 mb-6">Manage your account, forms, and roster tools.</p>
+      <p className="text-gray-600 mb-6">Manage your orders, statistics, and roster tools.</p>
       
       {/* User Info Card */}
       <Card className="mb-6 shadow-card">
@@ -44,12 +44,11 @@ const Dashboard: React.FC = () => {
         </CardContent>
       </Card>
       
-      {/* Stats Cards */}
-      <StatsCards 
-        totalOrders={user.totalOrders} 
-        totalPlayers={user.totalPlayers} 
-        totalRevenue={user.totalRevenue} 
-      />
+      {/* Order Status Overview */}
+      <OrderStatusOverview orders={orders} />
+      
+      {/* Summary Statistics */}
+      <SummaryStatistics orders={orders} />
       
       {/* Saved Rosters */}
       <Card className="mb-6 shadow-card">
@@ -89,26 +88,6 @@ const Dashboard: React.FC = () => {
             <Button asChild className="bg-primary-700 hover:bg-primary-800">
               <Link to="/share">Get Embed Code</Link>
             </Button>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* Account Settings */}
-      <Card className="shadow-card">
-        <CardHeader>
-          <CardTitle>Account Settings</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Key className="h-4 w-4 text-gray-600" />
-              <Button variant="link" className="h-auto p-0 text-primary-700">Change Password</Button>
-            </div>
-            <Separator />
-            <div className="flex items-center gap-2">
-              <Trash2 className="h-4 w-4 text-error-500" />
-              <Button variant="link" className="h-auto p-0 text-error-500">Delete Account</Button>
-            </div>
           </div>
         </CardContent>
       </Card>
