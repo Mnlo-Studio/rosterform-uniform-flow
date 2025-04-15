@@ -1,8 +1,14 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, ChevronDown } from 'lucide-react';
 import { useRoster } from '@/context/RosterContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const QuickAddButtons: React.FC = () => {
   const { addPlayers } = useRoster();
@@ -17,20 +23,27 @@ const QuickAddButtons: React.FC = () => {
   return (
     <div className="mb-4">
       <p className="text-sm font-medium mb-2">Quick Add Players</p>
-      <div className="flex flex-wrap gap-2">
-        {quickAddOptions.map(option => (
-          <Button
-            key={option.count}
-            variant="outline"
-            size="sm"
-            onClick={() => addPlayers(option.count)}
-            className="border-neutral-200"
-          >
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" className="border-neutral-200">
             <Plus className="h-3.5 w-3.5 mr-1" />
-            {option.label}
+            Quick Add Players
+            <ChevronDown className="h-3.5 w-3.5 ml-1" />
           </Button>
-        ))}
-      </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="bg-white">
+          {quickAddOptions.map(option => (
+            <DropdownMenuItem
+              key={option.count}
+              onClick={() => addPlayers(option.count)}
+              className="cursor-pointer"
+            >
+              <Plus className="h-3.5 w-3.5 mr-1" />
+              Add {option.label} Player{option.count > 1 ? 's' : ''}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
