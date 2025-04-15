@@ -19,6 +19,16 @@ export const useBulkOptions = () => {
   const [quickAddCount, setQuickAddCount] = useState<number | null>(null);
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   
+  // Reset states when product info changes to force re-rendering of dropdown
+  React.useEffect(() => {
+    // Only reset selectedProductId if it's not present in the products list
+    if (selectedProductId && 
+        productInfo.products.length > 0 && 
+        !productInfo.products.some(p => p.id === selectedProductId)) {
+      setSelectedProductId('');
+    }
+  }, [productInfo.products, selectedProductId]);
+  
   const handleGenderChange = (value: string) => {
     updateBulkOptions({
       defaultGender: value

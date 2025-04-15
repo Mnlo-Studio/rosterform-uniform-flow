@@ -28,11 +28,18 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
   id,
   disabled = false
 }) => {
+  // Reset value if selected product no longer exists
+  React.useEffect(() => {
+    if (productId && products.length > 0 && !products.some(p => p.id === productId)) {
+      onValueChange(undefined);
+    }
+  }, [products, productId, onValueChange]);
+  
   return (
     <Select
       value={productId || ''}
       onValueChange={onValueChange}
-      disabled={disabled}
+      disabled={disabled || products.length === 0}
     >
       <SelectTrigger 
         id={id}
@@ -40,10 +47,10 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-white">
         {products.map(product => (
           <SelectItem key={product.id} value={product.id}>
-            {product.name}
+            {product.name || 'Unnamed Product'}
           </SelectItem>
         ))}
       </SelectContent>
