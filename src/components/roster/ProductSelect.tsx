@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   Select, 
   SelectContent, 
@@ -28,8 +28,14 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
   id,
   disabled = false
 }) => {
+  // Debug logging
+  useEffect(() => {
+    console.log('ProductSelect - Products:', products);
+    console.log('ProductSelect - Selected Product ID:', productId);
+  }, [products, productId]);
+  
   // Reset value if selected product no longer exists
-  React.useEffect(() => {
+  useEffect(() => {
     if (productId && products.length > 0 && !products.some(p => p.id === productId)) {
       onValueChange(undefined);
     }
@@ -47,12 +53,16 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent>
-        {products.map(product => (
-          <SelectItem key={product.id} value={product.id}>
-            {product.name || 'Unnamed Product'}
-          </SelectItem>
-        ))}
+      <SelectContent className="bg-white">
+        {products.length === 0 ? (
+          <SelectItem value="no-products" disabled>No products available</SelectItem>
+        ) : (
+          products.map(product => (
+            <SelectItem key={product.id} value={product.id}>
+              {product.name || 'Unnamed Product'}
+            </SelectItem>
+          ))
+        )}
       </SelectContent>
     </Select>
   );

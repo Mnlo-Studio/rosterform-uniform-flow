@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import ProductSelect from '@/components/roster/ProductSelect';
 
@@ -13,6 +13,12 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
   onProductSelect 
 }) => {
   const { productInfo, players } = useRoster();
+  
+  useEffect(() => {
+    // Debug logging
+    console.log('BulkProductAssignmentSection - Products:', productInfo.products);
+    console.log('BulkProductAssignmentSection - Selected Product ID:', selectedProductId);
+  }, [productInfo.products, selectedProductId]);
 
   return (
     <div>

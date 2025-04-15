@@ -19,6 +19,12 @@ export const useBulkOptions = () => {
   const [quickAddCount, setQuickAddCount] = useState<number | null>(null);
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   
+  // Debug logging
+  useEffect(() => {
+    console.log('useBulkOptions - Products:', productInfo.products);
+    console.log('useBulkOptions - Selected Product ID:', selectedProductId);
+  }, [productInfo.products, selectedProductId]);
+  
   // Reset states when product info changes to force re-rendering of dropdown
   useEffect(() => {
     // Only reset selectedProductId if it's not present in the products list
@@ -82,6 +88,7 @@ export const useBulkOptions = () => {
   };
   
   const handleProductSelection = (productId: string) => {
+    console.log('Product selected:', productId);
     setSelectedProductId(productId);
   };
   

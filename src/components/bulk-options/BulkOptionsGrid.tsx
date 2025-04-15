@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import DefaultOptionsSection from './DefaultOptionsSection';
 import CustomNamePrefixInput from './CustomNamePrefixInput';
 import CustomNumberPrefixInput from './CustomNumberPrefixInput';
@@ -38,21 +38,25 @@ const BulkOptionsGrid: React.FC<BulkOptionsGridProps> = ({
   onQuickAddSelection,
   onProductSelection
 }) => {
+  // Debug logging
+  useEffect(() => {
+    console.log('BulkOptionsGrid - Has Products:', hasProducts);
+    console.log('BulkOptionsGrid - Selected Product ID:', selectedProductId);
+  }, [hasProducts, selectedProductId]);
+
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {/* First row: Quick add and bulk product */}
       <QuickAddButtons 
         onSelectQuickAdd={onQuickAddSelection} 
         selectedCount={quickAddCount}
       />
       
-      {/* Bulk product assignment - only show if there are products available */}
-      {hasProducts && (
-        <BulkProductAssignmentSection 
-          selectedProductId={selectedProductId}
-          onProductSelect={onProductSelection}
-        />
-      )}
+      {/* Bulk product assignment - always show, whether or not there are products */}
+      <BulkProductAssignmentSection 
+        selectedProductId={selectedProductId}
+        onProductSelect={onProductSelection}
+      />
     
       {/* Second row: Default Gender and Size */}
       <div>
