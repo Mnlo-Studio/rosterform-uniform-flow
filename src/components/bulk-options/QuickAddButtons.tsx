@@ -11,15 +11,21 @@ import {
 
 interface QuickAddButtonsProps {
   onSelectQuickAdd: (count: number) => void;
+  selectedCount: number | null;
 }
 
-const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd }) => {
+const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd, selectedCount }) => {
   const quickAddOptions = [
     { count: 1, label: '1' },
     { count: 5, label: '5' },
     { count: 10, label: '10' },
     { count: 25, label: '25' }
   ];
+  
+  // Find the selected option label
+  const selectedOptionLabel = selectedCount 
+    ? `Add ${quickAddOptions.find(opt => opt.count === selectedCount)?.label || selectedCount} Player${selectedCount > 1 ? 's' : ''}`
+    : 'Quick Add Players';
   
   return (
     <div>
@@ -28,8 +34,8 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd }) =
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="border-neutral-200 w-full">
             <Plus className="h-3.5 w-3.5 mr-1" />
-            Quick Add Players
-            <ChevronDown className="h-3.5 w-3.5 ml-1" />
+            {selectedOptionLabel}
+            <ChevronDown className="h-3.5 w-3.5 ml-auto" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="bg-white">

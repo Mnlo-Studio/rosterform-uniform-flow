@@ -141,7 +141,10 @@ const BulkOptionsToolbar: React.FC = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             {/* First row: Quick add and bulk product */}
-            <QuickAddButtons onSelectQuickAdd={handleQuickAddSelection} />
+            <QuickAddButtons 
+              onSelectQuickAdd={handleQuickAddSelection} 
+              selectedCount={quickAddCount}
+            />
             
             {/* Bulk product assignment - only show if there are products available */}
             {productInfo.products.length > 0 && (
@@ -200,14 +203,12 @@ const BulkOptionsToolbar: React.FC = () => {
             {/* Fifth row: Custom inputs (only shown conditionally) */}
             {bulkOptions.namePrefixType === 'custom' && (
               <div>
-                <label className="text-sm font-medium mb-2 block">Custom Name Prefix</label>
                 <CustomNamePrefixInput prefix={bulkOptions.namePrefix} onChange={handleNamePrefixChange} />
               </div>
             )}
             
             {bulkOptions.numberFillType === 'custom' && (
               <div>
-                <label className="text-sm font-medium mb-2 block">Custom Number Prefix</label>
                 <CustomNumberPrefixInput prefix={bulkOptions.numberPrefix || ''} onChange={handleNumberPrefixChange} />
               </div>
             )}

@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
 interface CustomNamePrefixInputProps {
@@ -11,13 +10,13 @@ interface CustomNamePrefixInputProps {
 const CustomNamePrefixInput: React.FC<CustomNamePrefixInputProps> = ({ prefix, onChange }) => {
   return (
     <div>
-      <Label htmlFor="namePrefix" className="text-sm font-medium">Custom Name Prefix</Label>
+      <p className="text-sm font-medium mb-2">Custom Name Prefix</p>
       <Input 
         id="namePrefix" 
         value={prefix} 
         onChange={onChange} 
         placeholder="Enter prefix (e.g. 'Team Member')"
-        className="w-full mt-1"
+        className="w-full"
       />
     </div>
   );

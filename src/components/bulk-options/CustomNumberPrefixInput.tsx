@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
 interface CustomNumberPrefixInputProps {
@@ -11,13 +10,13 @@ interface CustomNumberPrefixInputProps {
 const CustomNumberPrefixInput: React.FC<CustomNumberPrefixInputProps> = ({ prefix, onChange }) => {
   return (
     <div>
-      <Label htmlFor="numberPrefix" className="text-sm font-medium">Custom Number Prefix</Label>
+      <p className="text-sm font-medium mb-2">Custom Number Prefix</p>
       <Input 
         id="numberPrefix" 
         value={prefix} 
         onChange={onChange} 
         placeholder="Enter number prefix (e.g. '#')"
-        className="w-full mt-1"
+        className="w-full"
       />
     </div>
   );
