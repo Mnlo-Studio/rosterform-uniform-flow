@@ -21,6 +21,7 @@ const RosterTableCard: React.FC<RosterTableCardProps> = ({ players }) => {
             <TableHeader className="bg-gray-50">
               <TableRow>
                 <TableHead className="w-[40px]">#</TableHead>
+                <TableHead>Product</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Number</TableHead>
                 <TableHead>Size</TableHead>
@@ -31,6 +32,7 @@ const RosterTableCard: React.FC<RosterTableCardProps> = ({ players }) => {
               {players.map((player, index) => (
                 <TableRow key={player.id}>
                   <TableCell>{index + 1}</TableCell>
+                  <TableCell>{player.productId || 'No Product'}</TableCell>
                   <TableCell>{player.name}</TableCell>
                   <TableCell>{player.number}</TableCell>
                   <TableCell>{player.size}</TableCell>

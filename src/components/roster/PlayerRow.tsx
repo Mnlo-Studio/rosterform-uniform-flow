@@ -52,6 +52,24 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
     <TableRow>
       <TableCell>{index + 1}</TableCell>
       
+      <TableCell>
+        <Select
+          value={player.productId || ''}
+          onValueChange={handleProductChange}
+        >
+          <SelectTrigger className="h-8">
+            <SelectValue placeholder="Select product" />
+          </SelectTrigger>
+          <SelectContent>
+            {productInfo.products.map(product => (
+              <SelectItem key={product.id} value={product.id}>
+                {product.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </TableCell>
+      
       {showName && (
         <TableCell>
           <Input
@@ -106,24 +124,6 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
             <SelectItem value="Male">Male</SelectItem>
             <SelectItem value="Female">Female</SelectItem>
             <SelectItem value="Other">Other</SelectItem>
-          </SelectContent>
-        </Select>
-      </TableCell>
-      
-      <TableCell>
-        <Select
-          value={player.productId || ''}
-          onValueChange={handleProductChange}
-        >
-          <SelectTrigger className="h-8">
-            <SelectValue placeholder="Select product" />
-          </SelectTrigger>
-          <SelectContent>
-            {productInfo.products.map(product => (
-              <SelectItem key={product.id} value={product.id}>
-                {product.name}
-              </SelectItem>
-            ))}
           </SelectContent>
         </Select>
       </TableCell>

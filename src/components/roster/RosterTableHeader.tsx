@@ -20,11 +20,11 @@ const RosterTableHeader: React.FC<RosterTableHeaderProps> = ({
   return (
     <TableRow>
       <TableHead className="w-[50px]">#</TableHead>
+      <TableHead>Product</TableHead>
       {showName && <TableHead>Name</TableHead>}
       {showNumber && <TableHead>Number</TableHead>}
       <TableHead>Size</TableHead>
       <TableHead>Gender</TableHead>
-      <TableHead>Product</TableHead>
       {showShortsSize && <TableHead>Shorts Size</TableHead>}
       {showSockSize && <TableHead>Sock Size</TableHead>}
       {showInitials && <TableHead>Initials</TableHead>}
