@@ -17,18 +17,14 @@ const BulkProductAssignmentSection: React.FC = () => {
   return (
     <div className="mb-4">
       <p className="text-sm font-medium mb-2">Bulk Product Assignment</p>
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="flex-grow">
-          <ProductSelect
-            productId={selectedProductId}
-            products={productInfo.products}
-            onValueChange={(value) => setSelectedProductId(value || '')}
-            placeholder="Select a product to assign"
-            triggerClassName="h-10"
-            disabled={players.length === 0}
-          />
-        </div>
-      </div>
+      <ProductSelect
+        productId={selectedProductId}
+        products={productInfo.products}
+        onValueChange={(value) => setSelectedProductId(value || '')}
+        placeholder="Select a product to assign"
+        triggerClassName="h-10 w-full"
+        disabled={players.length === 0}
+      />
     </div>
   );
 };

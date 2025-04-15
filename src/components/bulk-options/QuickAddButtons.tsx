@@ -25,7 +25,7 @@ const QuickAddButtons: React.FC = () => {
       <p className="text-sm font-medium mb-2">Quick Add Players</p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="border-neutral-200">
+          <Button variant="outline" className="border-neutral-200 w-full">
             <Plus className="h-3.5 w-3.5 mr-1" />
             Quick Add Players
             <ChevronDown className="h-3.5 w-3.5 ml-1" />

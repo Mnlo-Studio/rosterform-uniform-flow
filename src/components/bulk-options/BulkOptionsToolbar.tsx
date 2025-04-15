@@ -4,7 +4,7 @@ import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Check, Plus } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import DefaultOptionsSection from './DefaultOptionsSection';
 import CustomNamePrefixInput from './CustomNamePrefixInput';
@@ -94,12 +94,15 @@ const BulkOptionsToolbar: React.FC = () => {
         <CardTitle className="text-xl font-semibold text-gray-800">Bulk Options</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-5">
-          {/* Quick add buttons */}
-          <QuickAddButtons />
-          
-          {/* Bulk product assignment - only show if there are products available */}
-          {productInfo.products.length > 0 && <BulkProductAssignmentSection />}
+        <div className="space-y-4">
+          {/* Quick add and bulk product in a 2-column grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Quick add buttons */}
+            <QuickAddButtons />
+            
+            {/* Bulk product assignment - only show if there are products available */}
+            {productInfo.products.length > 0 && <BulkProductAssignmentSection />}
+          </div>
           
           <DefaultOptionsSection 
             bulkOptions={bulkOptions} 
@@ -110,15 +113,18 @@ const BulkOptionsToolbar: React.FC = () => {
             onNameCaseChange={handleNameCaseChange} 
           />
           
-          {/* 5. Custom Name Prefix */}
-          {bulkOptions.namePrefixType === 'custom' && (
-            <CustomNamePrefixInput prefix={bulkOptions.namePrefix} onChange={handleNamePrefixChange} />
-          )}
-          
-          {/* 6. Custom Number Prefix */}
-          {bulkOptions.numberFillType === 'custom' && (
-            <CustomNumberPrefixInput prefix={bulkOptions.numberPrefix || ''} onChange={handleNumberPrefixChange} />
-          )}
+          {/* Custom inputs in a 2-column grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* 5. Custom Name Prefix */}
+            {bulkOptions.namePrefixType === 'custom' && (
+              <CustomNamePrefixInput prefix={bulkOptions.namePrefix} onChange={handleNamePrefixChange} />
+            )}
+            
+            {/* 6. Custom Number Prefix */}
+            {bulkOptions.numberFillType === 'custom' && (
+              <CustomNumberPrefixInput prefix={bulkOptions.numberPrefix || ''} onChange={handleNumberPrefixChange} />
+            )}
+          </div>
           
           <ToggleOptionsSection 
             bulkOptions={bulkOptions} 
