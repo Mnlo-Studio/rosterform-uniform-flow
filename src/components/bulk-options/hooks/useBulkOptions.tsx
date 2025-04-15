@@ -78,18 +78,24 @@ export const useBulkOptions = () => {
   const handleApplyChanges = () => {
     let changesMade = false;
     let messages = [];
+    let applyBulkOptionsToExisting = false;
     
-    // Check if there are any players before applying changes to existing players
-    if (players.length === 0 && !quickAddCount) {
+    // Check if there are any selections or actions to apply
+    if (!quickAddCount && !selectedProductId && players.length === 0) {
       toast({
-        title: "No players to update",
-        description: "Add players to the roster first before applying bulk options.",
+        title: "No actions to apply",
+        description: "Select quick add players, product assignment, or have existing players first.",
         variant: "destructive"
       });
       return;
     }
     
-    // Apply quick add if selected
+    // Check if the user wants to apply bulk options to existing players
+    if (players.length > 0 && !quickAddCount) {
+      applyBulkOptionsToExisting = true;
+    }
+    
+    // Apply quick add if selected (without modifying existing players)
     if (quickAddCount) {
       addPlayers(quickAddCount);
       messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
@@ -105,8 +111,9 @@ export const useBulkOptions = () => {
       changesMade = true;
     }
     
-    // Apply other bulk options to existing players
-    if (players.length > 0) {
+    // Apply other bulk options to existing players ONLY if explicitly requested
+    // (no new players are being added)
+    if (applyBulkOptionsToExisting) {
       applyBulkOptions();
       messages.push("Bulk options applied to all players");
       changesMade = true;

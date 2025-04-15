@@ -15,7 +15,7 @@ const BulkOptionsFooter: React.FC<BulkOptionsFooterProps> = ({ onApply }) => {
         className="bg-primary-700 hover:bg-primary-800 text-white"
       >
         <Check size={16} className="mr-1" />
-        Apply
+        Apply Changes
       </Button>
     </div>
   );

@@ -20,11 +20,11 @@ export const createPlayers = (
     ),
     number: bulkOptions.numberFillType !== 'custom'
       ? generateNumber(bulkOptions.numberFillType, existingCount + index, bulkOptions.numberPrefix)
-      : '',
+      : bulkOptions.numberPrefix || '',
     size: bulkOptions.defaultSize,
     gender: bulkOptions.defaultGender,
-    shortsSize: bulkOptions.defaultSize,
-    sockSize: bulkOptions.defaultSize,
+    shortsSize: bulkOptions.showShortsSize ? bulkOptions.defaultSize : '',
+    sockSize: bulkOptions.showSockSize ? bulkOptions.defaultSize : '',
     initials: '',
     productId: defaultProductId,
   }));
