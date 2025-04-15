@@ -41,8 +41,8 @@ const Index = () => {
         <div className="space-y-6">
           <CustomerInfoForm />
           <ProductInfoForm />
-          <RosterTable />
           <BulkOptionsToolbar />
+          <RosterTable />
           <OrderSummary />
         </div>
       </div>
@@ -50,3 +50,4 @@ const Index = () => {
 };
 
 export default Index;
+
