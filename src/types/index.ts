@@ -26,6 +26,7 @@ export type ProductInfo = {
   pricePerItem: number;
   notes: string;
   images: string[];
+  productType?: string;
 };
 
 export type BulkOptions = {

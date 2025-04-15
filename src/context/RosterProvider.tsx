@@ -1,3 +1,4 @@
+
 import React, { useState, ReactNode } from 'react';
 import { Player, CustomerInfo, ProductInfo, BulkOptions } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,6 +26,7 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
     pricePerItem: 0,
     notes: '',
     images: [],
+    productType: 'standard',
   });
   const [bulkOptions, setBulkOptions] = useState<BulkOptions>({
     defaultGender: 'Male',
@@ -168,6 +170,7 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
       pricePerItem: 0,
       notes: '',
       images: [],
+      productType: 'standard',
     });
   };
 

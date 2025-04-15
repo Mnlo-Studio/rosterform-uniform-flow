@@ -40,6 +40,30 @@ const ProductInfoForm: React.FC = () => {
     imageSlots[index] = img;
   });
 
+  // Get the product name label based on product type
+  const getProductNameLabel = () => {
+    switch(productInfo.productType) {
+      case 'jerseys':
+        return 'Jersey Name*';
+      case 'equipment':
+        return 'Equipment Name*';
+      default:
+        return 'Product Name*';
+    }
+  };
+
+  // Get the product placeholder based on product type
+  const getProductPlaceholder = () => {
+    switch(productInfo.productType) {
+      case 'jerseys':
+        return 'Team Jerseys';
+      case 'equipment':
+        return 'Team Equipment';
+      default:
+        return 'Custom Product';
+    }
+  };
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -62,13 +86,13 @@ const ProductInfoForm: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="productName">Product Name*</Label>
+            <Label htmlFor="productName">{getProductNameLabel()}</Label>
             <Input
               id="productName"
               name="name"
               value={productInfo.name}
               onChange={handleInputChange}
-              placeholder="Custom Basketball Jersey"
+              placeholder={getProductPlaceholder()}
               required
             />
           </div>
