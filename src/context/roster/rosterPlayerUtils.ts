@@ -40,9 +40,11 @@ export const applyBulkOptionsToPlayers = (
   return players.map((player, index) => {
     const updatedPlayer = { ...player };
 
+    // Always apply these default options
     updatedPlayer.gender = bulkOptions.defaultGender;
     updatedPlayer.size = bulkOptions.defaultSize;
 
+    // Apply conditional fields if they're shown/enabled
     if (bulkOptions.showShortsSize) {
       updatedPlayer.shortsSize = bulkOptions.defaultSize;
     }
@@ -51,12 +53,16 @@ export const applyBulkOptionsToPlayers = (
       updatedPlayer.sockSize = bulkOptions.defaultSize;
     }
 
+    // Apply name/number generation based on settings
     if (bulkOptions.numberFillType !== 'custom') {
       updatedPlayer.number = generateNumber(
         bulkOptions.numberFillType,
         index,
         bulkOptions.numberPrefix
       );
+    } else if (bulkOptions.numberPrefix) {
+      // If custom is selected but we have a prefix, apply it
+      updatedPlayer.number = bulkOptions.numberPrefix;
     }
 
     if (bulkOptions.namePrefixType !== 'none') {

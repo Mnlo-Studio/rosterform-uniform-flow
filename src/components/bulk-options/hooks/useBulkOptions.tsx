@@ -79,7 +79,7 @@ export const useBulkOptions = () => {
     let changesMade = false;
     let messages = [];
     
-    // Check if there are any players before applying changes
+    // Check if there are any players before applying changes to existing players
     if (players.length === 0 && !quickAddCount) {
       toast({
         title: "No players to update",
@@ -105,7 +105,7 @@ export const useBulkOptions = () => {
       changesMade = true;
     }
     
-    // Apply other bulk options
+    // Apply other bulk options to existing players
     if (players.length > 0) {
       applyBulkOptions();
       messages.push("Bulk options applied to all players");

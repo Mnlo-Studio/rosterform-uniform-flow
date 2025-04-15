@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { Player } from '@/types';
 import { useIsMobile } from '@/hooks/use-mobile';
