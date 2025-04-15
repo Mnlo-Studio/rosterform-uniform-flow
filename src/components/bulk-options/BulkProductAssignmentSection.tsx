@@ -1,18 +1,18 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import ProductSelect from '@/components/roster/ProductSelect';
 
-const BulkProductAssignmentSection: React.FC = () => {
-  const { productInfo, players, bulkAssignProductToPlayers } = useRoster();
-  const [selectedProductId, setSelectedProductId] = useState<string>('');
+interface BulkProductAssignmentSectionProps {
+  selectedProductId: string;
+  onProductSelect: (productId: string) => void;
+}
 
-  // Automatically apply product when selected
-  React.useEffect(() => {
-    if (selectedProductId && players.length > 0) {
-      bulkAssignProductToPlayers(selectedProductId);
-    }
-  }, [selectedProductId, players, bulkAssignProductToPlayers]);
+const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> = ({ 
+  selectedProductId, 
+  onProductSelect 
+}) => {
+  const { productInfo, players } = useRoster();
 
   return (
     <div className="mb-4">
@@ -20,7 +20,7 @@ const BulkProductAssignmentSection: React.FC = () => {
       <ProductSelect
         productId={selectedProductId}
         products={productInfo.products}
-        onValueChange={(value) => setSelectedProductId(value || '')}
+        onValueChange={(value) => onProductSelect(value || '')}
         placeholder="Select a product to assign"
         triggerClassName="h-10 w-full"
         disabled={players.length === 0}

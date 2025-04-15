@@ -10,9 +10,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const QuickAddButtons: React.FC = () => {
-  const { addPlayers } = useRoster();
-  
+interface QuickAddButtonsProps {
+  onSelectQuickAdd: (count: number) => void;
+}
+
+const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd }) => {
   const quickAddOptions = [
     { count: 1, label: '1' },
     { count: 5, label: '5' },
@@ -35,7 +37,7 @@ const QuickAddButtons: React.FC = () => {
           {quickAddOptions.map(option => (
             <DropdownMenuItem
               key={option.count}
-              onClick={() => addPlayers(option.count)}
+              onClick={() => onSelectQuickAdd(option.count)}
               className="cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5 mr-1" />

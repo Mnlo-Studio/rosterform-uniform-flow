@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
@@ -19,10 +19,16 @@ const BulkOptionsToolbar: React.FC = () => {
     updateBulkOptions,
     players,
     applyBulkOptions,
-    productInfo
+    productInfo,
+    addPlayers,
+    bulkAssignProductToPlayers
   } = useRoster();
   const isMobile = useIsMobile();
   const { toast } = useToast();
+  
+  // State for storing pending actions
+  const [quickAddCount, setQuickAddCount] = useState<number | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string>('');
   
   const handleGenderChange = (value: string) => {
     updateBulkOptions({
@@ -72,8 +78,20 @@ const BulkOptionsToolbar: React.FC = () => {
     });
   };
   
+  const handleQuickAddSelection = (count: number) => {
+    setQuickAddCount(count);
+  };
+  
+  const handleProductSelection = (productId: string) => {
+    setSelectedProductId(productId);
+  };
+  
   const handleApplyChanges = () => {
-    if (players.length === 0) {
+    let changesMade = false;
+    let messages = [];
+    
+    // Check if there are any players before applying changes
+    if (players.length === 0 && !quickAddCount) {
       toast({
         title: "No players to update",
         description: "Add players to the roster first before applying bulk options.",
@@ -81,11 +99,37 @@ const BulkOptionsToolbar: React.FC = () => {
       });
       return;
     }
-    applyBulkOptions();
-    toast({
-      title: "Bulk options applied",
-      description: "Changes have been applied to all players in the roster."
-    });
+    
+    // Apply quick add if selected
+    if (quickAddCount) {
+      addPlayers(quickAddCount);
+      messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
+      setQuickAddCount(null); // Reset after applying
+      changesMade = true;
+    }
+    
+    // Apply bulk product assignment if selected
+    if (selectedProductId && players.length > 0) {
+      bulkAssignProductToPlayers(selectedProductId);
+      messages.push("Product assigned to all players");
+      setSelectedProductId(''); // Reset after applying
+      changesMade = true;
+    }
+    
+    // Apply other bulk options
+    if (players.length > 0) {
+      applyBulkOptions();
+      messages.push("Bulk options applied to all players");
+      changesMade = true;
+    }
+    
+    // Show toast notification
+    if (changesMade) {
+      toast({
+        title: "Changes applied",
+        description: messages.join('. ')
+      });
+    }
   };
   
   return (
@@ -98,10 +142,15 @@ const BulkOptionsToolbar: React.FC = () => {
           {/* Quick add and bulk product in a 2-column grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Quick add buttons */}
-            <QuickAddButtons />
+            <QuickAddButtons onSelectQuickAdd={handleQuickAddSelection} />
             
             {/* Bulk product assignment - only show if there are products available */}
-            {productInfo.products.length > 0 && <BulkProductAssignmentSection />}
+            {productInfo.products.length > 0 && (
+              <BulkProductAssignmentSection 
+                selectedProductId={selectedProductId}
+                onProductSelect={handleProductSelection}
+              />
+            )}
           </div>
           
           <DefaultOptionsSection 
