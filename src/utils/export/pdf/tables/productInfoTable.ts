@@ -17,16 +17,29 @@ export const addProductInfoTable = (
   doc.text('Product Information', margin, yOffset);
   yOffset += 8;
   
-  const productData = [
-    ['Product Name', productInfo.name],
-    ['Price Per Item', formatCurrency(productInfo.pricePerItem)],
-    ['Notes', productInfo.notes || 'N/A']
-  ];
+  // Create table data for all products
+  const productData: string[][] = [];
+  
+  // Add header row for product table
+  productData.push(['Product Name', 'Price', 'Notes']);
+  
+  // Add data for each product
+  productInfo.products.forEach(product => {
+    productData.push([
+      product.name || 'N/A',
+      formatCurrency(product.pricePerItem),
+      product.notes || 'N/A'
+    ]);
+  });
   
   autoTable(doc, {
     startY: yOffset,
-    head: [['Field', 'Value']],
-    body: productData,
+    head: [['Product Name', 'Price', 'Notes']],
+    body: productInfo.products.map(product => [
+      product.name || 'N/A',
+      formatCurrency(product.pricePerItem),
+      product.notes || 'N/A'
+    ]),
     theme: 'grid',
     styles: { 
       fontSize: 10,
@@ -41,7 +54,9 @@ export const addProductInfoTable = (
       fillColor: [248, 248, 248]
     },
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 40 }
+      0: { fontStyle: 'bold', cellWidth: 'auto' },
+      1: { cellWidth: 40, halign: 'right' },
+      2: { cellWidth: 'auto' }
     },
     margin: { left: margin, right: margin }
   });

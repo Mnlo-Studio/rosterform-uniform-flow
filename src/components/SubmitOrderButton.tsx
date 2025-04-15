@@ -28,10 +28,23 @@ const SubmitOrderButton: React.FC = () => {
     }
     
     // Validate product info
-    if (!productInfo.name || productInfo.pricePerItem <= 0) {
+    if (productInfo.products.length === 0) {
       toast({
         title: "Missing product information",
-        description: "Please fill in all required product fields.",
+        description: "Please add at least one product.",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    const invalidProducts = productInfo.products.filter(product => 
+      !product.name || product.pricePerItem <= 0
+    );
+    
+    if (invalidProducts.length > 0) {
+      toast({
+        title: "Incomplete product information",
+        description: `${invalidProducts.length} product(s) are missing required information.`,
         variant: "destructive"
       });
       return false;

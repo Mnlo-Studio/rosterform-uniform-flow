@@ -5,17 +5,30 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Order } from '@/types/orders';
 
 interface OrderDetailsHeaderProps {
   orderId: string;
   isEditMode: boolean;
   onToggleEditMode: () => void;
+  order?: Order;
+  onEdit?: () => void;
+  onCancel?: () => void;
+  onSave?: () => void;
+  onStatusChange?: (status: 'Pending' | 'Completed' | 'Cancelled') => void;
+  onPaymentChange?: (isPaid: boolean) => void;
 }
 
 const OrderDetailsHeader: React.FC<OrderDetailsHeaderProps> = ({
   orderId,
   isEditMode,
-  onToggleEditMode
+  onToggleEditMode,
+  order,
+  onEdit,
+  onCancel,
+  onSave,
+  onStatusChange,
+  onPaymentChange
 }) => {
   return (
     <div className="flex items-center justify-between mb-6">

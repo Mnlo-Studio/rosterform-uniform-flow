@@ -20,9 +20,10 @@ export const generateOrderZip = async (
     // Add PDF to zip
     await addPDFToZip(zip, customerInfo, players, productInfo);
     
-    // Add images folder with images
-    if (productInfo.images && productInfo.images.length > 0) {
-      await addImagesToZip(zip, productInfo.images);
+    // Add images folder with images from all products
+    const allImages: string[] = productInfo.products.flatMap(product => product.images);
+    if (allImages.length > 0) {
+      await addImagesToZip(zip, allImages);
     }
     
     // Generate zip file and trigger download

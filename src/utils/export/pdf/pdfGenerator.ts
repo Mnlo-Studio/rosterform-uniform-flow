@@ -33,8 +33,9 @@ export const generatePDF = async (
     yOffset = addTitle(doc, yOffset);
     
     // Add product images if available
-    if (productInfo.images && productInfo.images.length > 0) {
-      yOffset = await addProductImages(doc, yOffset, productInfo.images);
+    const allImages = productInfo.products.flatMap(product => product.images);
+    if (allImages.length > 0) {
+      yOffset = await addProductImages(doc, yOffset, allImages);
     }
     
     // Add Customer Info Section
@@ -44,7 +45,7 @@ export const generatePDF = async (
     yOffset = addProductInfoTable(doc, yOffset, productInfo);
     
     // Add Roster Table
-    yOffset = addRosterTable(doc, yOffset, players);
+    yOffset = addRosterTable(doc, yOffset, players, productInfo.products);
     
     // Add Order Summary
     yOffset = addOrderSummaryTable(doc, yOffset, players, productInfo);

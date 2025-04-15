@@ -42,12 +42,17 @@ export const mockOrders: Order[] = [
       zipCode: '62701',
     },
     productInfo: {
-      name: 'Basketball Jersey',
-      pricePerItem: 65.00,
-      notes: 'Home jerseys with custom numbers',
-      images: [
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Front',
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Back',
+      products: [
+        {
+          id: uuidv4(),
+          name: 'Basketball Jersey',
+          pricePerItem: 65.00,
+          notes: 'Home jerseys with custom numbers',
+          images: [
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Front',
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Back',
+          ],
+        }
       ],
     },
   },
@@ -70,13 +75,18 @@ export const mockOrders: Order[] = [
       zipCode: '92501',
     },
     productInfo: {
-      name: 'Soccer Uniform Set',
-      pricePerItem: 95.00,
-      notes: 'Complete set with jersey, shorts, and socks',
-      images: [
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Uniform+Front',
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Uniform+Back',
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Shorts',
+      products: [
+        {
+          id: uuidv4(),
+          name: 'Soccer Uniform Set',
+          pricePerItem: 95.00,
+          notes: 'Complete set with jersey, shorts, and socks',
+          images: [
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Uniform+Front',
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Uniform+Back',
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Shorts',
+          ],
+        }
       ],
     },
   },
@@ -99,12 +109,17 @@ export const mockOrders: Order[] = [
       zipCode: '14120',
     },
     productInfo: {
-      name: 'Baseball Jersey',
-      pricePerItem: 62.50,
-      notes: 'Away jerseys with custom numbers and names',
-      images: [
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Front',
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Back',
+      products: [
+        {
+          id: uuidv4(),
+          name: 'Baseball Jersey',
+          pricePerItem: 62.50,
+          notes: 'Away jerseys with custom numbers and names',
+          images: [
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Front',
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Back',
+          ],
+        }
       ],
     },
   },
@@ -127,12 +142,17 @@ export const mockOrders: Order[] = [
       zipCode: '80401',
     },
     productInfo: {
-      name: 'Volleyball Jersey',
-      pricePerItem: 90.00,
-      notes: 'Custom jerseys with player numbers',
-      images: [
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Front',
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Back',
+      products: [
+        {
+          id: uuidv4(),
+          name: 'Volleyball Jersey',
+          pricePerItem: 90.00,
+          notes: 'Custom jerseys with player numbers',
+          images: [
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Front',
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Back',
+          ],
+        }
       ],
     },
   },
@@ -155,13 +175,18 @@ export const mockOrders: Order[] = [
       zipCode: '75001',
     },
     productInfo: {
-      name: 'Football Jersey',
-      pricePerItem: 110.00,
-      notes: 'Home jerseys with custom numbers and team logo',
-      images: [
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Front',
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Back',
-        'https://placehold.co/400x400/e2e8f0/1e293b?text=Logo+Detail',
+      products: [
+        {
+          id: uuidv4(),
+          name: 'Football Jersey',
+          pricePerItem: 110.00,
+          notes: 'Home jerseys with custom numbers and team logo',
+          images: [
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Front',
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Jersey+Back',
+            'https://placehold.co/400x400/e2e8f0/1e293b?text=Logo+Detail',
+          ],
+        }
       ],
     },
   },

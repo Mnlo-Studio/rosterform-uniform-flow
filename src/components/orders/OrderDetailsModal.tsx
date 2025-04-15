@@ -20,17 +20,24 @@ const OrderDetailsModal = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { toast } = useToast();
-  const { order, isLoading, error, updateOrder } = useOrderDetails(orderId || '');
   
-  // Local state for edited values
-  const [editedOrder, setEditedOrder] = useState<Order | null>(null);
-  const [isEditMode, setIsEditMode] = useState(false);
-  
-  useEffect(() => {
-    if (order && !editedOrder) {
-      setEditedOrder(order);
-    }
-  }, [order, editedOrder]);
+  const { 
+    order,
+    editedOrder,
+    isEditMode,
+    isLoading,
+    error,
+    updateOrder,
+    handleCustomerInfoChange,
+    handleProductInfoChange,
+    handleToggleEditMode,
+    handleSaveChanges,
+    handleDownloadOriginal,
+    handleDownloadUpdated,
+    handleSendInvoice,
+    handleImageUpload,
+    handleImageRemove
+  } = useOrderDetails(orderId || '');
   
   const handleClose = () => {
     setOpen(false);
@@ -38,77 +45,30 @@ const OrderDetailsModal = () => {
   };
   
   const handleEdit = () => {
-    setIsEditMode(true);
+    handleToggleEditMode();
   };
   
   const handleCancel = () => {
     if (order) {
-      setEditedOrder(order);
+      updateOrder(order);
     }
-    setIsEditMode(false);
+    handleToggleEditMode();
   };
   
   const handleSave = () => {
-    if (editedOrder) {
-      updateOrder(editedOrder);
-      setIsEditMode(false);
-      toast({
-        title: "Order updated",
-        description: "Order details have been successfully updated.",
-      });
-    }
-  };
-  
-  const handleCustomerInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editedOrder) return;
-    
-    const { name, value } = e.target;
-    setEditedOrder({
-      ...editedOrder,
-      customerInfo: {
-        ...editedOrder.customerInfo,
-        [name]: value
-      }
-    });
-  };
-  
-  const handleProductInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editedOrder || !editedOrder.productInfo.products[0]) return;
-    
-    const { name, value } = e.target;
-    
-    // For now, we'll just update the first product for compatibility
-    // In a future update, this could be enhanced to handle multiple products
-    setEditedOrder({
-      ...editedOrder,
-      productInfo: {
-        ...editedOrder.productInfo,
-        products: editedOrder.productInfo.products.map((product, index) => {
-          if (index === 0) { // Update only the first product
-            if (name === 'pricePerItem') {
-              return { ...product, [name]: parseFloat(value) || 0 };
-            }
-            return { ...product, [name]: value };
-          }
-          return product;
-        })
-      }
-    });
+    handleSaveChanges();
   };
   
   const handleStatusChange = (status: 'Pending' | 'Completed' | 'Cancelled') => {
     if (!editedOrder) return;
     
-    setEditedOrder({
+    const updatedOrder = {
       ...editedOrder,
       status
-    });
+    };
     
     // Auto-save status changes
-    updateOrder({
-      ...editedOrder,
-      status
-    });
+    updateOrder(updatedOrder);
     
     toast({
       title: "Status updated",
@@ -119,16 +79,13 @@ const OrderDetailsModal = () => {
   const handlePaymentChange = (isPaid: boolean) => {
     if (!editedOrder) return;
     
-    setEditedOrder({
+    const updatedOrder = {
       ...editedOrder,
       isPaid
-    });
+    };
     
     // Auto-save payment changes
-    updateOrder({
-      ...editedOrder,
-      isPaid
-    });
+    updateOrder(updatedOrder);
     
     toast({
       title: "Payment status updated",
@@ -171,8 +128,9 @@ const OrderDetailsModal = () => {
   const modalContent = (
     <>
       <OrderDetailsHeader 
-        order={editedOrder} 
+        orderId={editedOrder.orderId}
         isEditMode={isEditMode}
+        onToggleEditMode={handleToggleEditMode}
         onEdit={handleEdit}
         onCancel={handleCancel}
         onSave={handleSave}
@@ -205,17 +163,27 @@ const OrderDetailsModal = () => {
         </div>
         
         <div>
-          <OrderImagesCard images={editedOrder.productInfo.products.flatMap(p => p.images)} />
+          <OrderImagesCard 
+            images={editedOrder.productInfo.products.flatMap(p => p.images)}
+            onImageUpload={isEditMode ? handleImageUpload : undefined}
+            onImageRemove={isEditMode ? handleImageRemove : undefined}
+          />
         </div>
       </div>
       
-      <OrderDetailsFooter order={editedOrder} />
+      <OrderDetailsFooter 
+        isEditMode={isEditMode}
+        onSaveChanges={handleSaveChanges}
+        onDownloadOriginal={handleDownloadOriginal}
+        onDownloadUpdated={handleDownloadUpdated}
+        onSendInvoice={handleSendInvoice}
+      />
     </>
   );
   
   // Render as Drawer on mobile, Dialog on desktop
   return isMobile ? (
-    <Drawer open={open} onOpenChange={setOpen} onClose={handleClose}>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerContent>
         <div className="p-4 max-w-4xl mx-auto">
           {modalContent}
@@ -223,7 +191,7 @@ const OrderDetailsModal = () => {
       </DrawerContent>
     </Drawer>
   ) : (
-    <Dialog open={open} onOpenChange={setOpen} onClose={handleClose}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[95vw] max-h-[90vh] overflow-y-auto">
         <div className="p-2">
           {modalContent}

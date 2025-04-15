@@ -9,9 +9,16 @@ const OrderSummary: React.FC = () => {
   const { players, productInfo } = useRoster();
   
   const totalPlayers = players.length;
-  const totalCost = calculateTotalCost(players, productInfo.pricePerItem);
+  
+  // Calculate total cost based on all products assigned to players
+  const totalCost = calculateTotalCost(players, productInfo.products);
   const sizeBreakdown = calculateSizeBreakdown(players);
   const genderBreakdown = calculateGenderBreakdown(players);
+
+  // Get the average price of all products (for display purposes)
+  const averagePrice = productInfo.products.length 
+    ? productInfo.products.reduce((sum, product) => sum + product.pricePerItem, 0) / productInfo.products.length 
+    : 0;
 
   return (
     <Card>
@@ -26,8 +33,8 @@ const OrderSummary: React.FC = () => {
           </div>
           
           <div className="flex justify-between items-center border-b pb-2 border-neutral-200">
-            <span className="text-sm text-gray-500">Price Per Item:</span>
-            <span className="font-semibold">{formatCurrency(productInfo.pricePerItem)}</span>
+            <span className="text-sm text-gray-500">Avg. Price Per Item:</span>
+            <span className="font-semibold">{formatCurrency(averagePrice)}</span>
           </div>
           
           <div className="flex justify-between items-center border-b pb-2 border-neutral-200">

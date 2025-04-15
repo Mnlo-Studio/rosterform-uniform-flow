@@ -5,8 +5,8 @@ import ImageUploadBox from '@/components/ImageUploadBox';
 
 interface OrderImagesCardProps {
   images: string[];
-  onImageUpload: (index: number, base64: string) => void;
-  onImageRemove: (index: number) => void;
+  onImageUpload?: (index: number, base64: string) => void;
+  onImageRemove?: (index: number) => void;
 }
 
 const OrderImagesCard: React.FC<OrderImagesCardProps> = ({
@@ -31,8 +31,8 @@ const OrderImagesCard: React.FC<OrderImagesCardProps> = ({
             <ImageUploadBox
               key={index}
               imageSrc={image || undefined}
-              onImageUpload={(base64) => onImageUpload(index, base64)}
-              onRemove={image ? () => onImageRemove(index) : undefined}
+              onImageUpload={onImageUpload ? (base64) => onImageUpload(index, base64) : undefined}
+              onRemove={image && onImageRemove ? () => onImageRemove(index) : undefined}
             />
           ))}
         </div>

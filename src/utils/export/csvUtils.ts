@@ -1,6 +1,6 @@
 
 import Papa from 'papaparse';
-import { Player, CustomerInfo, ProductInfo } from '@/types';
+import { Player, CustomerInfo, ProductInfo, Product } from '@/types';
 import { formatCurrency } from '../calculations';
 
 // Generate CSV for customer info
@@ -21,7 +21,7 @@ export const generateCustomerInfoCSV = (customerInfo: CustomerInfo): string => {
 
 // Generate CSV for roster
 export const generateRosterCSV = (players: Player[]): string => {
-  const headers = ['#', 'Name', 'Number', 'Size', 'Gender', 'Shorts Size', 'Sock Size', 'Initials'];
+  const headers = ['#', 'Name', 'Number', 'Size', 'Gender', 'Shorts Size', 'Sock Size', 'Initials', 'Product'];
   
   const data = players.map((player, index) => [
     index + 1,
@@ -31,7 +31,8 @@ export const generateRosterCSV = (players: Player[]): string => {
     player.gender,
     player.shortsSize || '',
     player.sockSize || '',
-    player.initials || ''
+    player.initials || '',
+    player.productId || ''
   ]);
   
   return Papa.unparse([headers, ...data]);
@@ -42,7 +43,21 @@ export const generateOrderSummaryCSV = (
   players: Player[], 
   productInfo: ProductInfo
 ): string => {
-  const totalCost = players.length * productInfo.pricePerItem;
+  // Calculate total cost based on products assigned to players
+  let totalCost = 0;
+  const productPrices = new Map<string, number>();
+  
+  // Create a map of product IDs to prices
+  productInfo.products.forEach(product => {
+    productPrices.set(product.id, product.pricePerItem);
+  });
+  
+  // Calculate cost for each player based on assigned product
+  players.forEach(player => {
+    if (player.productId && productPrices.has(player.productId)) {
+      totalCost += productPrices.get(player.productId) || 0;
+    }
+  });
   
   // Group by size
   const sizeCount: Record<string, number> = {};
@@ -62,13 +77,22 @@ export const generateOrderSummaryCSV = (
     }
   });
   
+  // Initialize data
   const data = [
     ['Total Players', players.length.toString()],
-    ['Price Per Item', formatCurrency(productInfo.pricePerItem)],
+    ['Products', productInfo.products.length.toString()],
     ['Total Cost', formatCurrency(totalCost)],
     ['', ''],
-    ['Size Breakdown', '']
+    ['Products', '']
   ];
+  
+  // Add product details
+  productInfo.products.forEach(product => {
+    data.push([product.name, formatCurrency(product.pricePerItem)]);
+  });
+  
+  data.push(['', '']);
+  data.push(['Size Breakdown', '']);
   
   Object.entries(sizeCount).forEach(([size, count]) => {
     data.push([size, count.toString()]);

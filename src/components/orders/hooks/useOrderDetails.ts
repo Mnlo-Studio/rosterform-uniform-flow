@@ -8,16 +8,38 @@ export const useOrderDetails = (orderId: string | undefined) => {
   const [order, setOrder] = useState<Order | null>(null);
   const [editedOrder, setEditedOrder] = useState<Order | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Find the order from mockOrders based on orderId
-    const foundOrder = mockOrders.find(o => o.orderId === orderId);
-    if (foundOrder) {
-      setOrder(foundOrder);
-      setEditedOrder(foundOrder);
+    // Simulate API call
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      // Find the order from mockOrders based on orderId
+      const foundOrder = mockOrders.find(o => o.orderId === orderId);
+      if (foundOrder) {
+        setOrder(foundOrder);
+        setEditedOrder(foundOrder);
+      } else {
+        throw new Error(`Order ${orderId} not found`);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Unknown error'));
+    } finally {
+      setIsLoading(false);
     }
   }, [orderId]);
+
+  const updateOrder = (updatedOrder: Order) => {
+    setOrder(updatedOrder);
+    setEditedOrder(updatedOrder);
+    
+    // In a real app, this would be an API call
+    console.log('Order updated:', updatedOrder);
+  };
 
   const handleCustomerInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,12 +58,23 @@ export const useOrderDetails = (orderId: string | undefined) => {
   const handleProductInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditedOrder(prev => {
-      if (!prev) return null;
+      if (!prev || !prev.productInfo.products[0]) return null;
+      
+      // For now, we'll just update the first product for compatibility
+      // In a future update, this could be enhanced to handle multiple products
       return {
         ...prev,
         productInfo: {
           ...prev.productInfo,
-          [name]: value
+          products: prev.productInfo.products.map((product, index) => {
+            if (index === 0) { // Update only the first product
+              if (name === 'pricePerItem') {
+                return { ...product, [name]: parseFloat(value) || 0 };
+              }
+              return { ...product, [name]: value };
+            }
+            return product;
+          })
         }
       };
     });
@@ -52,13 +85,14 @@ export const useOrderDetails = (orderId: string | undefined) => {
   };
 
   const handleSaveChanges = () => {
-    console.log("Saving changes:", editedOrder);
-    // Implementation for saving changes would go here
-    toast({
-      title: "Changes saved",
-      description: "Your changes have been successfully saved.",
-    });
-    setIsEditMode(false);
+    if (editedOrder) {
+      updateOrder(editedOrder);
+      toast({
+        title: "Changes saved",
+        description: "Your changes have been successfully saved.",
+      });
+      setIsEditMode(false);
+    }
   };
 
   const handleDownloadOriginal = () => {
@@ -90,14 +124,25 @@ export const useOrderDetails = (orderId: string | undefined) => {
   
   const handleImageUpload = (index: number, base64: string) => {
     setEditedOrder(prev => {
-      if (!prev) return null;
-      const newImages = [...prev.productInfo.images];
+      if (!prev || !prev.productInfo.products[0]) return null;
+      
+      // Create a copy of products array
+      const updatedProducts = [...prev.productInfo.products];
+      
+      // Update the images for the first product (for compatibility)
+      const newImages = [...(updatedProducts[0].images || [])];
       newImages[index] = base64;
+      
+      updatedProducts[0] = {
+        ...updatedProducts[0],
+        images: newImages
+      };
+      
       return {
         ...prev,
         productInfo: {
           ...prev.productInfo,
-          images: newImages
+          products: updatedProducts
         }
       };
     });
@@ -105,14 +150,25 @@ export const useOrderDetails = (orderId: string | undefined) => {
   
   const handleImageRemove = (index: number) => {
     setEditedOrder(prev => {
-      if (!prev) return null;
-      const newImages = [...prev.productInfo.images];
+      if (!prev || !prev.productInfo.products[0]) return null;
+      
+      // Create a copy of products array
+      const updatedProducts = [...prev.productInfo.products];
+      
+      // Remove the image from the first product (for compatibility)
+      const newImages = [...(updatedProducts[0].images || [])];
       newImages.splice(index, 1);
+      
+      updatedProducts[0] = {
+        ...updatedProducts[0],
+        images: newImages
+      };
+      
       return {
         ...prev,
         productInfo: {
           ...prev.productInfo,
-          images: newImages
+          products: updatedProducts
         }
       };
     });
@@ -122,6 +178,9 @@ export const useOrderDetails = (orderId: string | undefined) => {
     order,
     editedOrder,
     isEditMode,
+    isLoading,
+    error,
+    updateOrder,
     handleCustomerInfoChange,
     handleProductInfoChange,
     handleToggleEditMode,

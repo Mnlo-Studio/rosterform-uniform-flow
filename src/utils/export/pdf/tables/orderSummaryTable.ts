@@ -24,11 +24,21 @@ export const addOrderSummaryTable = (
   doc.text('Order Summary', margin, yOffset);
   yOffset += 8;
   
-  const totalCost = players.length * productInfo.pricePerItem;
+  // Calculate total cost based on products assigned to players
+  let totalCost = 0;
+  
+  players.forEach(player => {
+    if (player.productId) {
+      const product = productInfo.products.find(p => p.id === player.productId);
+      if (product) {
+        totalCost += product.pricePerItem;
+      }
+    }
+  });
   
   const summaryData = [
     ['Total Players', players.length.toString()],
-    ['Price Per Item', formatCurrency(productInfo.pricePerItem)],
+    ['Total Products', productInfo.products.length.toString()],
     ['Total Cost', formatCurrency(totalCost)]
   ];
   

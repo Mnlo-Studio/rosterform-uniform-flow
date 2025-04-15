@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Download, SendHorizontal, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Order } from '@/types/orders';
 
 interface OrderDetailsFooterProps {
   isEditMode: boolean;
@@ -10,6 +11,7 @@ interface OrderDetailsFooterProps {
   onDownloadOriginal: () => void;
   onDownloadUpdated: () => void;
   onSendInvoice: () => void;
+  order?: Order;
 }
 
 const OrderDetailsFooter: React.FC<OrderDetailsFooterProps> = ({
