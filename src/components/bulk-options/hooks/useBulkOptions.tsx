@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -20,7 +20,7 @@ export const useBulkOptions = () => {
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   
   // Reset states when product info changes to force re-rendering of dropdown
-  React.useEffect(() => {
+  useEffect(() => {
     // Only reset selectedProductId if it's not present in the products list
     if (selectedProductId && 
         productInfo.products.length > 0 && 
