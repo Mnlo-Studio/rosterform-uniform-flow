@@ -4,4 +4,3 @@ export { default as CustomNamePrefixInput } from './CustomNamePrefixInput';
 export { default as CustomNumberPrefixInput } from './CustomNumberPrefixInput';
 export { default as DefaultOptionsSection } from './DefaultOptionsSection';
 export { default as ToggleOptionsSection } from './ToggleOptionsSection';
-export { default as ProductBulkOptionsToolbar } from './ProductBulkOptionsToolbar';

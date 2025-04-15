@@ -3,20 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import CustomerInfoForm from '@/components/CustomerInfoForm';
 import ProductInfoForm from '@/components/ProductInfoForm';
-import { BulkOptionsToolbar, ProductBulkOptionsToolbar } from '@/components/bulk-options';
+import { BulkOptionsToolbar } from '@/components/bulk-options';
 import RosterTable from '@/components/RosterTable';
 import OrderSummary from '@/components/OrderSummary';
 import BackToSuccessLink from '@/components/BackToSuccessLink';
 import { Button } from '@/components/ui/button';
 import { ClipboardList } from 'lucide-react';
 import { useLayout } from '@/context/LayoutContext';
-import { useRoster } from '@/context/RosterContext';
 
 const Index = () => {
   const location = useLocation();
   const [showBackLink, setShowBackLink] = useState(false);
-  const { isDashboardLayout } = useLayout();
-  const { productInfo } = useRoster();
+  const {
+    isDashboardLayout
+  } = useLayout();
   
   useEffect(() => {
     // Only show back link if explicitly navigated from success page
@@ -41,7 +41,6 @@ const Index = () => {
         <div className="space-y-6">
           <CustomerInfoForm />
           <ProductInfoForm />
-          <ProductBulkOptionsToolbar />
           <BulkOptionsToolbar />
           <RosterTable />
           <OrderSummary />
