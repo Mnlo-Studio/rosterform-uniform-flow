@@ -53,16 +53,20 @@ export const applyBulkOptionsToPlayers = (
       updatedPlayer.sockSize = bulkOptions.defaultSize;
     }
 
-    // Apply number generation based on settings
+    // Apply number generation based on settings - IMPORTANT: Always replace the number instead of appending
     if (bulkOptions.numberFillType !== 'custom') {
+      // Generate a new number using the pattern, replacing any existing number
       updatedPlayer.number = generateNumber(
         bulkOptions.numberFillType,
         index,
         bulkOptions.numberPrefix
       );
     } else if (bulkOptions.numberPrefix) {
-      // If custom is selected but we have a prefix, apply it
+      // If custom is selected, use just the prefix as the full number value
       updatedPlayer.number = bulkOptions.numberPrefix;
+    } else {
+      // If custom with empty prefix, clear the number
+      updatedPlayer.number = '';
     }
 
     // Apply name generation based on settings
