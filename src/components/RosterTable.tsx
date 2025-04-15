@@ -9,7 +9,6 @@ import RosterHeader from './roster/RosterHeader';
 import MobilePlayerList from './roster/MobilePlayerList';
 import DesktopPlayerList from './roster/DesktopPlayerList';
 import EmptyRoster from './roster/EmptyRoster';
-import BulkProductAssignment from './roster/BulkProductAssignment';
 
 const RosterTable: React.FC = () => {
   const { 
@@ -73,9 +72,6 @@ const RosterTable: React.FC = () => {
             </div>
           </div>
         )}
-        
-        {/* Bulk product assignment section */}
-        {players.length > 0 && <BulkProductAssignment />}
         
         <RosterHeader onAddPlayers={addPlayers} />
         

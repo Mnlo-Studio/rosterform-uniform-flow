@@ -4,19 +4,22 @@ import { useRoster } from '@/context/RosterContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import { Check, Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import DefaultOptionsSection from './DefaultOptionsSection';
 import CustomNamePrefixInput from './CustomNamePrefixInput';
 import CustomNumberPrefixInput from './CustomNumberPrefixInput';
 import ToggleOptionsSection from './ToggleOptionsSection';
+import QuickAddButtons from './QuickAddButtons';
+import BulkProductAssignmentSection from './BulkProductAssignmentSection';
 
 const BulkOptionsToolbar: React.FC = () => {
   const {
     bulkOptions,
     updateBulkOptions,
     players,
-    applyBulkOptions
+    applyBulkOptions,
+    productInfo
   } = useRoster();
   const isMobile = useIsMobile();
   const { toast } = useToast();
@@ -92,6 +95,12 @@ const BulkOptionsToolbar: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-5">
+          {/* Quick add buttons */}
+          <QuickAddButtons />
+          
+          {/* Bulk product assignment - only show if there are products available */}
+          {productInfo.products.length > 0 && <BulkProductAssignmentSection />}
+          
           <DefaultOptionsSection 
             bulkOptions={bulkOptions} 
             onGenderChange={handleGenderChange} 
