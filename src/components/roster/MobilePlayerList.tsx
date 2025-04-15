@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Player } from '@/types';
-import PlayerCard from './PlayerCard';
+import { PlayerCard } from './PlayerCard';
+import { useRoster } from '@/context/RosterContext';
 
 interface MobilePlayerListProps {
   players: Player[];
@@ -26,12 +27,10 @@ const MobilePlayerList: React.FC<MobilePlayerListProps> = ({
   onInputChange,
   onSelectChange
 }) => {
-  if (players.length === 0) {
-    return null;
-  }
+  const { productInfo, assignProductToPlayer } = useRoster();
   
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-4">
       {players.map((player, index) => (
         <PlayerCard
           key={player.id}
@@ -45,6 +44,8 @@ const MobilePlayerList: React.FC<MobilePlayerListProps> = ({
           onRemove={onRemove}
           onInputChange={onInputChange}
           onSelectChange={onSelectChange}
+          products={productInfo.products}
+          onProductChange={(productId) => assignProductToPlayer(player.id, productId)}
         />
       ))}
     </div>

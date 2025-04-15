@@ -4,13 +4,23 @@ import { useRoster } from '@/context/RosterContext';
 import { Player } from '@/types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { AlertTriangle } from 'lucide-react';
 import RosterHeader from './roster/RosterHeader';
 import MobilePlayerList from './roster/MobilePlayerList';
 import DesktopPlayerList from './roster/DesktopPlayerList';
 import EmptyRoster from './roster/EmptyRoster';
+import BulkProductAssignment from './roster/BulkProductAssignment';
 
 const RosterTable: React.FC = () => {
-  const { players, bulkOptions, addPlayers, removePlayer, updatePlayer } = useRoster();
+  const { 
+    players, 
+    bulkOptions, 
+    addPlayers, 
+    removePlayer, 
+    updatePlayer,
+    productInfo,
+    areAllPlayersAssignedProducts
+  } = useRoster();
   const isMobile = useIsMobile();
 
   const handleInputChange = (id: string, field: keyof Player, value: string) => {
@@ -29,11 +39,15 @@ const RosterTable: React.FC = () => {
 
   // Calculate total columns (base columns + additional columns)
   // Base depends on whether name and number are shown
-  const baseColumnsCount = 3 + // # (index), size, gender
+  const baseColumnsCount = 4 + // # (index), size, gender, product
     (bulkOptions.showName ? 1 : 0) +
     (bulkOptions.showNumber ? 1 : 0);
   
   const totalColumns = baseColumnsCount + additionalColumnsCount + 1; // +1 for action column
+
+  // Determine if we need to show warnings
+  const showProductWarning = players.length > 0 && productInfo.products.length > 0 && !areAllPlayersAssignedProducts();
+  const showNoProductsWarning = players.length > 0 && productInfo.products.length === 0;
 
   return (
     <Card>
@@ -41,6 +55,28 @@ const RosterTable: React.FC = () => {
         <CardTitle className="text-xl font-semibold text-gray-800">Team Roster</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
+        {/* Show warnings if needed */}
+        {showNoProductsWarning && (
+          <div className="bg-amber-50 p-4 rounded-md border border-amber-200 mb-4">
+            <div className="flex items-center">
+              <AlertTriangle className="h-5 w-5 text-amber-500 mr-2" />
+              <p className="text-amber-800">No products have been added. Add at least one product to assign to players.</p>
+            </div>
+          </div>
+        )}
+        
+        {showProductWarning && (
+          <div className="bg-amber-50 p-4 rounded-md border border-amber-200 mb-4">
+            <div className="flex items-center">
+              <AlertTriangle className="h-5 w-5 text-amber-500 mr-2" />
+              <p className="text-amber-800">Some players do not have a product assigned.</p>
+            </div>
+          </div>
+        )}
+        
+        {/* Bulk product assignment section */}
+        {players.length > 0 && <BulkProductAssignment />}
+        
         <RosterHeader onAddPlayers={addPlayers} />
         
         {isMobile ? (

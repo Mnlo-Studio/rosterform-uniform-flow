@@ -2,12 +2,14 @@
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Player } from '@/types';
+import { Product } from '@/types';
 
 // Add roster table to PDF
 export const addRosterTable = (
   doc: jsPDF, 
   yOffset: number, 
-  players: Player[]
+  players: Player[],
+  products?: Product[]
 ): number => {
   const margin = 15;
   
@@ -22,17 +24,29 @@ export const addRosterTable = (
     yOffset = margin;
   }
   
-  const headers = ['#', 'Name', 'Number', 'Size', 'Gender', 'Shorts', 'Socks', 'Initials'];
-  const rosterData = players.map((player, index) => [
-    index + 1,
-    player.name,
-    player.number,
-    player.size,
-    player.gender,
-    player.shortsSize || '-',
-    player.sockSize || '-',
-    player.initials || '-'
-  ]);
+  const headers = ['#', 'Name', 'Number', 'Size', 'Gender', 'Product', 'Shorts', 'Socks', 'Initials'];
+  const rosterData = players.map((player, index) => {
+    // Find the product name if available
+    let productName = '-';
+    if (player.productId && products) {
+      const product = products.find(p => p.id === player.productId);
+      if (product) {
+        productName = product.name;
+      }
+    }
+    
+    return [
+      index + 1,
+      player.name,
+      player.number,
+      player.size,
+      player.gender,
+      productName,
+      player.shortsSize || '-',
+      player.sockSize || '-',
+      player.initials || '-'
+    ];
+  });
   
   autoTable(doc, {
     startY: yOffset,

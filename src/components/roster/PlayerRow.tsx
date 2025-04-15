@@ -15,6 +15,7 @@ import {
   TableCell,
   TableRow,
 } from "@/components/ui/table";
+import { useRoster } from '@/context/RosterContext';
 
 interface PlayerRowProps {
   player: Player;
@@ -41,6 +42,12 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
   onInputChange,
   onSelectChange
 }) => {
+  const { productInfo, assignProductToPlayer } = useRoster();
+  
+  const handleProductChange = (productId: string | undefined) => {
+    assignProductToPlayer(player.id, productId);
+  };
+
   return (
     <TableRow>
       <TableCell>{index + 1}</TableCell>
@@ -99,6 +106,24 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
             <SelectItem value="Male">Male</SelectItem>
             <SelectItem value="Female">Female</SelectItem>
             <SelectItem value="Other">Other</SelectItem>
+          </SelectContent>
+        </Select>
+      </TableCell>
+      
+      <TableCell>
+        <Select
+          value={player.productId || ''}
+          onValueChange={handleProductChange}
+        >
+          <SelectTrigger className="h-8">
+            <SelectValue placeholder="Select product" />
+          </SelectTrigger>
+          <SelectContent>
+            {productInfo.products.map(product => (
+              <SelectItem key={product.id} value={product.id}>
+                {product.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </TableCell>

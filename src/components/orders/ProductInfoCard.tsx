@@ -3,7 +3,14 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ProductInfo } from '@/types';
+import { formatCurrency } from '@/utils/calculations';
+
+interface ProductInfo {
+  name: string;
+  pricePerItem: number;
+  notes: string;
+  images: string[];
+}
 
 interface ProductInfoCardProps {
   productInfo: ProductInfo;
@@ -24,9 +31,9 @@ const ProductInfoCard: React.FC<ProductInfoCardProps> = ({
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="productName">Product Name</Label>
+            <Label htmlFor="name">Product Name</Label>
             <Input 
-              id="productName"
+              id="name"
               name="name"
               value={productInfo.name}
               onChange={onProductInfoChange}

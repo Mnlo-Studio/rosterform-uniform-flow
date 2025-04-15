@@ -1,5 +1,6 @@
+
 import React, { useState, ReactNode } from 'react';
-import { Player, CustomerInfo, ProductInfo, BulkOptions } from '@/types';
+import { Player, CustomerInfo, ProductInfo, BulkOptions, Product } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 import { generateNumber, generateName } from '@/utils/rosterHelpers';
 import { RosterContext } from './RosterContext';
@@ -21,10 +22,7 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
     zipCode: '',
   });
   const [productInfo, setProductInfo] = useState<ProductInfo>({
-    name: '',
-    pricePerItem: 0,
-    notes: '',
-    images: [],
+    products: [],
   });
   const [bulkOptions, setBulkOptions] = useState<BulkOptions>({
     defaultGender: 'Male',
@@ -60,6 +58,7 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
         shortsSize: bulkOptions.defaultSize,
         sockSize: bulkOptions.defaultSize,
         initials: '',
+        productId: productInfo.products.length === 1 ? productInfo.products[0].id : undefined,
       };
     });
 
@@ -80,30 +79,100 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
     setCustomerInfo({ ...customerInfo, ...data });
   };
 
-  const updateProductInfo = (data: Partial<ProductInfo>) => {
-    setProductInfo({ ...productInfo, ...data });
+  // Create an empty product with default values
+  const createEmptyProduct = (): Product => ({
+    id: uuidv4(),
+    name: '',
+    pricePerItem: 0,
+    notes: '',
+    images: [],
+  });
+
+  // Add a new product
+  const addProduct = () => {
+    setProductInfo({
+      ...productInfo,
+      products: [...productInfo.products, createEmptyProduct()]
+    });
+  };
+
+  // Update an existing product
+  const updateProduct = (id: string, data: Partial<Product>) => {
+    setProductInfo({
+      ...productInfo,
+      products: productInfo.products.map(product => 
+        product.id === id ? { ...product, ...data } : product
+      )
+    });
+  };
+
+  // Remove a product
+  const removeProduct = (id: string) => {
+    // Remove the product
+    setProductInfo({
+      ...productInfo,
+      products: productInfo.products.filter(product => product.id !== id)
+    });
+    
+    // Remove this product from any players who had it assigned
+    setPlayers(players.map(player => 
+      player.productId === id ? { ...player, productId: undefined } : player
+    ));
+  };
+
+  // Move a product up in the list
+  const moveProductUp = (id: string) => {
+    const products = [...productInfo.products];
+    const index = products.findIndex(p => p.id === id);
+    if (index > 0) {
+      const temp = products[index];
+      products[index] = products[index - 1];
+      products[index - 1] = temp;
+      setProductInfo({ ...productInfo, products });
+    }
+  };
+
+  // Move a product down in the list
+  const moveProductDown = (id: string) => {
+    const products = [...productInfo.products];
+    const index = products.findIndex(p => p.id === id);
+    if (index < products.length - 1) {
+      const temp = products[index];
+      products[index] = products[index + 1];
+      products[index + 1] = temp;
+      setProductInfo({ ...productInfo, products });
+    }
+  };
+
+  // Assign a product to a player
+  const assignProductToPlayer = (playerId: string, productId: string | undefined) => {
+    setPlayers(players.map(player => 
+      player.id === playerId ? { ...player, productId } : player
+    ));
+  };
+
+  // Bulk assign a product to all players
+  const bulkAssignProductToPlayers = (productId: string) => {
+    setPlayers(players.map(player => ({ ...player, productId })));
   };
 
   const updateBulkOptions = (data: Partial<BulkOptions>) => {
     setBulkOptions({ ...bulkOptions, ...data });
   };
 
-  const addImage = (image: string) => {
-    if (productInfo.images.length < 4) {
-      setProductInfo({
-        ...productInfo,
-        images: [...productInfo.images, image]
-      });
-    }
+  const addImage = (productId: string, image: string) => {
+    updateProduct(productId, {
+      images: [...(productInfo.products.find(p => p.id === productId)?.images || []), image]
+    });
   };
 
-  const removeImage = (index: number) => {
-    const newImages = [...productInfo.images];
-    newImages.splice(index, 1);
-    setProductInfo({
-      ...productInfo,
-      images: newImages
-    });
+  const removeImage = (productId: string, index: number) => {
+    const product = productInfo.products.find(p => p.id === productId);
+    if (product) {
+      const newImages = [...product.images];
+      newImages.splice(index, 1);
+      updateProduct(productId, { images: newImages });
+    }
   };
 
   const applyBulkOptions = () => {
@@ -164,11 +233,14 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
 
   const resetProductInfo = () => {
     setProductInfo({
-      name: '',
-      pricePerItem: 0,
-      notes: '',
-      images: [],
+      products: [],
     });
+  };
+
+  // Check if all players have a product assigned
+  const areAllPlayersAssignedProducts = (): boolean => {
+    if (players.length === 0 || productInfo.products.length === 0) return true;
+    return players.every(player => player.productId !== undefined);
   };
 
   return (
@@ -181,14 +253,21 @@ export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
       removePlayer,
       updatePlayer,
       updateCustomerInfo,
-      updateProductInfo,
+      addProduct,
+      updateProduct,
+      removeProduct,
+      moveProductUp,
+      moveProductDown,
+      assignProductToPlayer,
+      bulkAssignProductToPlayers,
       updateBulkOptions,
       addImage,
       removeImage,
       applyBulkOptions,
       resetRoster,
       resetCustomerInfo,
-      resetProductInfo
+      resetProductInfo,
+      areAllPlayersAssignedProducts
     }}>
       {children}
     </RosterContext.Provider>

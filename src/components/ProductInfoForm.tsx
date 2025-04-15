@@ -1,44 +1,26 @@
 
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import ImageUploadBox from './ImageUploadBox';
+import { Plus } from 'lucide-react';
+import ProductBlock from './products/ProductBlock';
+import { toast } from 'sonner';
 
 const ProductInfoForm: React.FC = () => {
-  const { productInfo, updateProductInfo, addImage, removeImage } = useRoster();
+  const { 
+    productInfo, 
+    addProduct, 
+    updateProduct, 
+    removeProduct, 
+    moveProductUp, 
+    moveProductDown 
+  } = useRoster();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    
-    if (name === 'pricePerItem') {
-      // Convert to number and handle invalid inputs
-      const numericValue = parseFloat(value);
-      updateProductInfo({ 
-        [name]: isNaN(numericValue) ? 0 : numericValue 
-      });
-    } else {
-      updateProductInfo({ [name]: value });
-    }
+  const handleAddProduct = () => {
+    addProduct();
+    toast.success('New product added');
   };
-
-  const handleImageUpload = (base64: string) => {
-    addImage(base64);
-  };
-
-  const handleRemoveImage = (index: number) => {
-    removeImage(index);
-  };
-
-  // Prepare empty slots for images
-  const imageSlots = Array(4).fill(null);
-  productInfo.images.forEach((img, index) => {
-    imageSlots[index] = img;
-  });
 
   return (
     <Card>
@@ -46,66 +28,43 @@ const ProductInfoForm: React.FC = () => {
         <CardTitle className="text-xl font-semibold text-gray-800">Product Info</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-6">
-          <p className="text-sm font-medium mb-3 text-gray-700">Upload Product Images</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {imageSlots.map((img, index) => (
-              <ImageUploadBox
-                key={index}
-                imageSrc={img}
-                onImageUpload={handleImageUpload}
-                onRemove={img ? () => handleRemoveImage(index) : undefined}
+        {productInfo.products.length === 0 ? (
+          <div className="text-center py-10">
+            <p className="text-gray-500 mb-4">No products added yet</p>
+            <Button 
+              onClick={handleAddProduct}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" /> Add a Product
+            </Button>
+          </div>
+        ) : (
+          <>
+            {productInfo.products.map((product, index) => (
+              <ProductBlock 
+                key={product.id}
+                product={product}
+                index={index}
+                onUpdate={updateProduct}
+                onRemove={removeProduct}
+                onMoveUp={moveProductUp}
+                onMoveDown={moveProductDown}
+                isFirst={index === 0}
+                isLast={index === productInfo.products.length - 1}
               />
             ))}
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="productName">Product Name*</Label>
-            <Input
-              id="productName"
-              name="name"
-              value={productInfo.name}
-              onChange={handleInputChange}
-              placeholder="Custom Basketball Jersey"
-              required
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="pricePerItem">Price Per Item*</Label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <span className="text-gray-500">$</span>
-              </div>
-              <Input
-                id="pricePerItem"
-                name="pricePerItem"
-                type="number"
-                min="0"
-                step="0.01"
-                value={productInfo.pricePerItem}
-                onChange={handleInputChange}
-                className="pl-7"
-                placeholder="45.00"
-                required
-              />
+            
+            <div className="flex justify-center mt-4">
+              <Button 
+                onClick={handleAddProduct}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" /> Add Another Product
+              </Button>
             </div>
-          </div>
-        </div>
-        
-        <div className="mt-4 space-y-2">
-          <Label htmlFor="notes">Notes</Label>
-          <Textarea
-            id="notes"
-            name="notes"
-            value={productInfo.notes}
-            onChange={handleInputChange}
-            placeholder="Additional information about this product..."
-            className="h-24 border border-neutral-200 rounded-md"
-          />
-        </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );

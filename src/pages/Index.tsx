@@ -41,8 +41,8 @@ const Index = () => {
         <div className="space-y-6">
           <CustomerInfoForm />
           <ProductInfoForm />
-          <BulkOptionsToolbar />
           <RosterTable />
+          <BulkOptionsToolbar />
           <OrderSummary />
         </div>
       </div>

@@ -8,6 +8,7 @@ export type Player = {
   shortsSize?: string;
   sockSize?: string;
   initials?: string;
+  productId?: string; // Link to product
 };
 
 export type CustomerInfo = {
@@ -21,11 +22,16 @@ export type CustomerInfo = {
   zipCode: string;
 };
 
-export type ProductInfo = {
+export type Product = {
+  id: string;
   name: string;
   pricePerItem: number;
   notes: string;
   images: string[];
+};
+
+export type ProductInfo = {
+  products: Product[];
 };
 
 export type BulkOptions = {
