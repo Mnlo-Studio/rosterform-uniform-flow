@@ -1,0 +1,142 @@
+
+import { useState } from 'react';
+import { useRoster } from '@/context/RosterContext';
+import { useToast } from '@/hooks/use-toast';
+
+export const useBulkOptions = () => {
+  const {
+    bulkOptions,
+    updateBulkOptions,
+    players,
+    applyBulkOptions,
+    productInfo,
+    addPlayers,
+    bulkAssignProductToPlayers
+  } = useRoster();
+  const { toast } = useToast();
+  
+  // State for storing pending actions
+  const [quickAddCount, setQuickAddCount] = useState<number | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string>('');
+  
+  const handleGenderChange = (value: string) => {
+    updateBulkOptions({
+      defaultGender: value
+    });
+  };
+  
+  const handleSizeChange = (value: string) => {
+    updateBulkOptions({
+      defaultSize: value
+    });
+  };
+  
+  const handleNumberFillChange = (value: 'custom' | 'odd' | 'even' | 'random') => {
+    updateBulkOptions({
+      numberFillType: value
+    });
+  };
+  
+  const handleNamePrefixTypeChange = (value: 'none' | 'player' | 'custom') => {
+    updateBulkOptions({
+      namePrefixType: value
+    });
+  };
+  
+  const handleNamePrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateBulkOptions({
+      namePrefix: e.target.value
+    });
+  };
+  
+  const handleNumberPrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateBulkOptions({
+      numberPrefix: e.target.value
+    });
+  };
+  
+  const handleNameCaseChange = (value: 'normal' | 'uppercase' | 'lowercase') => {
+    updateBulkOptions({
+      nameCaseType: value
+    });
+  };
+  
+  const toggleOption = (option: keyof Pick<typeof bulkOptions, 'showName' | 'showNumber' | 'showShortsSize' | 'showSockSize' | 'showInitials'>) => {
+    updateBulkOptions({
+      [option]: !bulkOptions[option]
+    });
+  };
+  
+  const handleQuickAddSelection = (count: number) => {
+    setQuickAddCount(count);
+  };
+  
+  const handleProductSelection = (productId: string) => {
+    setSelectedProductId(productId);
+  };
+  
+  const handleApplyChanges = () => {
+    let changesMade = false;
+    let messages = [];
+    
+    // Check if there are any players before applying changes
+    if (players.length === 0 && !quickAddCount) {
+      toast({
+        title: "No players to update",
+        description: "Add players to the roster first before applying bulk options.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Apply quick add if selected
+    if (quickAddCount) {
+      addPlayers(quickAddCount);
+      messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
+      setQuickAddCount(null); // Reset after applying
+      changesMade = true;
+    }
+    
+    // Apply bulk product assignment if selected
+    if (selectedProductId && players.length > 0) {
+      bulkAssignProductToPlayers(selectedProductId);
+      messages.push("Product assigned to all players");
+      setSelectedProductId(''); // Reset after applying
+      changesMade = true;
+    }
+    
+    // Apply other bulk options
+    if (players.length > 0) {
+      applyBulkOptions();
+      messages.push("Bulk options applied to all players");
+      changesMade = true;
+    }
+    
+    // Show toast notification
+    if (changesMade) {
+      toast({
+        title: "Changes applied",
+        description: messages.join('. ')
+      });
+    }
+  };
+
+  return {
+    bulkOptions,
+    quickAddCount,
+    selectedProductId,
+    productInfo,
+    players,
+    handleGenderChange,
+    handleSizeChange,
+    handleNumberFillChange,
+    handleNamePrefixTypeChange,
+    handleNamePrefixChange,
+    handleNumberPrefixChange,
+    handleNameCaseChange,
+    toggleOption,
+    handleQuickAddSelection,
+    handleProductSelection,
+    handleApplyChanges
+  };
+};
