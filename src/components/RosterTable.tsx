@@ -5,7 +5,6 @@ import { Player } from '@/types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle } from 'lucide-react';
-import RosterHeader from './roster/RosterHeader';
 import MobilePlayerList from './roster/MobilePlayerList';
 import DesktopPlayerList from './roster/DesktopPlayerList';
 import EmptyRoster from './roster/EmptyRoster';
@@ -72,8 +71,6 @@ const RosterTable: React.FC = () => {
             </div>
           </div>
         )}
-        
-        <RosterHeader onAddPlayers={addPlayers} />
         
         {isMobile ? (
           <MobilePlayerList 
