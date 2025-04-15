@@ -1,23 +1,18 @@
 
 import React, { useState } from 'react';
 import { useRoster } from '@/context/RosterContext';
-import { Button } from '@/components/ui/button';
 import ProductSelect from '@/components/roster/ProductSelect';
-import { toast } from 'sonner';
 
 const BulkProductAssignmentSection: React.FC = () => {
   const { productInfo, players, bulkAssignProductToPlayers } = useRoster();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  const handleApplyToAll = () => {
-    if (!selectedProductId) {
-      toast.error('Please select a product first');
-      return;
+  // Automatically apply product when selected
+  React.useEffect(() => {
+    if (selectedProductId && players.length > 0) {
+      bulkAssignProductToPlayers(selectedProductId);
     }
-    
-    bulkAssignProductToPlayers(selectedProductId);
-    toast.success('Product assigned to all players');
-  };
+  }, [selectedProductId, players, bulkAssignProductToPlayers]);
 
   return (
     <div className="mb-4">
@@ -33,13 +28,6 @@ const BulkProductAssignmentSection: React.FC = () => {
             disabled={players.length === 0}
           />
         </div>
-        <Button 
-          onClick={handleApplyToAll}
-          disabled={!selectedProductId || players.length === 0}
-          className="whitespace-nowrap"
-        >
-          Apply to All
-        </Button>
       </div>
     </div>
   );
