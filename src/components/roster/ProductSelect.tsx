@@ -38,7 +38,7 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
   return (
     <Select
       value={productId || ''}
-      onValueChange={onValueChange}
+      onValueChange={(value) => onValueChange(value || undefined)}
       disabled={disabled || products.length === 0}
     >
       <SelectTrigger 
@@ -47,7 +47,7 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent className="bg-white">
+      <SelectContent>
         {products.map(product => (
           <SelectItem key={product.id} value={product.id}>
             {product.name || 'Unnamed Product'}

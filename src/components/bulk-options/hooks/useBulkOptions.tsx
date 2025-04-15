@@ -116,7 +116,8 @@ export const useBulkOptions = () => {
     // Apply bulk product assignment if selected
     if (selectedProductId && players.length > 0) {
       bulkAssignProductToPlayers(selectedProductId);
-      messages.push("Product assigned to all players");
+      const productName = productInfo.products.find(p => p.id === selectedProductId)?.name || 'Selected product';
+      messages.push(`${productName} assigned to all players`);
       setSelectedProductId(''); // Reset after applying
       changesMade = true;
     }
