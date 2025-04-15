@@ -22,17 +22,21 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd, sel
     { count: 25, label: '25' }
   ];
   
-  // Find the selected option label
+  // Set default to 1 player if no count is selected
   const selectedOptionLabel = selectedCount 
     ? `Add ${quickAddOptions.find(opt => opt.count === selectedCount)?.label || selectedCount} Player${selectedCount > 1 ? 's' : ''}`
-    : 'Quick Add Players';
+    : 'Add 1 Player';
   
   return (
     <div>
       <p className="text-sm font-medium mb-2">Quick Add Players</p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="border-neutral-200 w-full">
+          <Button 
+            variant="outline" 
+            className="border-neutral-200 w-full"
+            onClick={() => onSelectQuickAdd(1)} // Default to 1 player on initial click
+          >
             <Plus className="h-3.5 w-3.5 mr-1" />
             {selectedOptionLabel}
             <ChevronDown className="h-3.5 w-3.5 ml-auto" />
@@ -56,3 +60,4 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd, sel
 };
 
 export default QuickAddButtons;
+
