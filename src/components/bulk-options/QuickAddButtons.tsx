@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, ChevronDown } from 'lucide-react';
-import { useRoster } from '@/context/RosterContext';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +22,7 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd }) =
   ];
   
   return (
-    <div className="mb-4">
+    <div>
       <p className="text-sm font-medium mb-2">Quick Add Players</p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

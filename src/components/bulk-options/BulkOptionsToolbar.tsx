@@ -139,9 +139,8 @@ const BulkOptionsToolbar: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {/* Quick add and bulk product in a 2-column grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Quick add buttons */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* First row: Quick add and bulk product */}
             <QuickAddButtons onSelectQuickAdd={handleQuickAddSelection} />
             
             {/* Bulk product assignment - only show if there are products available */}
@@ -151,30 +150,70 @@ const BulkOptionsToolbar: React.FC = () => {
                 onProductSelect={handleProductSelection}
               />
             )}
-          </div>
           
-          <DefaultOptionsSection 
-            bulkOptions={bulkOptions} 
-            onGenderChange={handleGenderChange} 
-            onSizeChange={handleSizeChange} 
-            onNumberFillChange={handleNumberFillChange} 
-            onNamePrefixTypeChange={handleNamePrefixTypeChange} 
-            onNameCaseChange={handleNameCaseChange} 
-          />
-          
-          {/* Custom inputs in a 2-column grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* 5. Custom Name Prefix */}
+            {/* Second row: Default Gender and Size */}
+            <div>
+              <label htmlFor="defaultGender" className="text-sm font-medium mb-2 block">Default Gender</label>
+              <DefaultOptionsSection.GenderSelect 
+                value={bulkOptions.defaultGender} 
+                onChange={handleGenderChange} 
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="defaultSize" className="text-sm font-medium mb-2 block">Default Size</label>
+              <DefaultOptionsSection.SizeSelect 
+                value={bulkOptions.defaultSize} 
+                onChange={handleSizeChange} 
+              />
+            </div>
+            
+            {/* Third row: Name Auto-Fill and Number Auto-Fill */}
+            <div>
+              <label htmlFor="namePrefixType" className="text-sm font-medium mb-2 block">Name Auto-Fill</label>
+              <DefaultOptionsSection.NamePrefixSelect 
+                value={bulkOptions.namePrefixType} 
+                onChange={handleNamePrefixTypeChange} 
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="numberFill" className="text-sm font-medium mb-2 block">Number Auto-Fill</label>
+              <DefaultOptionsSection.NumberFillSelect 
+                value={bulkOptions.numberFillType} 
+                onChange={handleNumberFillChange} 
+              />
+            </div>
+            
+            {/* Fourth row: Name Case (left column only) */}
+            <div>
+              <label htmlFor="nameCaseType" className="text-sm font-medium mb-2 block">Name Case</label>
+              <DefaultOptionsSection.NameCaseSelect 
+                value={bulkOptions.nameCaseType} 
+                onChange={handleNameCaseChange} 
+              />
+            </div>
+            
+            {/* No element in right column of fourth row */}
+            <div></div>
+            
+            {/* Fifth row: Custom inputs (only shown conditionally) */}
             {bulkOptions.namePrefixType === 'custom' && (
-              <CustomNamePrefixInput prefix={bulkOptions.namePrefix} onChange={handleNamePrefixChange} />
+              <div>
+                <label className="text-sm font-medium mb-2 block">Custom Name Prefix</label>
+                <CustomNamePrefixInput prefix={bulkOptions.namePrefix} onChange={handleNamePrefixChange} />
+              </div>
             )}
             
-            {/* 6. Custom Number Prefix */}
             {bulkOptions.numberFillType === 'custom' && (
-              <CustomNumberPrefixInput prefix={bulkOptions.numberPrefix || ''} onChange={handleNumberPrefixChange} />
+              <div>
+                <label className="text-sm font-medium mb-2 block">Custom Number Prefix</label>
+                <CustomNumberPrefixInput prefix={bulkOptions.numberPrefix || ''} onChange={handleNumberPrefixChange} />
+              </div>
             )}
           </div>
           
+          {/* Toggle options section for Name, Number, etc. */}
           <ToggleOptionsSection 
             bulkOptions={bulkOptions} 
             isMobile={isMobile} 

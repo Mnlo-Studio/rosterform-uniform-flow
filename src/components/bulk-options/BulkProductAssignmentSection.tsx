@@ -15,7 +15,7 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
   const { productInfo, players } = useRoster();
 
   return (
-    <div className="mb-4">
+    <div>
       <p className="text-sm font-medium mb-2">Bulk Product Assignment</p>
       <ProductSelect
         productId={selectedProductId}

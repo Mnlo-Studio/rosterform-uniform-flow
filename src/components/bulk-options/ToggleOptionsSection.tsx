@@ -16,7 +16,7 @@ const ToggleOptionsSection: React.FC<ToggleOptionsSectionProps> = ({
   onToggleOption 
 }) => {
   return (
-    <div className="flex flex-wrap gap-6 pt-2">
+    <div className="flex flex-wrap gap-6">
       <div className="flex items-center space-x-2">
         <Switch 
           id="showName" 
