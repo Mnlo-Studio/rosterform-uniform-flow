@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -16,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRoster } from '@/context/RosterContext';
+import ProductSelect from './ProductSelect';
 
 interface PlayerRowProps {
   player: Player;
@@ -53,21 +53,12 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
       <TableCell>{index + 1}</TableCell>
       
       <TableCell>
-        <Select
-          value={player.productId || ''}
+        <ProductSelect
+          productId={player.productId}
+          products={productInfo.products}
           onValueChange={handleProductChange}
-        >
-          <SelectTrigger className="h-8">
-            <SelectValue placeholder="Select product" />
-          </SelectTrigger>
-          <SelectContent>
-            {productInfo.products.map(product => (
-              <SelectItem key={product.id} value={product.id}>
-                {product.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          triggerClassName="h-8"
+        />
       </TableCell>
       
       {showName && (

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Player, Product } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -12,6 +11,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
+import ProductSelect from './ProductSelect';
 
 interface PlayerCardProps {
   player: Player;
@@ -136,21 +136,13 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
             <label htmlFor={`product-${player.id}`} className="text-xs font-medium text-gray-700 mb-1 block">
               Product
             </label>
-            <Select
-              value={player.productId || ''}
+            <ProductSelect
+              id={`product-${player.id}`}
+              productId={player.productId}
+              products={products}
               onValueChange={onProductChange}
-            >
-              <SelectTrigger id={`product-${player.id}`} className="h-9">
-                <SelectValue placeholder="Select product" />
-              </SelectTrigger>
-              <SelectContent>
-                {products.map(product => (
-                  <SelectItem key={product.id} value={product.id}>
-                    {product.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              triggerClassName="h-9"
+            />
           </div>
           
           {showShortsSize && (

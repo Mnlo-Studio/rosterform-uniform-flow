@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Player } from '@/types';
 
@@ -20,12 +20,12 @@ const RosterTableCard: React.FC<RosterTableCardProps> = ({ players }) => {
           <Table>
             <TableHeader className="bg-gray-50">
               <TableRow>
-                <TableHead className="w-[40px]">#</TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Number</TableHead>
-                <TableHead>Size</TableHead>
-                <TableHead>Gender</TableHead>
+                <TableCell className="w-[40px]">#</TableCell>
+                <TableCell>Product</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Number</TableCell>
+                <TableCell>Size</TableCell>
+                <TableCell>Gender</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>

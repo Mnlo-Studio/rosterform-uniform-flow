@@ -2,14 +2,8 @@
 import React, { useState } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { Button } from '@/components/ui/button';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
 import { toast } from 'sonner';
+import ProductSelect from './ProductSelect';
 
 const BulkProductAssignment: React.FC = () => {
   const { productInfo, players, bulkAssignProductToPlayers } = useRoster();
@@ -38,21 +32,14 @@ const BulkProductAssignment: React.FC = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-3 bg-gray-50 p-4 rounded-md mb-4">
       <div className="flex-grow">
-        <Select 
-          value={selectedProductId} 
-          onValueChange={setSelectedProductId}
-        >
-          <SelectTrigger className="h-9">
-            <SelectValue placeholder="Select a product to assign" />
-          </SelectTrigger>
-          <SelectContent>
-            {productInfo.products.map(product => (
-              <SelectItem key={product.id} value={product.id}>
-                {product.name} (${product.pricePerItem})
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ProductSelect
+          productId={selectedProductId}
+          products={productInfo.products}
+          onValueChange={(value) => setSelectedProductId(value || '')}
+          placeholder="Select a product to assign"
+          triggerClassName="h-9"
+          disabled={players.length === 0}
+        />
       </div>
       <Button 
         onClick={handleApplyToAll}
