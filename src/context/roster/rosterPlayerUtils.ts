@@ -53,7 +53,7 @@ export const applyBulkOptionsToPlayers = (
       updatedPlayer.sockSize = bulkOptions.defaultSize;
     }
 
-    // Apply name/number generation based on settings
+    // Apply number generation based on settings
     if (bulkOptions.numberFillType !== 'custom') {
       updatedPlayer.number = generateNumber(
         bulkOptions.numberFillType,
@@ -65,6 +65,7 @@ export const applyBulkOptionsToPlayers = (
       updatedPlayer.number = bulkOptions.numberPrefix;
     }
 
+    // Apply name generation based on settings
     if (bulkOptions.namePrefixType !== 'none') {
       updatedPlayer.name = generateName(
         bulkOptions.namePrefixType,

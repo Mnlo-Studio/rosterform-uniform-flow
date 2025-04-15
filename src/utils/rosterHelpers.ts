@@ -16,7 +16,7 @@ export const generateNumber = (fillType: 'odd' | 'even' | 'random', index: numbe
   return prefix ? `${prefix}${baseNumber}` : baseNumber;
 };
 
-// Update the helper function to handle name casing
+// Updated helper function to not append index for custom names
 export const generateName = (
   prefixType: 'none' | 'player' | 'custom', 
   prefix: string, 
@@ -29,7 +29,8 @@ export const generateName = (
   } else if (prefixType === 'player') {
     name = `Player ${index + 1}`;
   } else {
-    name = `${prefix} ${index + 1}`;
+    // For custom names, just use the prefix without appending a number
+    name = prefix;
   }
 
   switch(caseType) {
