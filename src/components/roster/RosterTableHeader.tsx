@@ -1,8 +1,6 @@
 
 import React from 'react';
 import { TableHead, TableRow } from '@/components/ui/table';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useRoster } from '@/context/RosterContext';
 
 interface RosterTableHeaderProps {
   showName: boolean;
@@ -19,27 +17,8 @@ const RosterTableHeader: React.FC<RosterTableHeaderProps> = ({
   showSockSize,
   showInitials,
 }) => {
-  const { players, selectedPlayers, selectAllPlayers, deselectAllPlayers } = useRoster();
-
-  const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      selectAllPlayers();
-    } else {
-      deselectAllPlayers();
-    }
-  };
-
-  const allSelected = players.length > 0 && selectedPlayers.length === players.length;
-
   return (
     <TableRow>
-      <TableHead className="w-[40px] pl-4">
-        <Checkbox 
-          checked={allSelected} 
-          onCheckedChange={handleSelectAll} 
-          aria-label="Select all players" 
-        />
-      </TableHead>
       <TableHead className="w-[50px]">#</TableHead>
       <TableHead>Product</TableHead>
       {showName && <TableHead>Name</TableHead>}

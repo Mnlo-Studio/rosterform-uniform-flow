@@ -1,3 +1,4 @@
+
 import { Player, CustomerInfo, ProductInfo, BulkOptions, Product } from '@/types';
 
 export interface RosterContextType {
@@ -24,12 +25,4 @@ export interface RosterContextType {
   resetCustomerInfo: () => void;
   resetProductInfo: () => void;
   areAllPlayersAssignedProducts: () => boolean;
-
-  // Player selection state
-  selectedPlayers: string[];
-  selectPlayer: (playerId: string) => void;
-  deselectPlayer: (playerId: string) => void;
-  togglePlayerSelection: (playerId: string) => void;
-  selectAllPlayers: () => void;
-  deselectAllPlayers: () => void;
 }

@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { Player } from '@/types';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -18,7 +18,6 @@ const RosterTable: React.FC = () => {
     updatePlayer,
     productInfo,
     areAllPlayersAssignedProducts,
-    selectedPlayers
   } = useRoster();
   const isMobile = useIsMobile();
 
@@ -38,7 +37,7 @@ const RosterTable: React.FC = () => {
 
   // Calculate total columns (base columns + additional columns)
   // Base depends on whether name and number are shown
-  const baseColumnsCount = 5 + // checkbox, # (index), size, gender, product
+  const baseColumnsCount = 4 + // # (index), size, gender, product
     (bulkOptions.showName ? 1 : 0) +
     (bulkOptions.showNumber ? 1 : 0);
   
@@ -48,18 +47,12 @@ const RosterTable: React.FC = () => {
   const showProductWarning = players.length > 0 && productInfo.products.length > 0 && !areAllPlayersAssignedProducts();
   const showNoProductsWarning = players.length > 0 && productInfo.products.length === 0;
 
-  // Debug selected players
-  useEffect(() => {
-    console.log('Selected players:', selectedPlayers);
-  }, [selectedPlayers]);
-
   return (
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-xl font-semibold text-gray-800">Team Roster</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
-        {/* Show warnings if needed */}
         {showNoProductsWarning && (
           <div className="bg-amber-50 p-4 rounded-md border border-amber-200 mb-4">
             <div className="flex items-center">

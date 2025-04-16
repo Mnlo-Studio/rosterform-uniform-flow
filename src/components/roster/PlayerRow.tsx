@@ -15,7 +15,6 @@ import {
   TableCell,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from '@/components/ui/checkbox';
 import { useRoster } from '@/context/RosterContext';
 import ProductSelect from './ProductSelect';
 
@@ -44,23 +43,14 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
   onInputChange,
   onSelectChange
 }) => {
-  const { productInfo, assignProductToPlayer, selectedPlayers, togglePlayerSelection } = useRoster();
+  const { productInfo, assignProductToPlayer } = useRoster();
   
   const handleProductChange = (productId: string | undefined) => {
     assignProductToPlayer(player.id, productId);
   };
 
-  const isSelected = selectedPlayers.includes(player.id);
-
   return (
     <TableRow>
-      <TableCell className="pl-4">
-        <Checkbox 
-          checked={isSelected} 
-          onCheckedChange={() => togglePlayerSelection(player.id)} 
-          aria-label={`Select player ${player.name || index + 1}`}
-        />
-      </TableCell>
       <TableCell>{index + 1}</TableCell>
       
       <TableCell>

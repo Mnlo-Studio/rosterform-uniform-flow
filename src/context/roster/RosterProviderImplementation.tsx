@@ -1,5 +1,5 @@
 
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
 import { Player, CustomerInfo, ProductInfo, BulkOptions, Product } from '@/types';
 import { 
   createPlayers, 
@@ -24,7 +24,6 @@ export const useRosterState = (): RosterContextType => {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>(initialCustomerInfo);
   const [productInfo, setProductInfo] = useState<ProductInfo>(initialProductInfo);
   const [bulkOptions, setBulkOptions] = useState<BulkOptions>(initialBulkOptions);
-  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
 
   // Player management functions
   const addPlayers = (count: number) => {
@@ -35,42 +34,12 @@ export const useRosterState = (): RosterContextType => {
 
   const removePlayer = (id: string) => {
     setPlayers(players.filter(player => player.id !== id));
-    if (selectedPlayers.includes(id)) {
-      setSelectedPlayers(selectedPlayers.filter(playerId => playerId !== id));
-    }
   };
 
   const updatePlayer = (id: string, data: Partial<Player>) => {
     setPlayers(players.map(player => 
       player.id === id ? { ...player, ...data } : player
     ));
-  };
-
-  // Player selection functions
-  const selectPlayer = (playerId: string) => {
-    if (!selectedPlayers.includes(playerId)) {
-      setSelectedPlayers([...selectedPlayers, playerId]);
-    }
-  };
-
-  const deselectPlayer = (playerId: string) => {
-    setSelectedPlayers(selectedPlayers.filter(id => id !== playerId));
-  };
-
-  const togglePlayerSelection = (playerId: string) => {
-    if (selectedPlayers.includes(playerId)) {
-      deselectPlayer(playerId);
-    } else {
-      selectPlayer(playerId);
-    }
-  };
-
-  const selectAllPlayers = () => {
-    setSelectedPlayers(players.map(player => player.id));
-  };
-
-  const deselectAllPlayers = () => {
-    setSelectedPlayers([]);
   };
 
   // Customer info management
@@ -166,15 +135,9 @@ export const useRosterState = (): RosterContextType => {
     customerInfo,
     productInfo,
     bulkOptions,
-    selectedPlayers,
     addPlayers,
     removePlayer,
     updatePlayer,
-    selectPlayer,
-    deselectPlayer,
-    togglePlayerSelection,
-    selectAllPlayers,
-    deselectAllPlayers,
     updateCustomerInfo,
     addProduct,
     updateProduct,
