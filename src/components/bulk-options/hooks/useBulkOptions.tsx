@@ -98,6 +98,16 @@ export const useBulkOptions = () => {
   const handleProductSelection = (productId: string) => {
     console.log('Product selected:', productId);
     setSelectedProductId(productId);
+    
+    // If there are players, allow applying product immediately
+    if (players.length > 0 && productId) {
+      bulkAssignProductToPlayers(productId);
+      const productName = productInfo.products.find(p => p.id === productId)?.name || 'Selected product';
+      toast({
+        title: "Product assigned",
+        description: `${productName} assigned to all players`
+      });
+    }
   };
   
   const handleApplyChanges = () => {
@@ -133,7 +143,7 @@ export const useBulkOptions = () => {
       bulkAssignProductToPlayers(selectedProductId);
       const productName = productInfo.products.find(p => p.id === selectedProductId)?.name || 'Selected product';
       messages.push(`${productName} assigned to all players`);
-      setSelectedProductId(''); // Reset after applying
+      // Do not reset selectedProductId after applying - allow it to persist
       changesMade = true;
     }
     

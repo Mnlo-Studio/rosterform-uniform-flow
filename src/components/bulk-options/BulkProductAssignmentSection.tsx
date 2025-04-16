@@ -26,7 +26,7 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
       <ProductSelect
         productId={selectedProductId}
         products={productInfo.products}
-        onValueChange={(value) => onProductSelect(value || '')}
+        onValueChange={onProductSelect}
         placeholder="Select a product to assign"
         triggerClassName="h-10 w-full"
         disabled={players.length === 0}

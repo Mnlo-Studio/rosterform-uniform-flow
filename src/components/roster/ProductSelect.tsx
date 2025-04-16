@@ -12,7 +12,7 @@ import { Product } from '@/types';
 interface ProductSelectProps {
   productId: string | undefined;
   products: Product[];
-  onValueChange: (productId: string | undefined) => void;
+  onValueChange: (productId: string) => void;
   placeholder?: string;
   triggerClassName?: string;
   id?: string;
@@ -37,14 +37,14 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
   // Reset value if selected product no longer exists
   useEffect(() => {
     if (productId && products.length > 0 && !products.some(p => p.id === productId)) {
-      onValueChange(undefined);
+      onValueChange('');
     }
   }, [products, productId, onValueChange]);
-  
+
   return (
     <Select
       value={productId || ''}
-      onValueChange={(value) => onValueChange(value || undefined)}
+      onValueChange={onValueChange}
       disabled={disabled || products.length === 0}
     >
       <SelectTrigger 
