@@ -20,6 +20,14 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
     console.log('BulkProductAssignmentSection - Selected Product ID:', selectedProductId);
   }, [productInfo.products, selectedProductId]);
 
+  // Ensure we check for product selection when products change
+  useEffect(() => {
+    // If no product is selected but products exist, select the first one
+    if ((!selectedProductId || selectedProductId === '') && productInfo.products.length > 0) {
+      onProductSelect(productInfo.products[0].id);
+    }
+  }, [productInfo.products, selectedProductId, onProductSelect]);
+
   return (
     <div>
       <p className="text-sm font-medium mb-2">Bulk Product Assignment</p>

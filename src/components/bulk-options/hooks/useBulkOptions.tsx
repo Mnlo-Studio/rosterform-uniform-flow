@@ -40,7 +40,7 @@ export const useBulkOptions = () => {
     if (selectedProductId && 
         productInfo.products.length > 0 && 
         !productInfo.products.some(p => p.id === selectedProductId)) {
-      setSelectedProductId('');
+      setSelectedProductId(productInfo.products[0].id);
     }
   }, [productInfo.products, selectedProductId]);
   
@@ -99,7 +99,6 @@ export const useBulkOptions = () => {
   const handleProductSelection = (productId: string) => {
     console.log('Product selected:', productId);
     setSelectedProductId(productId);
-    // Removed the automatic product assignment code
   };
   
   const handleApplyChanges = () => {
@@ -135,7 +134,6 @@ export const useBulkOptions = () => {
       bulkAssignProductToPlayers(selectedProductId);
       const productName = productInfo.products.find(p => p.id === selectedProductId)?.name || 'Selected product';
       messages.push(`${productName} assigned to all players`);
-      // Do not reset selectedProductId after applying - allow it to persist
       changesMade = true;
     }
     

@@ -20,6 +20,7 @@ const ProductInfoForm: React.FC = () => {
   const handleAddProduct = () => {
     addProduct();
     toast.success('New product added');
+    console.log('New product added, total products:', productInfo.products.length + 1);
   };
 
   return (
