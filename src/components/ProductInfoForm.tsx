@@ -46,7 +46,10 @@ const ProductInfoForm: React.FC = () => {
                 key={product.id}
                 product={product}
                 index={index}
-                onUpdate={updateProduct}
+                onUpdate={(id, data) => {
+                  updateProduct(id, data);
+                  console.log('Product updated:', id);
+                }}
                 onRemove={removeProduct}
                 onMoveUp={moveProductUp}
                 onMoveDown={moveProductDown}

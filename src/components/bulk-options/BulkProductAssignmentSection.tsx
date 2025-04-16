@@ -12,18 +12,18 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
   selectedProductId, 
   onProductSelect 
 }) => {
-  const { productInfo, players } = useRoster();
+  const { productInfo } = useRoster();
   
+  // Debug logging
   useEffect(() => {
-    // Debug logging
     console.log('BulkProductAssignmentSection - Products:', productInfo.products);
     console.log('BulkProductAssignmentSection - Selected Product ID:', selectedProductId);
   }, [productInfo.products, selectedProductId]);
 
-  // Ensure we check for product selection when products change
+  // When products change, select first product if none is selected
   useEffect(() => {
-    // If no product is selected but products exist, select the first one
-    if ((!selectedProductId || selectedProductId === '') && productInfo.products.length > 0) {
+    if (productInfo.products.length > 0 && (!selectedProductId || !productInfo.products.some(p => p.id === selectedProductId))) {
+      console.log('Auto-selecting first product:', productInfo.products[0].id);
       onProductSelect(productInfo.products[0].id);
     }
   }, [productInfo.products, selectedProductId, onProductSelect]);
@@ -37,7 +37,7 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
         onValueChange={onProductSelect}
         placeholder="Select a product to assign"
         triggerClassName="h-10 w-full"
-        disabled={players.length === 0}
+        disabled={productInfo.products.length === 0}
       />
     </div>
   );

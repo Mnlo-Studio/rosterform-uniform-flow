@@ -31,19 +31,30 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
   // Debug logging
   useEffect(() => {
     console.log('ProductSelect - Products:', products);
-    console.log('ProductSelect - Selected Product ID:', productId);
+    console.log('ProductSelect - Current Product ID:', productId);
   }, [products, productId]);
   
-  // Reset value if selected product no longer exists
+  // Reset selection if selected product no longer exists but products are available
   useEffect(() => {
-    if (productId && products.length > 0 && !products.some(p => p.id === productId)) {
-      onValueChange('');
+    if (products.length > 0 && productId && !products.some(p => p.id === productId)) {
+      console.log('Selected product no longer exists, auto-selecting first product');
+      onValueChange(products[0].id);
+    }
+  }, [products, productId, onValueChange]);
+  
+  // If no product selected but products are available, select first one
+  useEffect(() => {
+    if (products.length > 0 && !productId) {
+      console.log('No product selected, auto-selecting first product');
+      onValueChange(products[0].id);
     }
   }, [products, productId, onValueChange]);
 
+  const actualValue = productId && products.some(p => p.id === productId) ? productId : '';
+
   return (
     <Select
-      value={productId || ''}
+      value={actualValue}
       onValueChange={onValueChange}
       disabled={disabled || products.length === 0}
     >

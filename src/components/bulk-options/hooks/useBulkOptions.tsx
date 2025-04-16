@@ -19,28 +19,30 @@ export const useBulkOptions = () => {
   const [quickAddCount, setQuickAddCount] = useState<number | null>(null);
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   
-  // Automatically select first product when products are available
-  useEffect(() => {
-    if (productInfo.products.length > 0 && !selectedProductId) {
-      const firstProductId = productInfo.products[0].id;
-      setSelectedProductId(firstProductId);
-      console.log('Automatically selected first product:', firstProductId);
-    }
-  }, [productInfo.products, selectedProductId]);
-  
   // Debug logging
   useEffect(() => {
     console.log('useBulkOptions - Products:', productInfo.products);
     console.log('useBulkOptions - Selected Product ID:', selectedProductId);
   }, [productInfo.products, selectedProductId]);
   
-  // Reset states when product info changes to force re-rendering of dropdown
+  // Reset selectedProductId if it's no longer in the products list
   useEffect(() => {
-    // Only reset selectedProductId if it's not present in the products list
-    if (selectedProductId && 
-        productInfo.products.length > 0 && 
-        !productInfo.products.some(p => p.id === selectedProductId)) {
-      setSelectedProductId(productInfo.products[0].id);
+    if (productInfo.products.length > 0) {
+      // If selectedProductId doesn't exist in products, select first product
+      if (selectedProductId && !productInfo.products.some(p => p.id === selectedProductId)) {
+        console.log('Selected product no longer exists, selecting first product');
+        setSelectedProductId(productInfo.products[0].id);
+      } 
+      // If no product is selected and products exist, select first product
+      else if (!selectedProductId) {
+        console.log('No product selected, selecting first product');
+        setSelectedProductId(productInfo.products[0].id);
+      }
+    } else {
+      // Clear selection if no products exist
+      if (selectedProductId) {
+        setSelectedProductId('');
+      }
     }
   }, [productInfo.products, selectedProductId]);
   
@@ -97,7 +99,7 @@ export const useBulkOptions = () => {
   };
   
   const handleProductSelection = (productId: string) => {
-    console.log('Product selected:', productId);
+    console.log('Product selected in handler:', productId);
     setSelectedProductId(productId);
   };
   
