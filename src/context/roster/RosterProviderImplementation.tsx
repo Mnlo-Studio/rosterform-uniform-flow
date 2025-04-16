@@ -1,6 +1,6 @@
 
 import React, { useState, ReactNode } from 'react';
-import { Player, CustomerInfo, ProductInfo, BulkOptions } from '@/types';
+import { Player, CustomerInfo, ProductInfo, BulkOptions, Product } from '@/types';
 import { 
   createPlayers, 
   applyBulkOptionsToPlayers 
