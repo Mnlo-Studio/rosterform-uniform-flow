@@ -1,8 +1,8 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, ClipboardList, Share2, UserCircle, FileText } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import Logo from "./Logo";
 
 const MainSidebar = () => {
   const location = useLocation();
@@ -48,10 +48,7 @@ const MainSidebar = () => {
         <SidebarGroup>
           <SidebarGroupContent>
             <div className="flex items-center justify-center py-4 border-b">
-              <div className="flex items-center space-x-2">
-                <FileText size={24} className="text-primary" />
-                <span className="text-lg font-semibold">Roster Form</span>
-              </div>
+              <Logo />
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
