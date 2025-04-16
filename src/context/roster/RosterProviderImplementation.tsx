@@ -30,6 +30,7 @@ export const useRosterState = (): RosterContextType => {
     const defaultProductId = productInfo.products.length === 1 ? productInfo.products[0].id : undefined;
     const newPlayers = createPlayers(count, players.length, bulkOptions, defaultProductId);
     setPlayers([...players, ...newPlayers]);
+    return newPlayers; // Return the newly created players
   };
 
   const removePlayer = (id: string) => {

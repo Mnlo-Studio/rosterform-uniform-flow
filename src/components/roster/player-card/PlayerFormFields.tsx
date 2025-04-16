@@ -69,7 +69,7 @@ const PlayerFormFields: React.FC<PlayerFormFieldsProps> = ({
           id={`product-${player.id}`}
           productId={player.productId}
           products={products}
-          onValueChange={onProductChange}
+          onValueChange={(value) => onProductChange(value)}
           triggerClassName="h-9"
         />
       </div>

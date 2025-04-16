@@ -125,13 +125,23 @@ export const useBulkOptions = () => {
     
     // Apply quick add if selected (without modifying existing players)
     if (quickAddCount) {
-      addPlayers(quickAddCount);
+      // Add players with the selected product ID
+      const newPlayers = addPlayers(quickAddCount);
+      
+      // If there's a selected product, assign it to the newly added players
+      if (selectedProductId) {
+        // We're using setTimeout to ensure the players are added first
+        setTimeout(() => {
+          bulkAssignProductToPlayers(selectedProductId);
+        }, 0);
+      }
+      
       messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
       setQuickAddCount(null); // Reset after applying
       changesMade = true;
     }
     
-    // Apply bulk product assignment if selected
+    // Apply bulk product assignment if selected and there are players
     if (selectedProductId && players.length > 0) {
       bulkAssignProductToPlayers(selectedProductId);
       const productName = productInfo.products.find(p => p.id === selectedProductId)?.name || 'Selected product';

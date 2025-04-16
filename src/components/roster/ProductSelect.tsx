@@ -34,22 +34,9 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
     console.log('ProductSelect - Current Product ID:', productId);
   }, [products, productId]);
   
-  // Reset selection if selected product no longer exists but products are available
-  useEffect(() => {
-    if (products.length > 0 && productId && !products.some(p => p.id === productId)) {
-      console.log('Selected product no longer exists, auto-selecting first product');
-      onValueChange(products[0].id);
-    }
-  }, [products, productId, onValueChange]);
+  // If no product selected but products are available, don't auto-select
+  // Let the user or parent component handle the selection explicitly
   
-  // If no product selected but products are available, select first one
-  useEffect(() => {
-    if (products.length > 0 && !productId) {
-      console.log('No product selected, auto-selecting first product');
-      onValueChange(products[0].id);
-    }
-  }, [products, productId, onValueChange]);
-
   const actualValue = productId && products.some(p => p.id === productId) ? productId : '';
 
   return (
@@ -64,7 +51,7 @@ const ProductSelect: React.FC<ProductSelectProps> = ({
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent className="bg-white">
+      <SelectContent align="start" className="bg-white z-50">
         {products.length === 0 ? (
           <SelectItem value="no-products" disabled>No products available</SelectItem>
         ) : (
