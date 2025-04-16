@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, ChevronDown } from 'lucide-react';
 import {
@@ -22,10 +22,21 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd, sel
     { count: 25, label: '25' }
   ];
   
-  // Set default to 1 player if no count is selected
-  const selectedOptionLabel = selectedCount 
-    ? `Add ${quickAddOptions.find(opt => opt.count === selectedCount)?.label || selectedCount} Player${selectedCount > 1 ? 's' : ''}`
-    : 'Add 1 Player';
+  // Set default selection to 1 player on component mount
+  useEffect(() => {
+    if (selectedCount === null) {
+      onSelectQuickAdd(1);
+    }
+  }, []);
+  
+  // Default to 1 player if no count is selected
+  const selectedOption = quickAddOptions.find(opt => opt.count === (selectedCount || 1));
+  const selectedOptionLabel = `Add ${selectedOption?.label || '1'} Player${(selectedCount || 1) > 1 ? 's' : ''}`;
+  
+  const handleButtonClick = () => {
+    // When the button is clicked directly, add the currently selected count (or default to 1)
+    onSelectQuickAdd(selectedCount || 1);
+  };
   
   return (
     <div>
@@ -35,7 +46,7 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd, sel
           <Button 
             variant="outline" 
             className="border-neutral-200 w-full"
-            onClick={() => onSelectQuickAdd(1)} // Default to 1 player on initial click
+            onClick={handleButtonClick}
           >
             <Plus className="h-3.5 w-3.5 mr-1" />
             {selectedOptionLabel}
@@ -60,4 +71,3 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd, sel
 };
 
 export default QuickAddButtons;
-
