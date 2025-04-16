@@ -14,10 +14,12 @@ export interface PlayerCardProps {
   showSockSize: boolean;
   showInitials: boolean;
   products: Product[];
+  isSelected?: boolean;
   onRemove: (id: string) => void;
   onInputChange: (id: string, field: keyof Player, value: string) => void;
   onSelectChange: (id: string, field: keyof Player, value: string) => void;
   onProductChange: (productId: string | undefined) => void;
+  onToggleSelect?: () => void;
 }
 
 export const PlayerCard: React.FC<PlayerCardProps> = ({
@@ -29,17 +31,21 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
   showSockSize,
   showInitials,
   products,
+  isSelected = false,
   onRemove,
   onInputChange,
   onSelectChange,
-  onProductChange
+  onProductChange,
+  onToggleSelect
 }) => {
   return (
-    <Card>
+    <Card className={isSelected ? "border-primary" : ""}>
       <CardContent className="p-4">
         <PlayerCardHeader 
           index={index} 
           onRemove={() => onRemove(player.id)} 
+          isSelected={isSelected}
+          onToggleSelect={onToggleSelect}
         />
         
         <PlayerFormFields

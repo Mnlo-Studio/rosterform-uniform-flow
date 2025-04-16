@@ -27,7 +27,7 @@ const MobilePlayerList: React.FC<MobilePlayerListProps> = ({
   onInputChange,
   onSelectChange
 }) => {
-  const { productInfo, assignProductToPlayer } = useRoster();
+  const { productInfo, assignProductToPlayer, selectedPlayers, togglePlayerSelection } = useRoster();
   
   return (
     <div className="space-y-4 mt-4">
@@ -46,6 +46,8 @@ const MobilePlayerList: React.FC<MobilePlayerListProps> = ({
           onSelectChange={onSelectChange}
           products={productInfo.products}
           onProductChange={(productId) => assignProductToPlayer(player.id, productId)}
+          isSelected={selectedPlayers.includes(player.id)}
+          onToggleSelect={() => togglePlayerSelection(player.id)}
         />
       ))}
     </div>

@@ -17,7 +17,8 @@ const RosterTable: React.FC = () => {
     removePlayer, 
     updatePlayer,
     productInfo,
-    areAllPlayersAssignedProducts
+    areAllPlayersAssignedProducts,
+    selectedPlayers
   } = useRoster();
   const isMobile = useIsMobile();
 
@@ -37,7 +38,7 @@ const RosterTable: React.FC = () => {
 
   // Calculate total columns (base columns + additional columns)
   // Base depends on whether name and number are shown
-  const baseColumnsCount = 4 + // # (index), size, gender, product
+  const baseColumnsCount = 5 + // checkbox, # (index), size, gender, product
     (bulkOptions.showName ? 1 : 0) +
     (bulkOptions.showNumber ? 1 : 0);
   
@@ -46,6 +47,11 @@ const RosterTable: React.FC = () => {
   // Determine if we need to show warnings
   const showProductWarning = players.length > 0 && productInfo.products.length > 0 && !areAllPlayersAssignedProducts();
   const showNoProductsWarning = players.length > 0 && productInfo.products.length === 0;
+
+  // Debug selected players
+  useEffect(() => {
+    console.log('Selected players:', selectedPlayers);
+  }, [selectedPlayers]);
 
   return (
     <Card>

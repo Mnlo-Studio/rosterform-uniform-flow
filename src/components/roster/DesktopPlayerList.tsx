@@ -6,6 +6,7 @@ import RosterTableHeader from './RosterTableHeader';
 import {
   Table,
   TableBody,
+  TableHeader,
 } from "@/components/ui/table";
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -38,13 +39,15 @@ const DesktopPlayerList: React.FC<DesktopPlayerListProps> = ({
     <ScrollArea className="h-[400px] rounded-md border">
       <div className="w-full min-w-[640px]">
         <Table>
-          <RosterTableHeader 
-            showName={showName}
-            showNumber={showNumber}
-            showShortsSize={showShortsSize} 
-            showSockSize={showSockSize} 
-            showInitials={showInitials} 
-          />
+          <TableHeader>
+            <RosterTableHeader 
+              showName={showName}
+              showNumber={showNumber}
+              showShortsSize={showShortsSize} 
+              showSockSize={showSockSize} 
+              showInitials={showInitials} 
+            />
+          </TableHeader>
           <TableBody>
             {players.length > 0 ? (
               players.map((player, index) => (
