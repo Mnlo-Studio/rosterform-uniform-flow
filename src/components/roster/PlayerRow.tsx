@@ -1,22 +1,14 @@
 
 import React from 'react';
 import { Player } from '@/types';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Trash2 } from 'lucide-react';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
 import {
   TableCell,
   TableRow,
 } from "@/components/ui/table";
-import { useRoster } from '@/context/RosterContext';
-import ProductSelect from './ProductSelect';
+import PlayerInputCell from './row/PlayerInputCell';
+import PlayerSelectCell from './row/PlayerSelectCell';
+import ActionCell from './row/ActionCell';
+import ProductCell from './row/ProductCell';
 
 interface PlayerRowProps {
   player: Player;
@@ -43,146 +35,106 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
   onInputChange,
   onSelectChange
 }) => {
-  const { productInfo, assignProductToPlayer } = useRoster();
+  const sizeOptions = [
+    { value: "XS", label: "XS" },
+    { value: "S", label: "S" },
+    { value: "M", label: "M" },
+    { value: "L", label: "L" },
+    { value: "XL", label: "XL" },
+    { value: "2XL", label: "2XL" },
+    { value: "3XL", label: "3XL" }
+  ];
   
-  const handleProductChange = (productId: string | undefined) => {
-    assignProductToPlayer(player.id, productId);
-  };
+  const genderOptions = [
+    { value: "Male", label: "Male" },
+    { value: "Female", label: "Female" },
+    { value: "Other", label: "Other" }
+  ];
 
   return (
     <TableRow>
       <TableCell>{index + 1}</TableCell>
       
       <TableCell>
-        <ProductSelect
-          productId={player.productId}
-          products={productInfo.products}
-          onValueChange={handleProductChange}
-          triggerClassName="h-8"
-        />
+        <ProductCell playerId={player.id} />
       </TableCell>
       
       {showName && (
         <TableCell>
-          <Input
+          <PlayerInputCell
             value={player.name}
-            onChange={(e) => onInputChange(player.id, 'name', e.target.value)}
+            onChange={(value) => onInputChange(player.id, 'name', value)}
             placeholder="Player name"
-            className="h-8"
+            field="name"
           />
         </TableCell>
       )}
       
       {showNumber && (
         <TableCell>
-          <Input
+          <PlayerInputCell
             value={player.number}
-            onChange={(e) => onInputChange(player.id, 'number', e.target.value)}
+            onChange={(value) => onInputChange(player.id, 'number', value)}
             placeholder="#"
-            className="h-8"
+            field="number"
           />
         </TableCell>
       )}
       
       <TableCell>
-        <Select
+        <PlayerSelectCell
           value={player.size}
-          onValueChange={(value) => onSelectChange(player.id, 'size', value)}
-        >
-          <SelectTrigger className="h-8">
-            <SelectValue placeholder="Size" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="XS">XS</SelectItem>
-            <SelectItem value="S">S</SelectItem>
-            <SelectItem value="M">M</SelectItem>
-            <SelectItem value="L">L</SelectItem>
-            <SelectItem value="XL">XL</SelectItem>
-            <SelectItem value="2XL">2XL</SelectItem>
-            <SelectItem value="3XL">3XL</SelectItem>
-          </SelectContent>
-        </Select>
+          onChange={(value) => onSelectChange(player.id, 'size', value)}
+          placeholder="Size"
+          options={sizeOptions}
+        />
       </TableCell>
       
       <TableCell>
-        <Select
+        <PlayerSelectCell
           value={player.gender}
-          onValueChange={(value) => onSelectChange(player.id, 'gender', value)}
-        >
-          <SelectTrigger className="h-8">
-            <SelectValue placeholder="Gender" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Male">Male</SelectItem>
-            <SelectItem value="Female">Female</SelectItem>
-            <SelectItem value="Other">Other</SelectItem>
-          </SelectContent>
-        </Select>
+          onChange={(value) => onSelectChange(player.id, 'gender', value)}
+          placeholder="Gender"
+          options={genderOptions}
+        />
       </TableCell>
       
       {showShortsSize && (
         <TableCell>
-          <Select
+          <PlayerSelectCell
             value={player.shortsSize || ''}
-            onValueChange={(value) => onSelectChange(player.id, 'shortsSize', value)}
-          >
-            <SelectTrigger className="h-8">
-              <SelectValue placeholder="Size" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="XS">XS</SelectItem>
-              <SelectItem value="S">S</SelectItem>
-              <SelectItem value="M">M</SelectItem>
-              <SelectItem value="L">L</SelectItem>
-              <SelectItem value="XL">XL</SelectItem>
-              <SelectItem value="2XL">2XL</SelectItem>
-              <SelectItem value="3XL">3XL</SelectItem>
-            </SelectContent>
-          </Select>
+            onChange={(value) => onSelectChange(player.id, 'shortsSize', value)}
+            placeholder="Size"
+            options={sizeOptions}
+          />
         </TableCell>
       )}
       
       {showSockSize && (
         <TableCell>
-          <Select
+          <PlayerSelectCell
             value={player.sockSize || ''}
-            onValueChange={(value) => onSelectChange(player.id, 'sockSize', value)}
-          >
-            <SelectTrigger className="h-8">
-              <SelectValue placeholder="Size" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="XS">XS</SelectItem>
-              <SelectItem value="S">S</SelectItem>
-              <SelectItem value="M">M</SelectItem>
-              <SelectItem value="L">L</SelectItem>
-              <SelectItem value="XL">XL</SelectItem>
-            </SelectContent>
-          </Select>
+            onChange={(value) => onSelectChange(player.id, 'sockSize', value)}
+            placeholder="Size"
+            options={sizeOptions.slice(0, 5)} // Only XS to XL for socks
+          />
         </TableCell>
       )}
       
       {showInitials && (
         <TableCell>
-          <Input
+          <PlayerInputCell
             value={player.initials || ''}
-            onChange={(e) => onInputChange(player.id, 'initials', e.target.value)}
+            onChange={(value) => onInputChange(player.id, 'initials', value)}
             placeholder="ABC"
+            field="initials"
             maxLength={3}
-            className="h-8"
           />
         </TableCell>
       )}
       
       <TableCell>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => onRemove(player.id)}
-          className="h-8 w-8 text-gray-500 hover:text-red-500"
-        >
-          <Trash2 size={16} />
-        </Button>
+        <ActionCell onRemove={() => onRemove(player.id)} />
       </TableCell>
     </TableRow>
   );
