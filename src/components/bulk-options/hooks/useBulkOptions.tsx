@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
@@ -18,6 +17,15 @@ export const useBulkOptions = () => {
   // State for storing pending actions
   const [quickAddCount, setQuickAddCount] = useState<number | null>(null);
   const [selectedProductId, setSelectedProductId] = useState<string>('');
+  
+  // Automatically select first product when products are available
+  useEffect(() => {
+    if (productInfo.products.length > 0 && !selectedProductId) {
+      const firstProductId = productInfo.products[0].id;
+      setSelectedProductId(firstProductId);
+      console.log('Automatically selected first product:', firstProductId);
+    }
+  }, [productInfo.products, selectedProductId]);
   
   // Debug logging
   useEffect(() => {
