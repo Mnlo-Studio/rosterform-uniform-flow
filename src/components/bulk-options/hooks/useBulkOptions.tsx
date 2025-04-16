@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
@@ -98,16 +99,7 @@ export const useBulkOptions = () => {
   const handleProductSelection = (productId: string) => {
     console.log('Product selected:', productId);
     setSelectedProductId(productId);
-    
-    // If there are players, allow applying product immediately
-    if (players.length > 0 && productId) {
-      bulkAssignProductToPlayers(productId);
-      const productName = productInfo.products.find(p => p.id === productId)?.name || 'Selected product';
-      toast({
-        title: "Product assigned",
-        description: `${productName} assigned to all players`
-      });
-    }
+    // Removed the automatic product assignment code
   };
   
   const handleApplyChanges = () => {
