@@ -9,6 +9,7 @@ import { registerFormSchema, RegisterFormValues } from "./schemas/registerFormSc
 import NameField from "./register/NameField";
 import EmailField from "./register/EmailField";
 import PasswordField from "./register/PasswordField";
+import { useAuth } from "@/context/AuthContext";
 
 interface RegisterFormProps {
   isLoading: boolean;
@@ -17,6 +18,8 @@ interface RegisterFormProps {
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ isLoading, setIsLoading, switchToLogin }) => {
+  const { signUp } = useAuth();
+  
   // Register form
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerFormSchema),
@@ -32,26 +35,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ isLoading, setIsLoading, sw
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     try {
-      // This would connect to your actual auth system
-      console.log("Register attempt", data);
-      
-      // Simulate successful registration
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: "Success",
-        description: "Your account has been created. You can now log in.",
-      });
+      await signUp(data.email, data.password, data.name);
       
       // Switch to login tab after successful registration
       switchToLogin();
     } catch (error) {
       console.error("Registration error:", error);
-      toast({
-        title: "Error",
-        description: "Unable to create account. Please try again.",
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }

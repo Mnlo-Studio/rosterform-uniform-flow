@@ -1,11 +1,11 @@
 
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Eye, EyeOff, User, Lock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
 
 import {
   Form,
@@ -33,8 +33,8 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { signIn } = useAuth();
 
   // Login form
   const form = useForm<LoginFormValues>({
@@ -50,10 +50,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
-      console.log("Login attempt", data);
-      
-      // Simulate successful login
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await signIn(data.email, data.password);
       
       // Store user preferences if 'Remember me' is checked
       if (data.rememberMe) {
@@ -61,21 +58,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
       } else {
         localStorage.removeItem('rememberedEmail');
       }
-      
-      toast({
-        title: "Success",
-        description: "You have successfully logged in",
-      });
-      
-      // Redirect to dashboard after successful login
-      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
-      toast({
-        title: "Error",
-        description: "Invalid email or password",
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }
@@ -177,7 +161,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
           className="w-full py-5 bg-primary-700 hover:bg-primary-800 text-white rounded-md"
           disabled={isLoading}
         >
-          {isLoading ? "Signing in..." : "Login In"}
+          {isLoading ? "Signing in..." : "Log In"}
         </Button>
       </form>
     </Form>

@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { RosterProvider } from "@/context/RosterProvider";
 import { LayoutProvider } from "@/context/LayoutContext";
+import { AuthProvider } from "@/context/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
 import Index from "./pages/Index";
 import Success from "./pages/Success";
@@ -26,27 +27,29 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <LayoutProvider>
-          <RosterProvider>
-            <Routes>
-              {/* Auth page doesn't use MainLayout */}
-              <Route path="/auth" element={<Auth />} />
-              <Route path="*" element={
-                <MainLayout>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/success" element={<Success />} />
-                    <Route path="/orders" element={<Orders />} />
-                    <Route path="/orders/:orderId" element={<OrderDetails />} />
-                    <Route path="/share" element={<ShareEmbed />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/account" element={<Account />} />
-                    {/* Catch-all route */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </MainLayout>
-              } />
-            </Routes>
-          </RosterProvider>
+          <AuthProvider>
+            <RosterProvider>
+              <Routes>
+                {/* Auth page doesn't use MainLayout */}
+                <Route path="/auth" element={<Auth />} />
+                <Route path="*" element={
+                  <MainLayout>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/success" element={<Success />} />
+                      <Route path="/orders" element={<Orders />} />
+                      <Route path="/orders/:orderId" element={<OrderDetails />} />
+                      <Route path="/share" element={<ShareEmbed />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/account" element={<Account />} />
+                      {/* Catch-all route */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </MainLayout>
+                } />
+              </Routes>
+            </RosterProvider>
+          </AuthProvider>
         </LayoutProvider>
       </BrowserRouter>
     </TooltipProvider>

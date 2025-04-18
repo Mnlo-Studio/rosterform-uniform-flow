@@ -9,7 +9,162 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      players: {
+        Row: {
+          created_at: string
+          gender: string | null
+          id: string
+          initials: string | null
+          name: string
+          number: string | null
+          product_id: string | null
+          roster_id: string
+          shorts_size: string | null
+          size: string | null
+          sock_size: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          gender?: string | null
+          id?: string
+          initials?: string | null
+          name: string
+          number?: string | null
+          product_id?: string | null
+          roster_id: string
+          shorts_size?: string | null
+          size?: string | null
+          sock_size?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          gender?: string | null
+          id?: string
+          initials?: string | null
+          name?: string
+          number?: string | null
+          product_id?: string | null
+          roster_id?: string
+          shorts_size?: string | null
+          size?: string | null
+          sock_size?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "players_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "players_roster_id_fkey"
+            columns: ["roster_id"]
+            isOneToOne: false
+            referencedRelation: "rosters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          created_at: string
+          id: string
+          images: string[] | null
+          name: string
+          notes: string | null
+          price_per_item: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          images?: string[] | null
+          name: string
+          notes?: string | null
+          price_per_item?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          images?: string[] | null
+          name?: string
+          notes?: string | null
+          price_per_item?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rosters: {
+        Row: {
+          address: string | null
+          city: string | null
+          contact_name: string
+          created_at: string
+          email: string
+          id: string
+          phone: string | null
+          state: string | null
+          team_name: string
+          updated_at: string
+          user_id: string
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          contact_name: string
+          created_at?: string
+          email: string
+          id?: string
+          phone?: string | null
+          state?: string | null
+          team_name: string
+          updated_at?: string
+          user_id: string
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          contact_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          phone?: string | null
+          state?: string | null
+          team_name?: string
+          updated_at?: string
+          user_id?: string
+          zip_code?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
