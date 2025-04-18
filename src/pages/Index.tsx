@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import CustomerInfoForm from '@/components/CustomerInfoForm';
@@ -10,21 +9,18 @@ import BackToSuccessLink from '@/components/BackToSuccessLink';
 import { Button } from '@/components/ui/button';
 import { ClipboardList } from 'lucide-react';
 import { useLayout } from '@/context/LayoutContext';
-
 const Index = () => {
   const location = useLocation();
   const [showBackLink, setShowBackLink] = useState(false);
   const {
     isDashboardLayout
   } = useLayout();
-  
   useEffect(() => {
     // Only show back link if explicitly navigated from success page
     const fromSuccess = location.state && location.state.fromSuccess;
     setShowBackLink(!!fromSuccess);
   }, [location]);
-  
-  return <div className="bg-neutral-50 pb-8">
+  return <div className="pb-8 bg-white">
       <div className="max-w-4xl mx-auto bg-white/[0.99]">
         <div className="flex justify-between items-center mb-6">
           <h1>Roster Form</h1>
@@ -48,6 +44,4 @@ const Index = () => {
       </div>
     </div>;
 };
-
 export default Index;
-
