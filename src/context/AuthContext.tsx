@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else if (event === 'SIGNED_OUT') {
           // Redirect to auth page on sign out
           setTimeout(() => {
-            navigate('/auth');
+            navigate('/');
           }, 0);
         }
       }
@@ -91,7 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin + '/auth',
+          redirectTo: window.location.origin + '/',
         },
       });
       
