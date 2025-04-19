@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
@@ -71,27 +72,15 @@ const MainSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <SidebarMenuButton asChild isActive={isActive("/account")} tooltip="Account Settings">
-                      <div className="flex items-center gap-2 cursor-pointer w-full">
-                        <UserCircle size={20} />
-                        <span>Account Settings</span>
-                      </div>
-                    </SidebarMenuButton>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent side="right" align="start" className="w-48">
-                    <DropdownMenuItem asChild>
-                      <Link to="/account" className="flex items-center gap-2">
-                        <UserCircle className="h-4 w-4" />
-                        <span>Profile</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <LogoutButton variant="ghost" className="w-full justify-start" />
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <SidebarMenuButton asChild isActive={isActive("/account")} tooltip="Account Settings">
+                  <Link to="/account" className="flex items-center gap-2 w-full">
+                    <UserCircle size={20} />
+                    <span>Account Settings</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <LogoutButton variant="ghost" className="w-full justify-start" />
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -102,3 +91,4 @@ const MainSidebar = () => {
 };
 
 export default MainSidebar;
+
