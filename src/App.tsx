@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -19,7 +18,7 @@ import ShareEmbed from "./pages/ShareEmbed";
 import Dashboard from "./pages/Dashboard";
 import Account from "./pages/Account";
 import Auth from "./pages/Auth";
-import PublicOrderForm from "./pages/PublicOrderForm";
+import PublicOrderForm from "./pages/PublicOrderForm"; // ✅ Make sure this file exists
 
 const queryClient = new QueryClient();
 
@@ -29,38 +28,26 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        {/* Wrap everything in AuthProvider so auth context is available globally */}
         <AuthProvider>
           <LayoutProvider>
             <Routes>
-              {/* Public routes - no auth needed */}
+              {/* ✅ PUBLIC ORDER FORM */}
               <Route path="/form" element={
                 <RosterProvider>
                   <PublicOrderForm />
                 </RosterProvider>
               } />
-              
-              <Route path="/orders/:userId" element={
-                <RosterProvider>
-                  <PublicOrderForm />
-                </RosterProvider>
-              } />
-              
-              <Route path="/order/:formId" element={
-                <RosterProvider>
-                  <PublicOrderForm />
-                </RosterProvider>
-              } />
-              
+
+              {/* ✅ AUTH ROUTE */}
               <Route path="/auth" element={<Auth />} />
-              
-              {/* Protected routes */}
+
+              {/* ✅ PROTECTED ROUTES */}
               <Route path="/" element={
                 <ProtectedRoute>
                   <Navigate to="/dashboard" replace />
                 </ProtectedRoute>
               } />
-              
+
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <MainLayout>
@@ -68,7 +55,7 @@ const App = () => (
                   </MainLayout>
                 </ProtectedRoute>
               } />
-              
+
               <Route path="/order-form" element={
                 <ProtectedRoute>
                   <MainLayout>
@@ -78,7 +65,7 @@ const App = () => (
                   </MainLayout>
                 </ProtectedRoute>
               } />
-              
+
               <Route path="/success" element={
                 <ProtectedRoute>
                   <MainLayout>
@@ -88,7 +75,7 @@ const App = () => (
                   </MainLayout>
                 </ProtectedRoute>
               } />
-              
+
               <Route path="/orders" element={
                 <ProtectedRoute>
                   <MainLayout>
@@ -96,7 +83,7 @@ const App = () => (
                   </MainLayout>
                 </ProtectedRoute>
               } />
-              
+
               <Route path="/orders/:orderId" element={
                 <ProtectedRoute>
                   <MainLayout>
@@ -106,7 +93,7 @@ const App = () => (
                   </MainLayout>
                 </ProtectedRoute>
               } />
-              
+
               <Route path="/share" element={
                 <ProtectedRoute>
                   <MainLayout>
@@ -116,7 +103,7 @@ const App = () => (
                   </MainLayout>
                 </ProtectedRoute>
               } />
-              
+
               <Route path="/account" element={
                 <ProtectedRoute>
                   <MainLayout>
@@ -124,8 +111,8 @@ const App = () => (
                   </MainLayout>
                 </ProtectedRoute>
               } />
-              
-              {/* Catch-all route */}
+
+              {/* CATCH ALL */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </LayoutProvider>
