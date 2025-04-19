@@ -17,12 +17,7 @@ export const useOrderQueries = () => {
       
       const { data, error } = await supabase
         .from('orders')
-        .select(`
-          *,
-          customer_info (*),
-          order_products (*),
-          order_players (*)
-        `)
+        .select('*')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
@@ -37,17 +32,12 @@ export const useOrderQueries = () => {
         return [];
       }
       
-      return data.map(order => {
-        const orderData = {
-          ...order,
-          customer_info: Array.isArray(order.customer_info) && order.customer_info.length > 0 
-            ? order.customer_info[0] 
-            : order.customer_info || null,
-          order_products: Array.isArray(order.order_products) ? order.order_products : [],
-          order_players: Array.isArray(order.order_players) ? order.order_players : []
-        };
-        return mapDbOrderToOrder(orderData);
-      });
+      return data.map(order => mapDbOrderToOrder({
+        ...order,
+        customer_info: null,
+        order_products: [],
+        order_players: []
+      }));
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,

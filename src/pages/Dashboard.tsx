@@ -38,6 +38,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleCreateNewOrder = () => {
+    navigate('/roster');
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 rounded-lg">
       <h1 className="mb-2">Dashboard</h1>
@@ -91,7 +95,7 @@ const Dashboard: React.FC = () => {
             </p>
             <div className="flex gap-3">
               <Button 
-                onClick={() => navigate('/roster')} 
+                onClick={handleCreateNewOrder} 
                 className="flex items-center gap-2"
               >
                 <PlusIcon className="h-4 w-4" />

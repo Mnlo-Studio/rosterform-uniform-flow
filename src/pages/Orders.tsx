@@ -70,6 +70,10 @@ const Orders = () => {
     }
   };
 
+  const handleCreateNewOrder = () => {
+    navigate('/roster');
+  };
+
   const getTotalPlayers = () => {
     return filteredOrders.reduce((total, order) => 
       total + order.players.length, 0);
@@ -92,10 +96,10 @@ const Orders = () => {
               {error.message}
             </p>
             <Button 
-              onClick={() => navigate('/roster')} 
+              onClick={handleCreateNewOrder} 
               className="mt-2"
             >
-              Go to Roster
+              Go to Roster Form
             </Button>
           </div>
         </div>
@@ -159,7 +163,7 @@ const Orders = () => {
                 </p>
                 <div className="flex gap-3">
                   <Button 
-                    onClick={() => navigate('/roster')} 
+                    onClick={handleCreateNewOrder} 
                     className="flex items-center gap-2"
                   >
                     <PlusIcon className="h-4 w-4" />
