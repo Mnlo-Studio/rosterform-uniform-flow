@@ -1,12 +1,20 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRoster } from '@/context/RosterContext';
+import { useAuth } from '@/context/AuthContext';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const CustomerInfoForm: React.FC = () => {
   const { customerInfo, updateCustomerInfo } = useRoster();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
+      const defaultTeamName = `roster-form-${user.id}`;
+      updateCustomerInfo({ teamName: defaultTeamName });
+    }
+  }, [user, customerInfo.teamName, updateCustomerInfo]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,7 +35,7 @@ const CustomerInfoForm: React.FC = () => {
               name="teamName"
               value={customerInfo.teamName}
               onChange={handleInputChange}
-              placeholder="Warriors"
+              placeholder="Enter team name"
               required
             />
           </div>
