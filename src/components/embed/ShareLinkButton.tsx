@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link2, Check, ExternalLink } from "lucide-react";
@@ -11,18 +10,8 @@ interface ShareLinkButtonProps {
 const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
   const [copied, setCopied] = useState(false);
   
-  // Now we have two options for sharing:
-  // 1. A standalone form at /form (no authentication required)
-  // 2. A customer-specific form at /order/:formId
-  
-  // The standalone form URL is simpler
-  const standaloneFormURL = `${window.location.origin}/form`;
-  
-  // The customer-specific form URL (from the original prop)
-  const customerFormURL = shareURL.replace('/order/', '/form/');
-  
-  // Default to the standalone form for sharing
-  const publicFormURL = standaloneFormURL;
+  // Updated to use the new share URL format
+  const publicFormURL = shareURL.replace('/orders/', '/orders/');
   
   const copyShareLink = () => {
     navigator.clipboard.writeText(publicFormURL);
@@ -35,9 +24,8 @@ const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
   };
 
   const openShareLink = () => {
-    // Open in a new tab
     window.open(publicFormURL, '_blank', 'noopener,noreferrer');
-    toast.success("Opening public form in a new tab");
+    toast.success("Opening order form in a new tab");
   };
 
   return (

@@ -15,9 +15,9 @@ const ShareEmbed = () => {
   const formId = `roster-form-${userId}`;
   const embedDomain = "embed.rosterform.com";
   
-  // Update the domain to the correct production domain
-  const shareDomain = "rosterform.com"; // This should match your actual production domain
-  const shareURL = `https://${shareDomain}/order/${formId}`;
+  // Updated domain and route for sharing
+  const shareDomain = "rosterform.com";
+  const shareURL = `https://${shareDomain}/orders/${userId}`;
   
   const inlineCode = `<div data-form-id="${formId}"></div>
 <script>(function() {
