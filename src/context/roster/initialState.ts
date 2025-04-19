@@ -21,7 +21,7 @@ export const initialBulkOptions: BulkOptions = {
   defaultSize: 'M',
   numberFillType: 'custom',
   numberPrefix: '',
-  namePrefixType: 'custom',
+  namePrefixType: 'none',
   namePrefix: '',
   nameCaseType: 'normal',
   showName: true,

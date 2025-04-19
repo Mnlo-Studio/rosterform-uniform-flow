@@ -13,6 +13,7 @@ export type Player = {
 
 export type CustomerInfo = {
   id?: string;
+  teamName: string; // Adding teamName property
   contactName: string;
   email: string;
   phone: string | null;

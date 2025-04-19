@@ -62,6 +62,7 @@ export interface Order {
 
 export interface CustomerInfo {
   id: string;
+  teamName: string; // Adding teamName property
   contactName: string;
   email: string;
   phone: string | null;
@@ -117,6 +118,7 @@ export const mapDbOrderToOrder = (
     customerInfo: dbOrder.customer_info && dbOrder.customer_info[0]
       ? {
           id: dbOrder.customer_info[0].id,
+          teamName: dbOrder.customer_info[0].team_name, // Map from team_name to teamName
           contactName: dbOrder.customer_info[0].contact_name,
           email: dbOrder.customer_info[0].email,
           phone: dbOrder.customer_info[0].phone,

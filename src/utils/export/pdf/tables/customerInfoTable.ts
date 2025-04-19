@@ -24,6 +24,8 @@ export const addCustomerInfoTable = (
     ['Email', customerInfo.email],
     ['Phone', customerInfo.phone],
     ['Address', customerInfo.address],
+    ['City', customerInfo.city],
+    ['State', customerInfo.state],
     ['City, State, Zip', `${customerInfo.city}, ${customerInfo.state} ${customerInfo.zipCode}`]
   ];
   

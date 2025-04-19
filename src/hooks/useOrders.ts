@@ -28,13 +28,16 @@ export const useOrders = () => {
 
       if (error) throw error;
       
-      // Transform database data to frontend format
-      return data.map(order => mapDbOrderToOrder({
-        ...order,
-        customer_info: Array.isArray(order.customer_info) ? order.customer_info : null,
-        order_products: Array.isArray(order.order_products) ? order.order_products : [],
-        order_players: Array.isArray(order.order_players) ? order.order_players : []
-      }));
+      // Handle potential error response for relations
+      return data.map(order => {
+        const orderData = {
+          ...order,
+          customer_info: Array.isArray(order.customer_info) ? order.customer_info : null,
+          order_products: Array.isArray(order.order_products) ? order.order_products : [],
+          order_players: Array.isArray(order.order_players) ? order.order_players : []
+        };
+        return mapDbOrderToOrder(orderData);
+      });
     },
   });
 
@@ -44,9 +47,10 @@ export const useOrders = () => {
       // Convert frontend order to database format
       const dbOrderData = mapOrderToDbOrder(orderData);
       
+      // Insert single row, not an array
       const { data, error } = await supabase
         .from('orders')
-        .insert([dbOrderData])
+        .insert(dbOrderData)
         .select()
         .single();
 
