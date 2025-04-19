@@ -1,129 +1,38 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
-import { Player } from '@/types';
+import { useBulkOptionChanges } from './useBulkOptionChanges';
+import { useQuickAdd } from './useQuickAdd';
+import { useProductSelection } from './useProductSelection';
 
 export const useBulkOptions = () => {
-  const {
-    bulkOptions,
-    updateBulkOptions,
-    players,
-    applyBulkOptions,
-    productInfo,
-    addPlayers,
-    bulkAssignProductToPlayers
-  } = useRoster();
+  const { bulkOptions, players, productInfo, applyBulkOptions } = useRoster();
   const { toast } = useToast();
   
-  // State for storing pending actions
-  const [quickAddCount, setQuickAddCount] = useState<number | null>(null);
-  const [selectedProductId, setSelectedProductId] = useState<string>('');
+  const {
+    handleGenderChange,
+    handleSizeChange,
+    handleNumberFillChange,
+    handleNamePrefixTypeChange,
+    handleNamePrefixChange,
+    handleNumberPrefixChange,
+    handleNameCaseChange,
+    toggleOption
+  } = useBulkOptionChanges();
+
+  const {
+    quickAddCount,
+    handleQuickAddSelection,
+    addPlayersWithCount
+  } = useQuickAdd();
+
+  const {
+    selectedProductId,
+    handleProductSelection
+  } = useProductSelection();
   
-  // Debug logging
-  useEffect(() => {
-    console.log('useBulkOptions - Products:', productInfo.products);
-    console.log('useBulkOptions - Selected Product ID:', selectedProductId);
-    console.log('useBulkOptions - Current player count:', players.length);
-  }, [productInfo.products, selectedProductId, players.length]);
-  
-  // Reset selectedProductId if it's no longer in the products list
-  useEffect(() => {
-    if (productInfo.products.length > 0) {
-      // If selectedProductId doesn't exist in products, select first product
-      if (selectedProductId && !productInfo.products.some(p => p.id === selectedProductId)) {
-        console.log('Selected product no longer exists, selecting first product');
-        setSelectedProductId(productInfo.products[0].id);
-      } 
-      // If no product is selected and products exist, select first product
-      else if (!selectedProductId) {
-        console.log('No product selected, selecting first product');
-        setSelectedProductId(productInfo.products[0].id);
-      }
-    } else {
-      // Clear selection if no products exist
-      if (selectedProductId) {
-        setSelectedProductId('');
-      }
-    }
-  }, [productInfo.products, selectedProductId]);
-  
-  const handleGenderChange = (value: string) => {
-    updateBulkOptions({
-      defaultGender: value
-    });
-  };
-  
-  const handleSizeChange = (value: string) => {
-    updateBulkOptions({
-      defaultSize: value
-    });
-  };
-  
-  const handleNumberFillChange = (value: 'custom' | 'odd' | 'even' | 'random') => {
-    updateBulkOptions({
-      numberFillType: value
-    });
-  };
-  
-  const handleNamePrefixTypeChange = (value: 'none' | 'player' | 'custom') => {
-    updateBulkOptions({
-      namePrefixType: value
-    });
-  };
-  
-  const handleNamePrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateBulkOptions({
-      namePrefix: e.target.value
-    });
-  };
-  
-  const handleNumberPrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateBulkOptions({
-      numberPrefix: e.target.value
-    });
-  };
-  
-  const handleNameCaseChange = (value: 'normal' | 'uppercase' | 'lowercase') => {
-    updateBulkOptions({
-      nameCaseType: value
-    });
-  };
-  
-  const toggleOption = (option: keyof Pick<typeof bulkOptions, 'showName' | 'showNumber' | 'showShortsSize' | 'showSockSize' | 'showInitials'>) => {
-    updateBulkOptions({
-      [option]: !bulkOptions[option]
-    });
-  };
-  
-  const handleQuickAddSelection = (count: number) => {
-    console.log('Quick add selection:', count);
-    setQuickAddCount(count);
-  };
-  
-  const handleProductSelection = (productId: string) => {
-    console.log('Product selected in handler:', productId);
-    setSelectedProductId(productId);
-  };
-  
-  // Function to add players with the given count - explicitly typed to return Player[]
-  const addPlayersWithCount = useCallback((count: number): Player[] => {
-    if (count <= 0) return [];
-    
-    console.log(`Adding ${count} players`);
-    const newPlayers = addPlayers(count);
-    console.log('New players added:', newPlayers);
-    
-    // If there's a selected product, assign it to the newly added players
-    if (selectedProductId) {
-      console.log(`Assigning product ${selectedProductId} to new players`);
-      bulkAssignProductToPlayers(selectedProductId);
-    }
-    
-    return newPlayers || []; // Ensure we always return an array
-  }, [addPlayers, bulkAssignProductToPlayers, selectedProductId]);
-  
-  const handleApplyChanges = () => {
+  const handleApplyChanges = useCallback(() => {
     console.log('Apply changes clicked with quickAddCount:', quickAddCount);
     let changesMade = false;
     let messages = [];
@@ -131,11 +40,11 @@ export const useBulkOptions = () => {
     try {
       // Apply quick add if selected
       if (quickAddCount && quickAddCount > 0) {
-        const newPlayers = addPlayersWithCount(quickAddCount);
+        const newPlayers = addPlayersWithCount(quickAddCount, selectedProductId);
         
         if (newPlayers.length > 0) {
           messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
-          setQuickAddCount(null); // Reset after applying
+          handleQuickAddSelection(0); // Reset after applying
           changesMade = true;
         }
       } 
@@ -181,7 +90,16 @@ export const useBulkOptions = () => {
         variant: "destructive"
       });
     }
-  };
+  }, [
+    quickAddCount,
+    selectedProductId,
+    players.length,
+    addPlayersWithCount,
+    productInfo.products,
+    applyBulkOptions,
+    toast,
+    handleQuickAddSelection
+  ]);
 
   return {
     bulkOptions,
