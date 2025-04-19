@@ -1,5 +1,5 @@
-
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit, PlusIcon } from "lucide-react";
@@ -9,23 +9,18 @@ import StatsCards from "@/components/dashboard/StatsCards";
 import { useAuth } from "@/context/AuthContext";
 import { useOrders } from "@/hooks/useOrders";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
-  // Get authenticated user data from the auth context
   const { user } = useAuth();
   const navigate = useNavigate();
   
-  // Extract user information from Supabase user object
   const userData = {
     name: user?.user_metadata?.name || "User",
     email: user?.email || ""
   };
 
-  // Use the useOrders hook to fetch actual user orders
   const { orders, isLoading, addSampleOrder } = useOrders();
 
-  // Calculate totals for stats cards
   const totalOrders = orders?.length || 0;
   const totalPlayers = orders?.reduce((sum, order) => sum + (order.players?.length || 0), 0) || 0;
   const totalRevenue = orders?.reduce((sum, order) => sum + (order.total || 0), 0) || 0;
@@ -39,7 +34,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleCreateNewOrder = () => {
-    navigate('/roster');
+    navigate('/order-form');
   };
 
   return (
@@ -47,7 +42,6 @@ const Dashboard: React.FC = () => {
       <h1 className="mb-2">Dashboard</h1>
       <p className="text-gray-600 mb-6">Manage your orders, statistics, and roster tools.</p>
       
-      {/* User Info Card */}
       <Card className="mb-6 shadow-card">
         <CardContent className="pt-6">
           <div className="flex justify-between items-start">
@@ -70,17 +64,14 @@ const Dashboard: React.FC = () => {
         </div>
       ) : orders && orders.length > 0 ? (
         <>
-          {/* Stats Cards */}
           <StatsCards 
             totalOrders={totalOrders} 
             totalPlayers={totalPlayers} 
             totalRevenue={totalRevenue} 
           />
           
-          {/* Order Status Overview */}
           <OrderStatusOverview orders={orders} />
           
-          {/* Summary Statistics */}
           <SummaryStatistics orders={orders} />
         </>
       ) : (

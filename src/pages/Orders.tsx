@@ -1,5 +1,5 @@
-
-import React, { useState } from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import OrdersHeader from '@/components/orders/OrdersHeader';
 import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
@@ -16,7 +16,6 @@ const Orders = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const navigate = useNavigate();
 
-  // Filter orders based on search query and status
   const filteredOrders = orders?.filter(order => {
     const matchesSearch = !searchQuery || 
       order.teamName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -71,7 +70,7 @@ const Orders = () => {
   };
 
   const handleCreateNewOrder = () => {
-    navigate('/roster');
+    navigate('/order-form');
   };
 
   const getTotalPlayers = () => {

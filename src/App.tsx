@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -42,7 +42,7 @@ const App = () => (
                   <ProtectedRoute>
                     <MainLayout>
                       <Routes>
-                        <Route path="/roster" element={<Index />} />
+                        <Route path="/order-form" element={<Index />} /> {/* Changed from /roster */}
                         <Route path="/success" element={<Success />} />
                         <Route path="/orders" element={<Orders />} />
                         <Route path="/orders/:orderId" element={<OrderDetails />} />

@@ -8,7 +8,7 @@ import Logo from "./Logo";
 const MainSidebar = () => {
   const location = useLocation();
 
-  // Navigation items - updated Order Form path to /roster
+  // Navigation items - updated Order Form path to /order-form
   const navItems = [{
     label: "Dashboard",
     icon: LayoutDashboard,
@@ -16,7 +16,7 @@ const MainSidebar = () => {
   }, {
     label: "Order Form",
     icon: ClipboardList,
-    path: "/roster"
+    path: "/order-form"
   }, {
     label: "Orders",
     icon: ClipboardList,
