@@ -31,7 +31,7 @@ const App = () => (
       <BrowserRouter>
         <LayoutProvider>
           <Routes>
-            {/* Public order form route - completely separate from auth routes */}
+            {/* PRIORITY ORDER - Completely public routes first */}
             <Route 
               path="/order/:formId" 
               element={
@@ -41,12 +41,11 @@ const App = () => (
               } 
             />
 
-            {/* Auth route - completely public */}
+            {/* Public auth route */}
             <Route path="/auth" element={<Auth />} />
 
-            {/* Protected routes with auth check */}
+            {/* Authenticated routes go last */}
             <Route 
-              path="/*" 
               element={
                 <AuthProvider>
                   <Routes>
@@ -58,7 +57,7 @@ const App = () => (
                     } />
                     
                     {/* All protected routes using MainLayout */}
-                    <Route path="*" element={
+                    <Route element={
                       <ProtectedRoute>
                         <MainLayout>
                           <RosterProvider>
@@ -70,16 +69,17 @@ const App = () => (
                               <Route path="/share" element={<ShareEmbed />} />
                               <Route path="/dashboard" element={<Dashboard />} />
                               <Route path="/account" element={<Account />} />
-                              {/* Catch-all route */}
                               <Route path="*" element={<NotFound />} />
                             </Routes>
                           </RosterProvider>
                         </MainLayout>
                       </ProtectedRoute>
-                    } />
+                    }>
+                    </Route>
                   </Routes>
                 </AuthProvider>
               }
+              path="*"
             />
           </Routes>
         </LayoutProvider>

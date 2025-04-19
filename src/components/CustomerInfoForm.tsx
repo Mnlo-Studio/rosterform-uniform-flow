@@ -13,8 +13,11 @@ interface CustomerInfoFormProps {
 
 const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ isPublic = false }) => {
   const { customerInfo, updateCustomerInfo } = useRoster();
-  const { user } = useAuth();
   const { formId } = useParams<{ formId?: string }>();
+  
+  // Only try to access useAuth if not in public mode
+  const auth = !isPublic ? useAuth() : null;
+  const user = auth?.user || null;
 
   useEffect(() => {
     if (isPublic && formId && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
