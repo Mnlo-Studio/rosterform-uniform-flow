@@ -21,9 +21,9 @@ const PUBLIC_ROUTES = ['/success'];
 const PUBLIC_PARAMS = ['share=true', 'embed=true'];
 
 export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const location = useLocation();
   const [isDashboardLayout, setIsDashboardLayout] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const location = useLocation();
   
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
