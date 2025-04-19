@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { Player } from '@/types';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -53,7 +53,7 @@ const RosterTable: React.FC = () => {
   const showNoProductsWarning = players.length > 0 && productInfo.products.length === 0;
 
   // Debug logging
-  React.useEffect(() => {
+  useEffect(() => {
     console.log('RosterTable - Current players:', players);
   }, [players]);
 

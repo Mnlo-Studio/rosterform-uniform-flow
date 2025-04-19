@@ -35,6 +35,9 @@ const DesktopPlayerList: React.FC<DesktopPlayerListProps> = ({
   onInputChange,
   onSelectChange
 }) => {
+  // Debug log to check players
+  console.log('DesktopPlayerList - players:', players);
+  
   return (
     <ScrollArea className="h-[400px] rounded-md border">
       <div className="w-full min-w-[640px]">
