@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -6,6 +5,7 @@ import { z } from "zod";
 import { Eye, EyeOff, User, Lock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 import {
   Form,
