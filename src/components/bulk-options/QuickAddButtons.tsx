@@ -21,14 +21,14 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
   const handleQuickAddChange = (value: string) => {
     console.log('Quick add selected:', value);
     // Convert the string value to a number
-    const numValue = value ? parseInt(value, 10) : 0;
+    const numValue = value ? parseInt(value, 10) : 1;
     onSelectQuickAdd(numValue);
   };
 
   // Format the display value for the select
   const getDisplayValue = () => {
-    if (!selectedCount) return '1'; // Default to 1 if no selection
-    return selectedCount.toString();
+    // Default to 1 if no selection or null
+    return (selectedCount || 1).toString();
   };
 
   return (
@@ -41,7 +41,7 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
         onValueChange={handleQuickAddChange}
       >
         <SelectTrigger id="quickAddDropdown" className="w-full">
-          <SelectValue placeholder="Add 1 Player" />
+          <SelectValue>{getDisplayValue()} Player{getDisplayValue() !== '1' ? 's' : ''}</SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="1" defaultChecked>
@@ -75,4 +75,3 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
 };
 
 export default QuickAddButtons;
-
