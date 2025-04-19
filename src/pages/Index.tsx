@@ -10,6 +10,7 @@ import BackToSuccessLink from '@/components/BackToSuccessLink';
 import { Button } from '@/components/ui/button';
 import { ClipboardList } from 'lucide-react';
 import { useLayout } from '@/context/LayoutContext';
+import { RosterProvider } from '@/context/RosterContext';
 
 const Index = () => {
   const location = useLocation();
@@ -39,13 +40,15 @@ const Index = () => {
         
         {showBackLink && <BackToSuccessLink />}
         
-        <div className="space-y-6">
-          <CustomerInfoForm />
-          <ProductInfoForm />
-          <BulkOptionsToolbar />
-          <RosterTable />
-          <OrderSummary />
-        </div>
+        <RosterProvider>
+          <div className="space-y-6">
+            <CustomerInfoForm />
+            <ProductInfoForm />
+            <BulkOptionsToolbar />
+            <RosterTable />
+            <OrderSummary />
+          </div>
+        </RosterProvider>
       </div>
     </div>
   );

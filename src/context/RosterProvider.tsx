@@ -1,18 +1,6 @@
 
-import React, { ReactNode } from 'react';
-import { RosterContext } from './RosterContext';
-import { useRosterState } from './roster/RosterProviderImplementation';
+// This file is no longer needed as RosterProvider is now defined
+// directly in RosterContext.tsx to avoid circular dependencies.
 
-interface RosterProviderProps {
-  children: ReactNode;
-}
-
-export const RosterProvider: React.FC<RosterProviderProps> = ({ children }) => {
-  const rosterState = useRosterState();
-  
-  return (
-    <RosterContext.Provider value={rosterState}>
-      {children}
-    </RosterContext.Provider>
-  );
-};
+// Re-export from RosterContext.tsx for backward compatibility
+export { RosterProvider } from './RosterContext';
