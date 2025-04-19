@@ -26,19 +26,25 @@ interface OrdersTableProps {
   orders: Order[];
   onStatusChange?: (orderId: string, status: 'Pending' | 'Completed' | 'Cancelled') => void;
   onPaymentChange?: (orderId: string, isPaid: boolean) => void;
+  onViewDetails?: (orderId: string) => void;
 }
 
 const OrdersTable: React.FC<OrdersTableProps> = ({
   orders,
   onStatusChange,
-  onPaymentChange
+  onPaymentChange,
+  onViewDetails
 }) => {
   const navigate = useNavigate();
 
   const handleOrderClick = (orderId: string, event: React.MouseEvent) => {
     // Only navigate if the click is not on a dropdown
     if (!(event.target as HTMLElement).closest('.dropdown-area')) {
-      navigate(`/orders/${orderId}`);
+      if (onViewDetails) {
+        onViewDetails(orderId);
+      } else {
+        navigate(`/orders/${orderId}`);
+      }
     }
   };
 
