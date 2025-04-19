@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -30,32 +31,32 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <LayoutProvider>
-          <Routes>
-            {/* Completely public routes - no auth needed */}
-            <Route path="/form" element={
-              <RosterProvider>
-                <StandaloneOrderForm />
-              </RosterProvider>
-            } />
-            
-            {/* Public order forms - must not require auth */}
-            <Route path="/orders/:userId" element={
-              <RosterProvider>
-                <PublicOrderForm />
-              </RosterProvider>
-            } />
-            
-            <Route path="/order/:formId" element={
-              <RosterProvider>
-                <PublicOrderForm />
-              </RosterProvider>
-            } />
-            
-            <Route path="/auth" element={<Auth />} />
-            
-            {/* Protected routes */}
-            <Route path="/*" element={
-              <AuthProvider>
+          <AuthProvider>
+            <Routes>
+              {/* Completely public routes - no auth needed */}
+              <Route path="/form" element={
+                <RosterProvider>
+                  <StandaloneOrderForm />
+                </RosterProvider>
+              } />
+              
+              {/* Public order forms - must not require auth */}
+              <Route path="/orders/:userId" element={
+                <RosterProvider>
+                  <PublicOrderForm />
+                </RosterProvider>
+              } />
+              
+              <Route path="/order/:formId" element={
+                <RosterProvider>
+                  <PublicOrderForm />
+                </RosterProvider>
+              } />
+              
+              <Route path="/auth" element={<Auth />} />
+              
+              {/* Protected routes */}
+              <Route path="/*" element={
                 <Routes>
                   <Route path="/" element={
                     <ProtectedRoute>
@@ -136,9 +137,9 @@ const App = () => (
                     </ProtectedRoute>
                   } />
                 </Routes>
-              </AuthProvider>
-            } />
-          </Routes>
+              } />
+            </Routes>
+          </AuthProvider>
         </LayoutProvider>
       </BrowserRouter>
     </TooltipProvider>
