@@ -1,8 +1,8 @@
 
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { LayoutDashboard, ClipboardList, Share2, UserCircle, LogOut } from "lucide-react";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar";
 import Logo from "./Logo";
 import LogoutButton from "@/components/auth/LogoutButton";
 
@@ -30,7 +30,7 @@ const MainSidebar = () => {
 
   // Account items (at bottom)
   const accountItems = [{
-    label: "Account",
+    label: "Account Settings",
     icon: UserCircle,
     path: "/account"
   }];
@@ -81,12 +81,14 @@ const MainSidebar = () => {
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <LogoutButton variant="ghost" className="w-full justify-start" />
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
                 </SidebarMenuItem>)}
-              <SidebarMenuItem>
-                <div className="px-3 py-2">
-                  <LogoutButton variant="ghost" />
-                </div>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
