@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import Logo from "./Logo";
+import LogoutButton from "@/components/auth/LogoutButton";
 
 const MainSidebar = () => {
   const location = useLocation();
@@ -69,7 +70,7 @@ const MainSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-white">
+      <SidebarFooter className="bg-white border-t border-gray-200">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -81,6 +82,11 @@ const MainSidebar = () => {
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>)}
+              <SidebarMenuItem>
+                <div className="px-3 py-2">
+                  <LogoutButton variant="ghost" />
+                </div>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
