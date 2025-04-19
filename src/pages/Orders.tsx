@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import OrdersHeader from '@/components/orders/OrdersHeader';
 import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
@@ -112,83 +112,99 @@ const Orders = () => {
   }
 
   return (
-    <div className="space-y-6 bg-white p-4 md:p-6 lg:p-8 min-h-screen text-gray-800">
-      <OrdersHeader 
-        searchQuery={searchQuery} 
-        onSearch={handleSearch} 
-        statusFilter={statusFilter} 
-        onStatusFilter={handleStatusFilter} 
-      />
-      
-      {isLoading ? (
-        <div className="space-y-4">
-          <Skeleton className="h-[200px] w-full" />
-          <Skeleton className="h-[400px] w-full" />
+    <div className="space-y-6 pb-8">
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 py-6">
+          <OrdersHeader 
+            searchQuery={searchQuery} 
+            onSearch={handleSearch} 
+            statusFilter={statusFilter} 
+            onStatusFilter={handleStatusFilter} 
+          />
         </div>
-      ) : (
-        <>
-          {orders && orders.length > 0 ? (
-            <>
-              <OrdersSummaryCards 
-                totalOrders={filteredOrders.length} 
-                totalRevenue={getTotalRevenue()} 
-                totalPlayers={getTotalPlayers()} 
-              />
-              
-              {filteredOrders.length > 0 ? (
-                <OrdersTable 
-                  orders={filteredOrders} 
-                  onStatusChange={handleStatusChange}
-                  onPaymentChange={handlePaymentChange}
-                  onViewDetails={handleViewOrderDetails}
+      </div>
+
+      <div className="container mx-auto px-4">
+        {isLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-[200px] w-full" />
+            <Skeleton className="h-[400px] w-full" />
+          </div>
+        ) : (
+          <>
+            {orders && orders.length > 0 ? (
+              <>
+                <OrdersSummaryCards 
+                  totalOrders={filteredOrders.length} 
+                  totalRevenue={getTotalRevenue()} 
+                  totalPlayers={getTotalPlayers()} 
                 />
-              ) : (
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-10 text-center">
-                  <div className="flex flex-col items-center justify-center gap-4">
-                    <div className="bg-gray-50 rounded-full p-4">
-                      <ClipboardIcon className="h-8 w-8 text-gray-400" />
-                    </div>
-                    <h3 className="text-lg font-medium">No orders found</h3>
-                    <p className="text-gray-500 max-w-md">
-                      No orders match your current search or filter criteria.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-10 text-center">
-              <div className="flex flex-col items-center justify-center gap-4">
-                <div className="bg-gray-50 rounded-full p-4">
-                  <ClipboardIcon className="h-8 w-8 text-gray-400" />
-                </div>
-                <h3 className="text-lg font-medium">No orders yet</h3>
-                <p className="text-gray-500 max-w-md mb-4">
-                  You haven't created any orders yet. Create your first order or add a sample order to get started.
-                </p>
-                <div className="flex gap-3">
-                  <Button 
-                    onClick={handleCreateNewOrder} 
-                    className="flex items-center gap-2"
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                    Create New Order
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={handleCreateSampleOrder}
-                    className="flex items-center gap-2"
-                  >
-                    Add Sample Order
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </>
-      )}
+                
+                {filteredOrders.length > 0 ? (
+                  <OrdersTable 
+                    orders={filteredOrders} 
+                    onStatusChange={handleStatusChange}
+                    onPaymentChange={handlePaymentChange}
+                    onViewDetails={handleViewOrderDetails}
+                  />
+                ) : (
+                  <EmptySearchState />
+                )}
+              </>
+            ) : (
+              <EmptyOrdersState 
+                onCreateOrder={handleCreateNewOrder}
+                onAddSample={handleCreateSampleOrder}
+              />
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
+
+const EmptySearchState = () => (
+  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-8 text-center">
+    <div className="flex flex-col items-center justify-center gap-4">
+      <div className="bg-gray-50 rounded-full p-4">
+        <ClipboardIcon className="h-8 w-8 text-gray-400" />
+      </div>
+      <h3 className="text-lg font-medium">No orders found</h3>
+      <p className="text-gray-500 max-w-md">
+        No orders match your current search or filter criteria.
+      </p>
+    </div>
+  </div>
+);
+
+const EmptyOrdersState = ({ onCreateOrder, onAddSample }: { onCreateOrder: () => void, onAddSample: () => void }) => (
+  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-8 text-center">
+    <div className="flex flex-col items-center justify-center gap-4">
+      <div className="bg-gray-50 rounded-full p-4">
+        <ClipboardIcon className="h-8 w-8 text-gray-400" />
+      </div>
+      <h3 className="text-lg font-medium">No orders yet</h3>
+      <p className="text-gray-500 max-w-md mb-4">
+        You haven't created any orders yet. Create your first order or add a sample order to get started.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Button 
+          onClick={onCreateOrder} 
+          className="flex items-center gap-2"
+        >
+          <PlusIcon className="h-4 w-4" />
+          Create New Order
+        </Button>
+        <Button 
+          variant="outline"
+          onClick={onAddSample}
+        >
+          Add Sample Order
+        </Button>
+      </div>
+    </div>
+  </div>
+);
 
 export default Orders;
