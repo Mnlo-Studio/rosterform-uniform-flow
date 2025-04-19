@@ -15,7 +15,7 @@ export const useOrders = () => {
   const { user } = useAuth();
   const userId = user?.id;
 
-  // Fetch orders
+  // Fetch orders with improved error handling and caching
   const { data: orders, isLoading, error } = useQuery({
     queryKey: ['orders', userId],
     queryFn: async () => {
@@ -24,41 +24,50 @@ export const useOrders = () => {
       
       console.log('Fetching orders for user ID:', userId);
       
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          customer_info (*),
-          order_products (*),
-          order_players (*)
-        `)
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select(`
+            *,
+            customer_info (*),
+            order_products (*),
+            order_players (*)
+          `)
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching orders:', error);
-        throw error;
-      }
-      
-      console.log('Orders fetched:', data ? data.length : 0, 'orders');
-      
-      if (!data || data.length === 0) {
+        if (error) {
+          console.error('Error fetching orders:', error);
+          throw error;
+        }
+        
+        console.log('Orders fetched:', data ? data.length : 0, 'orders');
+        
+        if (!data || data.length === 0) {
+          return [];
+        }
+        
+        // Handle potential error response for relations
+        return data.map(order => {
+          const orderData = {
+            ...order,
+            customer_info: Array.isArray(order.customer_info) && order.customer_info.length > 0 
+              ? order.customer_info[0] 
+              : order.customer_info || null,
+            order_products: Array.isArray(order.order_products) ? order.order_products : [],
+            order_players: Array.isArray(order.order_players) ? order.order_players : []
+          };
+          return mapDbOrderToOrder(orderData);
+        });
+      } catch (err) {
+        console.error('Error in orders query:', err);
+        // Return empty array instead of throwing to prevent UI from crashing
         return [];
       }
-      
-      // Handle potential error response for relations
-      return data.map(order => {
-        const orderData = {
-          ...order,
-          customer_info: Array.isArray(order.customer_info) && order.customer_info.length > 0 
-            ? order.customer_info[0] 
-            : order.customer_info || null,
-          order_products: Array.isArray(order.order_products) ? order.order_products : [],
-          order_players: Array.isArray(order.order_players) ? order.order_players : []
-        };
-        return mapDbOrderToOrder(orderData);
-      });
     },
+    // Add caching and retry options for better performance
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
     enabled: !!userId, // Only run query when userId is available
   });
 

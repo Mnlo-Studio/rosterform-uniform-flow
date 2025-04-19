@@ -2,16 +2,19 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, PlusIcon } from "lucide-react";
 import OrderStatusOverview from "@/components/dashboard/OrderStatusOverview";
 import SummaryStatistics from "@/components/dashboard/SummaryStatistics";
+import StatsCards from "@/components/dashboard/StatsCards";
 import { useAuth } from "@/context/AuthContext";
 import { useOrders } from "@/hooks/useOrders";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
   // Get authenticated user data from the auth context
   const { user } = useAuth();
+  const navigate = useNavigate();
   
   // Extract user information from Supabase user object
   const userData = {
@@ -20,10 +23,23 @@ const Dashboard: React.FC = () => {
   };
 
   // Use the useOrders hook to fetch actual user orders
-  const { orders, isLoading } = useOrders();
+  const { orders, isLoading, addSampleOrder } = useOrders();
+
+  // Calculate totals for stats cards
+  const totalOrders = orders?.length || 0;
+  const totalPlayers = orders?.reduce((sum, order) => sum + (order.players?.length || 0), 0) || 0;
+  const totalRevenue = orders?.reduce((sum, order) => sum + (order.total || 0), 0) || 0;
+
+  const handleCreateSampleOrder = async () => {
+    try {
+      await addSampleOrder.mutateAsync();
+    } catch (error) {
+      console.error('Error creating sample order:', error);
+    }
+  };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg">
+    <div className="max-w-4xl mx-auto p-6 rounded-lg">
       <h1 className="mb-2">Dashboard</h1>
       <p className="text-gray-600 mb-6">Manage your orders, statistics, and roster tools.</p>
       
@@ -48,14 +64,49 @@ const Dashboard: React.FC = () => {
           <Skeleton className="h-[200px] w-full" />
           <Skeleton className="h-[400px] w-full" />
         </div>
-      ) : (
+      ) : orders && orders.length > 0 ? (
         <>
+          {/* Stats Cards */}
+          <StatsCards 
+            totalOrders={totalOrders} 
+            totalPlayers={totalPlayers} 
+            totalRevenue={totalRevenue} 
+          />
+          
           {/* Order Status Overview */}
-          <OrderStatusOverview orders={orders || []} />
+          <OrderStatusOverview orders={orders} />
           
           {/* Summary Statistics */}
-          <SummaryStatistics orders={orders || []} />
+          <SummaryStatistics orders={orders} />
         </>
+      ) : (
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-10 text-center">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="bg-gray-50 rounded-full p-4">
+              <PlusIcon className="h-8 w-8 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-medium">No orders yet</h3>
+            <p className="text-gray-500 max-w-md mb-4">
+              You haven't created any orders yet. Create your first order or add a sample order to get started.
+            </p>
+            <div className="flex gap-3">
+              <Button 
+                onClick={() => navigate('/roster')} 
+                className="flex items-center gap-2"
+              >
+                <PlusIcon className="h-4 w-4" />
+                Create New Order
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={handleCreateSampleOrder}
+                className="flex items-center gap-2"
+              >
+                Add Sample Order
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
