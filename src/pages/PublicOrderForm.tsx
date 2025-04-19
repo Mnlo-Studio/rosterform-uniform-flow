@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { RosterProvider } from '@/context/RosterProvider';
 import CustomerInfoForm from '@/components/CustomerInfoForm';
 import ProductInfoForm from '@/components/ProductInfoForm';
 import { BulkOptionsToolbar } from '@/components/bulk-options';
@@ -23,15 +22,13 @@ const PublicOrderForm: React.FC = () => {
           <h1 className="text-2xl font-bold">Order Form</h1>
         </div>
         
-        <RosterProvider>
-          <div className="space-y-6">
-            <CustomerInfoForm isPublic={true} />
-            <ProductInfoForm />
-            <BulkOptionsToolbar />
-            <RosterTable />
-            <OrderSummary />
-          </div>
-        </RosterProvider>
+        <div className="space-y-6">
+          <CustomerInfoForm isPublic={true} />
+          <ProductInfoForm />
+          <BulkOptionsToolbar />
+          <RosterTable />
+          <OrderSummary />
+        </div>
       </div>
     </div>
   );

@@ -31,21 +31,28 @@ const App = () => (
       <BrowserRouter>
         <LayoutProvider>
           <AuthProvider>
-            <RosterProvider>
-              <Routes>
-                {/* Make Auth the default route */}
-                <Route path="/" element={<Navigate to="/auth" replace />} />
-                
-                {/* Auth route */}
-                <Route path="/auth" element={<Auth />} />
-                
-                {/* Public routes that don't require authentication */}
-                <Route path="/order/:formId" element={<PublicOrderForm />} />
-                
-                {/* All other routes protected and using MainLayout */}
-                <Route path="*" element={
-                  <ProtectedRoute>
-                    <MainLayout>
+            <Routes>
+              {/* Make Auth the default route */}
+              <Route path="/" element={<Navigate to="/auth" replace />} />
+              
+              {/* Auth route */}
+              <Route path="/auth" element={<Auth />} />
+              
+              {/* Public routes that don't require authentication */}
+              <Route 
+                path="/order/:formId" 
+                element={
+                  <RosterProvider>
+                    <PublicOrderForm />
+                  </RosterProvider>
+                } 
+              />
+              
+              {/* All other routes protected and using MainLayout */}
+              <Route path="*" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <RosterProvider>
                       <Routes>
                         <Route path="/order-form" element={<Index />} /> {/* Changed from /roster */}
                         <Route path="/success" element={<Success />} />
@@ -57,11 +64,11 @@ const App = () => (
                         {/* Catch-all route */}
                         <Route path="*" element={<NotFound />} />
                       </Routes>
-                    </MainLayout>
-                  </ProtectedRoute>
-                } />
-              </Routes>
-            </RosterProvider>
+                    </RosterProvider>
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+            </Routes>
           </AuthProvider>
         </LayoutProvider>
       </BrowserRouter>
