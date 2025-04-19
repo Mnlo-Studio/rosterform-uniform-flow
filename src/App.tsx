@@ -31,15 +31,16 @@ const App = () => (
           <AuthProvider>
             <RosterProvider>
               <Routes>
-                {/* Make Auth the default route */}
-                <Route path="/" element={<Auth />} />
-                <Route path="/auth" element={<Navigate to="/" replace />} />
+                {/* Auth route */}
+                <Route path="/auth" element={<Auth />} />
                 
                 {/* All other routes protected and using MainLayout */}
                 <Route path="*" element={
                   <ProtectedRoute>
                     <MainLayout>
                       <Routes>
+                        {/* Make Roster the default route */}
+                        <Route path="/" element={<Navigate to="/roster" replace />} />
                         <Route path="/roster" element={<Index />} />
                         <Route path="/success" element={<Success />} />
                         <Route path="/orders" element={<Orders />} />

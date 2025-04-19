@@ -10,7 +10,7 @@ interface OrderStatusOverviewProps {
   orders: Order[];
 }
 
-const OrderStatusOverview: React.FC<OrderStatusOverviewProps> = ({ orders }) => {
+const OrderStatusOverview: React.FC<OrderStatusOverviewProps> = ({ orders = [] }) => {
   // Calculate order status counts
   const paidOrders = orders.filter(order => order.isPaid).length;
   const unpaidOrders = orders.filter(order => !order.isPaid).length;

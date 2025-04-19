@@ -10,7 +10,7 @@ interface SummaryStatisticsProps {
   orders: Order[];
 }
 
-const SummaryStatistics: React.FC<SummaryStatisticsProps> = ({ orders }) => {
+const SummaryStatistics: React.FC<SummaryStatisticsProps> = ({ orders = [] }) => {
   // Extract all players from all orders
   const allPlayers = orders.flatMap(order => order.players);
   
@@ -39,6 +39,39 @@ const SummaryStatistics: React.FC<SummaryStatisticsProps> = ({ orders }) => {
   // Define color scheme for bars
   const sizeColors = ["bg-blue-500", "bg-indigo-500", "bg-purple-500", "bg-pink-500", "bg-red-500", "bg-orange-500", "bg-yellow-500"];
   const genderColors = ["bg-teal-500", "bg-cyan-500", "bg-sky-500", "bg-blue-500"];
+
+  // If there are no orders or players, show empty state
+  if (allPlayers.length === 0) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <Card className="shadow-card">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-lg font-medium">Sizes Distribution</CardTitle>
+            <Ruler className="h-5 w-5 text-gray-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center justify-center h-[250px] text-center text-gray-500">
+              <p>No player data available</p>
+              <p className="text-sm mt-2">Statistics will appear when you create orders with players</p>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="shadow-card">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-lg font-medium">Gender Distribution</CardTitle>
+            <Users className="h-5 w-5 text-gray-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center justify-center h-[250px] text-center text-gray-500">
+              <p>No player data available</p>
+              <p className="text-sm mt-2">Statistics will appear when you create orders with players</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

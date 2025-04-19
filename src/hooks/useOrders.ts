@@ -8,14 +8,20 @@ import {
   mapDbOrderToOrder, 
   mapOrderToDbOrder 
 } from '@/types/orders';
+import { useAuth } from '@/context/AuthContext';
 
 export const useOrders = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const userId = user?.id;
 
   // Fetch orders
   const { data: orders, isLoading, error } = useQuery({
-    queryKey: ['orders'],
+    queryKey: ['orders', userId],
     queryFn: async () => {
+      // If no user is authenticated, return empty array
+      if (!userId) return [];
+      
       const { data, error } = await supabase
         .from('orders')
         .select(`
@@ -24,6 +30,7 @@ export const useOrders = () => {
           order_products (*),
           order_players (*)
         `)
+        .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -39,6 +46,7 @@ export const useOrders = () => {
         return mapDbOrderToOrder(orderData);
       });
     },
+    enabled: !!userId, // Only run query when userId is available
   });
 
   // Create order
@@ -54,7 +62,7 @@ export const useOrders = () => {
         // Ensure required fields are provided
         order_id: dbOrderData.order_id || `ORD-${Date.now()}`,
         team_name: dbOrderData.team_name || 'Untitled Team',
-        user_id: dbOrderData.user_id || '00000000-0000-0000-0000-000000000000'
+        user_id: userId || '00000000-0000-0000-0000-000000000000'
       };
       
       // Insert single row, not an array
@@ -75,7 +83,7 @@ export const useOrders = () => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', userId] });
       toast({
         title: "Order created",
         description: "Your order has been successfully created.",
@@ -114,7 +122,7 @@ export const useOrders = () => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', userId] });
       toast({
         title: "Order updated",
         description: "Your order has been successfully updated.",

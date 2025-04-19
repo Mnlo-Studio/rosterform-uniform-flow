@@ -3,10 +3,11 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
-import { mockOrders } from "@/data/mockOrders";
 import OrderStatusOverview from "@/components/dashboard/OrderStatusOverview";
 import SummaryStatistics from "@/components/dashboard/SummaryStatistics";
 import { useAuth } from "@/context/AuthContext";
+import { useOrders } from "@/hooks/useOrders";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Dashboard: React.FC = () => {
   // Get authenticated user data from the auth context
@@ -18,9 +19,8 @@ const Dashboard: React.FC = () => {
     email: user?.email || ""
   };
 
-  // Using mock orders for the dashboard stats
-  // In a real application, this would be fetched from your database
-  const orders = mockOrders;
+  // Use the useOrders hook to fetch actual user orders
+  const { orders, isLoading } = useOrders();
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg">
@@ -43,11 +43,20 @@ const Dashboard: React.FC = () => {
         </CardContent>
       </Card>
       
-      {/* Order Status Overview */}
-      <OrderStatusOverview orders={orders} />
-      
-      {/* Summary Statistics */}
-      <SummaryStatistics orders={orders} />
+      {isLoading ? (
+        <div className="space-y-6">
+          <Skeleton className="h-[200px] w-full" />
+          <Skeleton className="h-[400px] w-full" />
+        </div>
+      ) : (
+        <>
+          {/* Order Status Overview */}
+          <OrderStatusOverview orders={orders || []} />
+          
+          {/* Summary Statistics */}
+          <SummaryStatistics orders={orders || []} />
+        </>
+      )}
     </div>
   );
 };
