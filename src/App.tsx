@@ -20,7 +20,6 @@ import Dashboard from "./pages/Dashboard";
 import Account from "./pages/Account";
 import Auth from "./pages/Auth";
 import PublicOrderForm from "./pages/PublicOrderForm";
-import StandaloneOrderForm from "./pages/StandaloneOrderForm";
 
 const queryClient = new QueryClient();
 
@@ -31,16 +30,16 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <LayoutProvider>
+          {/* Wrap everything in AuthProvider so auth context is available globally */}
           <AuthProvider>
             <Routes>
-              {/* Completely public routes - no auth needed */}
+              {/* Public routes - no auth needed */}
               <Route path="/form" element={
                 <RosterProvider>
-                  <StandaloneOrderForm />
+                  <PublicOrderForm />
                 </RosterProvider>
               } />
               
-              {/* Public order forms - must not require auth */}
               <Route path="/orders/:userId" element={
                 <RosterProvider>
                   <PublicOrderForm />
@@ -56,88 +55,78 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               
               {/* Protected routes */}
-              <Route path="/*" element={
-                <Routes>
-                  <Route path="/" element={
-                    <ProtectedRoute>
-                      <Navigate to="/dashboard" replace />
-                    </ProtectedRoute>
-                  } />
-                  
-                  <Route path="/dashboard" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <Dashboard />
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                  
-                  <Route path="/order-form" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <RosterProvider>
-                          <Index />
-                        </RosterProvider>
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                  
-                  <Route path="/success" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <RosterProvider>
-                          <Success />
-                        </RosterProvider>
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                  
-                  <Route path="/orders" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <Orders />
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                  
-                  <Route path="/orders/:orderId" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <RosterProvider>
-                          <OrderDetails />
-                        </RosterProvider>
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                  
-                  <Route path="/share" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <RosterProvider>
-                          <ShareEmbed />
-                        </RosterProvider>
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                  
-                  <Route path="/account" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <Account />
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                  
-                  {/* Catch-all route */}
-                  <Route path="*" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <NotFound />
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                </Routes>
+              <Route path="/" element={
+                <ProtectedRoute>
+                  <Navigate to="/dashboard" replace />
+                </ProtectedRoute>
               } />
+              
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Dashboard />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/order-form" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <RosterProvider>
+                      <Index />
+                    </RosterProvider>
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/success" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <RosterProvider>
+                      <Success />
+                    </RosterProvider>
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/orders" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Orders />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/orders/:orderId" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <RosterProvider>
+                      <OrderDetails />
+                    </RosterProvider>
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/share" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <RosterProvider>
+                      <ShareEmbed />
+                    </RosterProvider>
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/account" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Account />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Catch-all route */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>
         </LayoutProvider>
