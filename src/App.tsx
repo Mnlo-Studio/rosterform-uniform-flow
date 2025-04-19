@@ -31,9 +31,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <LayoutProvider>
-          {/* These routes do NOT use AuthProvider and are completely public */}
           <Routes>
-            {/* Public standalone routes */}
+            {/* Completely public routes - no auth needed */}
             <Route path="/form" element={
               <RosterProvider>
                 <StandaloneOrderForm />
@@ -48,13 +47,21 @@ const App = () => (
             
             <Route path="/auth" element={<Auth />} />
             
-            {/* Protected routes wrapped in AuthProvider */}
+            {/* Protected routes */}
             <Route path="/*" element={
               <AuthProvider>
                 <Routes>
                   <Route path="/" element={
                     <ProtectedRoute>
                       <Navigate to="/dashboard" replace />
+                    </ProtectedRoute>
+                  } />
+                  
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                      <MainLayout>
+                        <Dashboard />
+                      </MainLayout>
                     </ProtectedRoute>
                   } />
                   
@@ -81,9 +88,7 @@ const App = () => (
                   <Route path="/orders" element={
                     <ProtectedRoute>
                       <MainLayout>
-                        <RosterProvider>
-                          <Orders />
-                        </RosterProvider>
+                        <Orders />
                       </MainLayout>
                     </ProtectedRoute>
                   } />
@@ -108,22 +113,10 @@ const App = () => (
                     </ProtectedRoute>
                   } />
                   
-                  <Route path="/dashboard" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <RosterProvider>
-                          <Dashboard />
-                        </RosterProvider>
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                  
                   <Route path="/account" element={
                     <ProtectedRoute>
                       <MainLayout>
-                        <RosterProvider>
-                          <Account />
-                        </RosterProvider>
+                        <Account />
                       </MainLayout>
                     </ProtectedRoute>
                   } />
@@ -132,9 +125,7 @@ const App = () => (
                   <Route path="*" element={
                     <ProtectedRoute>
                       <MainLayout>
-                        <RosterProvider>
-                          <NotFound />
-                        </RosterProvider>
+                        <NotFound />
                       </MainLayout>
                     </ProtectedRoute>
                   } />

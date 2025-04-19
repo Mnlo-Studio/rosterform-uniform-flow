@@ -11,8 +11,18 @@ interface ShareLinkButtonProps {
 const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
   const [copied, setCopied] = useState(false);
   
-  // Replace /order/ with /form for the public standalone form
-  const publicFormURL = shareURL.replace('/order/', '/form');
+  // Now we have two options for sharing:
+  // 1. A standalone form at /form (no authentication required)
+  // 2. A customer-specific form at /order/:formId
+  
+  // The standalone form URL is simpler
+  const standaloneFormURL = `${window.location.origin}/form`;
+  
+  // The customer-specific form URL (from the original prop)
+  const customerFormURL = shareURL.replace('/order/', '/form/');
+  
+  // Default to the standalone form for sharing
+  const publicFormURL = standaloneFormURL;
   
   const copyShareLink = () => {
     navigator.clipboard.writeText(publicFormURL);
