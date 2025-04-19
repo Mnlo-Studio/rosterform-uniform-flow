@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import OrdersHeader from '@/components/orders/OrdersHeader';
 import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
@@ -8,7 +9,6 @@ import { useOrders } from '@/hooks/useOrders';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ClipboardIcon, PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
 
 const Orders = () => {
   const { orders, isLoading, error, updateOrder, addSampleOrder } = useOrders();
@@ -63,7 +63,8 @@ const Orders = () => {
 
   const handleCreateSampleOrder = async () => {
     try {
-      await addSampleOrder.mutateAsync();
+      const result = await addSampleOrder.mutateAsync();
+      toast.success('Sample order created successfully');
     } catch (error) {
       console.error('Error creating sample order:', error);
     }
@@ -71,6 +72,10 @@ const Orders = () => {
 
   const handleCreateNewOrder = () => {
     navigate('/order-form');
+  };
+
+  const handleViewOrderDetails = (orderId: string) => {
+    navigate(`/orders/${orderId}`);
   };
 
   const getTotalPlayers = () => {
@@ -98,7 +103,7 @@ const Orders = () => {
               onClick={handleCreateNewOrder} 
               className="mt-2"
             >
-              Go to Roster Form
+              Go to Order Form
             </Button>
           </div>
         </div>
@@ -135,6 +140,7 @@ const Orders = () => {
                   orders={filteredOrders} 
                   onStatusChange={handleStatusChange}
                   onPaymentChange={handlePaymentChange}
+                  onViewDetails={handleViewOrderDetails}
                 />
               ) : (
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-10 text-center">

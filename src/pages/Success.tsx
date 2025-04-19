@@ -14,20 +14,24 @@ const Success = () => {
   const handleSameProduct = () => {
     resetRoster();
     resetCustomerInfo();
-    navigate('/', { state: { fromSuccess: true } });
+    navigate('/order-form', { state: { fromSuccess: true } });
   };
 
   const handleSameRoster = () => {
     resetProductInfo();
     resetCustomerInfo();
-    navigate('/', { state: { fromSuccess: true } });
+    navigate('/order-form', { state: { fromSuccess: true } });
   };
 
   const handleNewOrder = () => {
     resetRoster();
     resetProductInfo();
     resetCustomerInfo();
-    navigate('/', { state: { fromSuccess: true } });
+    navigate('/order-form', { state: { fromSuccess: true } });
+  };
+
+  const handleViewOrders = () => {
+    navigate('/orders');
   };
 
   return (
@@ -58,6 +62,12 @@ const Success = () => {
             className="w-full bg-primary-700 hover:bg-primary-800"
           >
             Submit a new order
+          </Button>
+          <Button 
+            onClick={handleViewOrders} 
+            className="w-full bg-neutral-200 text-neutral-800 hover:bg-neutral-300"
+          >
+            View all orders
           </Button>
         </CardContent>
         <CardFooter className="flex justify-center pt-0">

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useOrderDetails } from '@/components/orders/hooks/useOrderDetails';
 import OrderDetailsHeader from '@/components/orders/OrderDetailsHeader';
 import OrderImagesCard from '@/components/orders/OrderImagesCard';
@@ -8,9 +8,12 @@ import CustomerInfoCard from '@/components/orders/CustomerInfoCard';
 import ProductInfoCard from '@/components/orders/ProductInfoCard';
 import RosterTableCard from '@/components/orders/RosterTableCard';
 import OrderDetailsFooter from '@/components/orders/OrderDetailsFooter';
+import { toast } from 'sonner';
 
 const OrderDetails = () => {
   const { orderId } = useParams<{ orderId: string }>();
+  const navigate = useNavigate();
+
   const {
     order,
     editedOrder,
@@ -28,6 +31,19 @@ const OrderDetails = () => {
     handleImageRemove
   } = useOrderDetails(orderId);
 
+  const handleBackToOrders = () => {
+    navigate('/orders');
+  };
+
+  const onSaveChanges = async () => {
+    try {
+      await handleSaveChanges();
+      toast.success('Order updated successfully');
+    } catch (error) {
+      toast.error('Failed to update order');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -38,8 +54,16 @@ const OrderDetails = () => {
 
   if (error || !order || !editedOrder) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p>Order not found</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+        <div className="bg-white rounded-lg p-8 shadow-md text-center max-w-md w-full">
+          <p className="text-lg mb-4">Order not found or error loading details</p>
+          <button 
+            onClick={handleBackToOrders}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Back to Orders
+          </button>
+        </div>
       </div>
     );
   }
@@ -85,7 +109,7 @@ const OrderDetails = () => {
 
         <OrderDetailsFooter 
           isEditMode={isEditMode} 
-          onSaveChanges={handleSaveChanges} 
+          onSaveChanges={onSaveChanges} 
           onDownloadOriginal={handleDownloadOriginal} 
           onDownloadUpdated={handleDownloadUpdated} 
           onSendInvoice={handleSendInvoice} 

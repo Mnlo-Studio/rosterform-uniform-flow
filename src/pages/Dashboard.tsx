@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,6 +28,8 @@ const Dashboard: React.FC = () => {
   const handleCreateSampleOrder = async () => {
     try {
       await addSampleOrder.mutateAsync();
+      // Navigate to orders page after creating sample order
+      navigate('/orders');
     } catch (error) {
       console.error('Error creating sample order:', error);
     }
@@ -34,6 +37,10 @@ const Dashboard: React.FC = () => {
 
   const handleCreateNewOrder = () => {
     navigate('/order-form');
+  };
+
+  const handleEditProfile = () => {
+    navigate('/account');
   };
 
   return (
@@ -47,7 +54,12 @@ const Dashboard: React.FC = () => {
             <div>
               <h2>Hello, {userData.name}</h2>
             </div>
-            <Button variant="ghost" size="sm" className="gap-2 text-primary-700">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="gap-2 text-primary-700"
+              onClick={handleEditProfile}
+            >
               <Edit className="h-4 w-4" />
               <span>Edit Profile</span>
             </Button>

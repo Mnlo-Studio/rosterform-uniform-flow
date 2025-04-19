@@ -8,7 +8,7 @@ import Logo from "./Logo";
 const MainSidebar = () => {
   const location = useLocation();
 
-  // Navigation items - updated Order Form path to /order-form
+  // Navigation items
   const navItems = [{
     label: "Dashboard",
     icon: LayoutDashboard,
@@ -27,7 +27,7 @@ const MainSidebar = () => {
     path: "/share"
   }];
 
-  // Account items (at bottom) - removed Login/Register
+  // Account items (at bottom)
   const accountItems = [{
     label: "Account",
     icon: UserCircle,
