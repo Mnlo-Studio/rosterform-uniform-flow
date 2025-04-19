@@ -1,11 +1,24 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { 
+  Sidebar, 
+  SidebarContent, 
+  SidebarFooter, 
+  SidebarGroup, 
+  SidebarGroupContent, 
+  SidebarGroupLabel, 
+  SidebarMenu, 
+  SidebarMenuButton, 
+  SidebarMenuItem 
+} from "@/components/ui/sidebar";
 import Logo from "./Logo";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const MainSidebar = () => {
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   // Navigation items
   const navItems = [{
@@ -36,16 +49,23 @@ const MainSidebar = () => {
     return path !== "/" && location.pathname.startsWith(path);
   };
 
+  // Use different class name for mobile
+  const sidebarClassName = isMobile 
+    ? "bg-white h-full w-full" 
+    : "border-r border-gray-200";
+
   return (
-    <Sidebar className="border-r border-gray-200">
+    <Sidebar className={sidebarClassName}>
       <SidebarContent className="bg-white">
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <div className="flex items-center justify-center py-4 border-b">
-              <Logo />
-            </div>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {isMobile && (
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <div className="flex items-center justify-center py-4 border-b">
+                <Logo />
+              </div>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -53,7 +73,7 @@ const MainSidebar = () => {
               {navItems.map(item => (
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
-                    <Link to={item.path}>
+                    <Link to={item.path} className="flex items-center gap-3 py-2">
                       <item.icon size={20} />
                       <span>{item.label}</span>
                     </Link>
@@ -70,7 +90,7 @@ const MainSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/account")} tooltip="Account Settings">
-                  <Link to="/account" className="flex items-center gap-2 w-full">
+                  <Link to="/account" className="flex items-center gap-3 py-2">
                     <UserCircle size={20} />
                     <span>Account Settings</span>
                   </Link>
