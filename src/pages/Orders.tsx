@@ -6,12 +6,12 @@ import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
 import OrdersTable from '@/components/orders/OrdersTable';
 import { useOrders } from '@/hooks/useOrders';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ClipboardIcon } from 'lucide-react';
+import { ClipboardIcon, PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
 const Orders = () => {
-  const { orders, isLoading, error, updateOrder } = useOrders();
+  const { orders, isLoading, error, updateOrder, addSampleOrder } = useOrders();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const navigate = useNavigate();
@@ -62,6 +62,14 @@ const Orders = () => {
     }
   };
 
+  const handleCreateSampleOrder = async () => {
+    try {
+      await addSampleOrder.mutateAsync();
+    } catch (error) {
+      console.error('Error creating sample order:', error);
+    }
+  };
+
   const getTotalPlayers = () => {
     return filteredOrders.reduce((total, order) => 
       total + order.players.length, 0);
@@ -73,8 +81,24 @@ const Orders = () => {
 
   if (error) {
     return (
-      <div className="p-4 text-center text-red-500">
-        Error loading orders: {error.message}
+      <div className="p-4 text-center">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-10 text-center">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="bg-red-50 rounded-full p-4">
+              <ClipboardIcon className="h-8 w-8 text-red-400" />
+            </div>
+            <h3 className="text-lg font-medium">Error loading orders</h3>
+            <p className="text-gray-500 max-w-md">
+              {error.message}
+            </p>
+            <Button 
+              onClick={() => navigate('/roster')} 
+              className="mt-2"
+            >
+              Go to Roster
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -95,38 +119,60 @@ const Orders = () => {
         </div>
       ) : (
         <>
-          <OrdersSummaryCards 
-            totalOrders={filteredOrders.length} 
-            totalRevenue={getTotalRevenue()} 
-            totalPlayers={getTotalPlayers()} 
-          />
-          
-          {filteredOrders.length > 0 ? (
-            <OrdersTable 
-              orders={filteredOrders} 
-              onStatusChange={handleStatusChange}
-              onPaymentChange={handlePaymentChange}
-            />
+          {orders && orders.length > 0 ? (
+            <>
+              <OrdersSummaryCards 
+                totalOrders={filteredOrders.length} 
+                totalRevenue={getTotalRevenue()} 
+                totalPlayers={getTotalPlayers()} 
+              />
+              
+              {filteredOrders.length > 0 ? (
+                <OrdersTable 
+                  orders={filteredOrders} 
+                  onStatusChange={handleStatusChange}
+                  onPaymentChange={handlePaymentChange}
+                />
+              ) : (
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-10 text-center">
+                  <div className="flex flex-col items-center justify-center gap-4">
+                    <div className="bg-gray-50 rounded-full p-4">
+                      <ClipboardIcon className="h-8 w-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium">No orders found</h3>
+                    <p className="text-gray-500 max-w-md">
+                      No orders match your current search or filter criteria.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
             <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-10 text-center">
               <div className="flex flex-col items-center justify-center gap-4">
                 <div className="bg-gray-50 rounded-full p-4">
                   <ClipboardIcon className="h-8 w-8 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-medium">No orders found</h3>
-                <p className="text-gray-500 max-w-md">
-                  {!orders || orders.length === 0 
-                    ? "You haven't created any orders yet. Create your first order to get started." 
-                    : "No orders match your current search or filter criteria."}
+                <h3 className="text-lg font-medium">No orders yet</h3>
+                <p className="text-gray-500 max-w-md mb-4">
+                  You haven't created any orders yet. Create your first order or add a sample order to get started.
                 </p>
-                {!orders || orders.length === 0 && (
+                <div className="flex gap-3">
                   <Button 
                     onClick={() => navigate('/roster')} 
-                    className="mt-2"
+                    className="flex items-center gap-2"
                   >
+                    <PlusIcon className="h-4 w-4" />
                     Create New Order
                   </Button>
-                )}
+                  <Button 
+                    variant="outline"
+                    onClick={handleCreateSampleOrder}
+                    className="flex items-center gap-2"
+                  >
+                    Add Sample Order
+                  </Button>
+                </div>
               </div>
             </div>
           )}

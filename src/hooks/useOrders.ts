@@ -22,6 +22,8 @@ export const useOrders = () => {
       // If no user is authenticated, return empty array
       if (!userId) return [];
       
+      console.log('Fetching orders for user ID:', userId);
+      
       const { data, error } = await supabase
         .from('orders')
         .select(`
@@ -33,13 +35,24 @@ export const useOrders = () => {
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching orders:', error);
+        throw error;
+      }
+      
+      console.log('Orders fetched:', data ? data.length : 0, 'orders');
+      
+      if (!data || data.length === 0) {
+        return [];
+      }
       
       // Handle potential error response for relations
       return data.map(order => {
         const orderData = {
           ...order,
-          customer_info: Array.isArray(order.customer_info) ? order.customer_info : null,
+          customer_info: Array.isArray(order.customer_info) && order.customer_info.length > 0 
+            ? order.customer_info[0] 
+            : order.customer_info || null,
           order_products: Array.isArray(order.order_products) ? order.order_products : [],
           order_players: Array.isArray(order.order_players) ? order.order_players : []
         };
@@ -65,6 +78,8 @@ export const useOrders = () => {
         user_id: userId || '00000000-0000-0000-0000-000000000000'
       };
       
+      console.log('Creating order with data:', preparedData);
+      
       // Insert single row, not an array
       const { data, error } = await supabase
         .from('orders')
@@ -72,7 +87,12 @@ export const useOrders = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating order:', error);
+        throw error;
+      }
+      
+      console.log('Order created successfully:', data);
       
       // Map the response back to frontend format
       return mapDbOrderToOrder({
@@ -104,6 +124,8 @@ export const useOrders = () => {
       // Convert frontend order to database format
       const dbOrderData = mapOrderToDbOrder(orderData);
       
+      console.log('Updating order:', id, 'with data:', dbOrderData);
+      
       const { data, error } = await supabase
         .from('orders')
         .update(dbOrderData)
@@ -111,7 +133,12 @@ export const useOrders = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating order:', error);
+        throw error;
+      }
+      
+      console.log('Order updated successfully:', data);
       
       // Map the response back to frontend format
       return mapDbOrderToOrder({
@@ -137,11 +164,59 @@ export const useOrders = () => {
     },
   });
 
+  // Add a sample order function for development purposes
+  const addSampleOrder = useMutation({
+    mutationFn: async () => {
+      if (!userId) throw new Error("User not authenticated");
+      
+      const sampleOrder = {
+        order_id: `ORD-SAMPLE-${Date.now()}`,
+        team_name: 'Sample Team',
+        total: 299.99,
+        status: 'Pending',
+        is_paid: false,
+        user_id: userId,
+        date: new Date().toISOString()
+      };
+      
+      console.log('Creating sample order:', sampleOrder);
+      
+      const { data, error } = await supabase
+        .from('orders')
+        .insert(sampleOrder)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error creating sample order:', error);
+        throw error;
+      }
+      
+      console.log('Sample order created:', data);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders', userId] });
+      toast({
+        title: "Sample order created",
+        description: "A sample order has been added to your account.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error creating sample order",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+
   return {
-    orders,
+    orders: orders || [],
     isLoading,
     error,
     createOrder,
     updateOrder,
+    addSampleOrder
   };
 };
