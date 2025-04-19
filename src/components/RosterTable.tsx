@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { Player } from '@/types';
@@ -17,6 +16,7 @@ const RosterTable: React.FC = () => {
     updatePlayer,
     productInfo,
     areAllPlayersAssignedProducts,
+    addPlayers
   } = useRoster();
   
   const isMobile = useIsMobile();
@@ -27,6 +27,10 @@ const RosterTable: React.FC = () => {
 
   const handleSelectChange = (id: string, field: keyof Player, value: string) => {
     updatePlayer(id, { [field]: value });
+  };
+
+  const handleAddPlayers = (count: number) => {
+    addPlayers(count);
   };
 
   // Calculate the additional columns
@@ -107,6 +111,7 @@ const RosterTable: React.FC = () => {
           <EmptyRoster 
             totalColumns={totalColumns} 
             isMobile={isMobile}
+            onAddPlayers={handleAddPlayers}
           />
         )}
       </CardContent>
@@ -115,4 +120,3 @@ const RosterTable: React.FC = () => {
 };
 
 export default RosterTable;
-
