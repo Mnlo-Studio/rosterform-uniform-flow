@@ -20,6 +20,7 @@ const RosterTable: React.FC = () => {
     productInfo,
     areAllPlayersAssignedProducts,
   } = useRoster();
+  
   const isMobile = useIsMobile();
 
   const handleInputChange = (id: string, field: keyof Player, value: string) => {
@@ -31,7 +32,9 @@ const RosterTable: React.FC = () => {
   };
 
   const handleAddPlayers = (count: number = 5) => {
-    addPlayers(count);
+    console.log(`RosterTable: Adding ${count} players`);
+    const newPlayers = addPlayers(count);
+    console.log('RosterTable: New players:', newPlayers);
   };
 
   // Calculate the additional columns
@@ -52,16 +55,19 @@ const RosterTable: React.FC = () => {
   const showProductWarning = players.length > 0 && productInfo.products.length > 0 && !areAllPlayersAssignedProducts();
   const showNoProductsWarning = players.length > 0 && productInfo.products.length === 0;
 
+  // Debug logging
+  React.useEffect(() => {
+    console.log('RosterTable - Current players:', players);
+  }, [players]);
+
   return (
     <Card>
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
           <CardTitle className="text-xl font-semibold text-gray-800">Team Roster</CardTitle>
-          {players.length === 0 && (
-            <Button onClick={() => handleAddPlayers(5)} variant="default">
-              Add 5 Players
-            </Button>
-          )}
+          <Button onClick={() => handleAddPlayers(5)} variant="default">
+            Add 5 Players
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="p-4">

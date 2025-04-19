@@ -12,7 +12,7 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
   selectedProductId,
   onProductSelect
 }) => {
-  const { productInfo, players } = useRoster();
+  const { productInfo } = useRoster();
 
   // Debug logging
   useEffect(() => {
@@ -28,6 +28,11 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
     }
   }, [productInfo.products, selectedProductId, onProductSelect]);
 
+  const handleProductChange = (id: string) => {
+    console.log('Product select changed to:', id);
+    onProductSelect(id);
+  };
+
   return (
     <div>
       <label htmlFor="bulkProductSelection" className="text-sm font-medium mb-2 block">
@@ -37,7 +42,7 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
         id="bulkProductSelection"
         productId={selectedProductId}
         products={productInfo.products}
-        onValueChange={onProductSelect}
+        onValueChange={handleProductChange}
         placeholder="Select a product to assign"
         disabled={productInfo.products.length === 0}
       />

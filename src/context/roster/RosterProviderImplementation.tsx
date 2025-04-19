@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Player, CustomerInfo, ProductInfo, BulkOptions, Product } from '@/types';
 import { 
   createPlayers, 
@@ -26,12 +26,22 @@ export const useRosterState = (): RosterContextType => {
   const [bulkOptions, setBulkOptions] = useState<BulkOptions>(initialBulkOptions);
 
   // Player management functions
-  const addPlayers = (count: number) => {
+  const addPlayers = useCallback((count: number) => {
+    console.log(`useRosterState: Adding ${count} players with default product ID`);
     const defaultProductId = productInfo.products.length === 1 ? productInfo.products[0].id : undefined;
+    console.log('Default product ID:', defaultProductId);
+    
     const newPlayers = createPlayers(count, players.length, bulkOptions, defaultProductId);
-    setPlayers([...players, ...newPlayers]);
+    console.log('Created new players:', newPlayers);
+    
+    setPlayers(prevPlayers => {
+      const updatedPlayers = [...prevPlayers, ...newPlayers];
+      console.log('Updated players array:', updatedPlayers);
+      return updatedPlayers;
+    });
+    
     return newPlayers; // Return the newly created players
-  };
+  }, [players.length, bulkOptions, productInfo.products]);
 
   const removePlayer = (id: string) => {
     setPlayers(players.filter(player => player.id !== id));
@@ -94,6 +104,7 @@ export const useRosterState = (): RosterContextType => {
   };
 
   const bulkAssignProductToPlayers = (productId: string) => {
+    console.log(`Bulk assigning product ${productId} to all ${players.length} players`);
     setPlayers(players.map(player => ({ ...player, productId })));
   };
 

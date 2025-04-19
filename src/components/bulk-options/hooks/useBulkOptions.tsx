@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -23,7 +23,8 @@ export const useBulkOptions = () => {
   useEffect(() => {
     console.log('useBulkOptions - Products:', productInfo.products);
     console.log('useBulkOptions - Selected Product ID:', selectedProductId);
-  }, [productInfo.products, selectedProductId]);
+    console.log('useBulkOptions - Current player count:', players.length);
+  }, [productInfo.products, selectedProductId, players.length]);
   
   // Reset selectedProductId if it's no longer in the products list
   useEffect(() => {
@@ -104,6 +105,23 @@ export const useBulkOptions = () => {
     setSelectedProductId(productId);
   };
   
+  // Function to add players with the given count
+  const addPlayersWithCount = useCallback((count: number) => {
+    if (count <= 0) return [];
+    
+    console.log(`Adding ${count} players`);
+    const newPlayers = addPlayers(count);
+    console.log('New players added:', newPlayers);
+    
+    // If there's a selected product, assign it to the newly added players
+    if (selectedProductId) {
+      console.log(`Assigning product ${selectedProductId} to new players`);
+      bulkAssignProductToPlayers(selectedProductId);
+    }
+    
+    return newPlayers;
+  }, [addPlayers, bulkAssignProductToPlayers, selectedProductId]);
+  
   const handleApplyChanges = () => {
     console.log('Apply changes clicked with quickAddCount:', quickAddCount);
     let changesMade = false;
@@ -112,19 +130,13 @@ export const useBulkOptions = () => {
     try {
       // Apply quick add if selected
       if (quickAddCount && quickAddCount > 0) {
-        console.log(`Adding ${quickAddCount} players`);
-        const newPlayers = addPlayers(quickAddCount);
-        console.log('New players added:', newPlayers);
+        const newPlayers = addPlayersWithCount(quickAddCount);
         
-        // If there's a selected product, assign it to the newly added players
-        if (selectedProductId) {
-          console.log(`Assigning product ${selectedProductId} to new players`);
-          bulkAssignProductToPlayers(selectedProductId);
+        if (newPlayers.length > 0) {
+          messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
+          setQuickAddCount(null); // Reset after applying
+          changesMade = true;
         }
-        
-        messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
-        setQuickAddCount(null); // Reset after applying
-        changesMade = true;
       } 
       // Apply product assignment if selected and there are players
       else if (selectedProductId && players.length > 0) {
@@ -186,6 +198,7 @@ export const useBulkOptions = () => {
     toggleOption,
     handleQuickAddSelection,
     handleProductSelection,
-    handleApplyChanges
+    handleApplyChanges,
+    addPlayersWithCount
   };
 };

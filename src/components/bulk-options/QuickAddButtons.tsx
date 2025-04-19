@@ -29,17 +29,23 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
     }
   };
 
+  // Format the display value for the select
+  const getDisplayValue = () => {
+    if (!selectedCount) return '';
+    return selectedCount.toString();
+  };
+
   return (
     <div>
       <label htmlFor="quickAddDropdown" className="text-sm font-medium mb-2 block">
         Quick Add Players
       </label>
       <Select 
-        value={selectedCount ? selectedCount.toString() : ''} 
+        value={getDisplayValue()} 
         onValueChange={handleQuickAddChange}
       >
         <SelectTrigger id="quickAddDropdown" className="w-full">
-          <SelectValue placeholder="Add 5 Players" />
+          <SelectValue placeholder="Add Players" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="1">
