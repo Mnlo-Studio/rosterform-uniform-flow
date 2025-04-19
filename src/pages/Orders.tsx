@@ -4,80 +4,76 @@ import { toast } from "sonner";
 import OrdersHeader from '@/components/orders/OrdersHeader';
 import OrdersSummaryCards from '@/components/orders/OrdersSummaryCards';
 import OrdersTable from '@/components/orders/OrdersTable';
-import { Order } from '@/types/orders';
-import { mockOrders } from '@/data/mockOrders';
+import { useOrders } from '@/hooks/useOrders';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Orders = () => {
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
-  const [filteredOrders, setFilteredOrders] = useState<Order[]>(mockOrders);
+  const { orders, isLoading, error, updateOrder } = useOrders();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  // Filter orders based on search query and status
+  const filteredOrders = orders?.filter(order => {
+    const matchesSearch = !searchQuery || 
+      order.team_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.order_id.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesStatus = statusFilter === 'all' || 
+      order.status.toLowerCase() === statusFilter.toLowerCase();
+    
+    return matchesSearch && matchesStatus;
+  }) || [];
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    filterOrders(query, statusFilter);
   };
 
   const handleStatusFilter = (status: string) => {
     setStatusFilter(status);
-    filterOrders(searchQuery, status);
   };
 
-  const filterOrders = (query: string, status: string) => {
-    let filtered = orders;
-    
-    if (query) {
-      const lowercaseQuery = query.toLowerCase();
-      filtered = filtered.filter(order => 
-        order.teamName.toLowerCase().includes(lowercaseQuery) || 
-        order.orderId.toLowerCase().includes(lowercaseQuery)
-      );
+  const handleStatusChange = async (orderId: string, newStatus: 'Pending' | 'Completed' | 'Cancelled') => {
+    try {
+      await updateOrder.mutateAsync({
+        id: orderId,
+        status: newStatus
+      });
+      
+      toast.success(`Order ${orderId} status updated to ${newStatus}`);
+    } catch (error) {
+      console.error('Error updating order status:', error);
     }
-    
-    if (status !== 'all') {
-      filtered = filtered.filter(order => order.status.toLowerCase() === status.toLowerCase());
+  };
+
+  const handlePaymentChange = async (orderId: string, isPaid: boolean) => {
+    try {
+      await updateOrder.mutateAsync({
+        id: orderId,
+        is_paid: isPaid
+      });
+      
+      toast.success(`Order ${orderId} payment status updated to ${isPaid ? 'Paid' : 'Unpaid'}`);
+    } catch (error) {
+      console.error('Error updating payment status:', error);
     }
-    
-    setFilteredOrders(filtered);
-  };
-
-  const handleStatusChange = (orderId: string, newStatus: 'Pending' | 'Completed' | 'Cancelled') => {
-    const updatedOrders = orders.map(order => {
-      if (order.orderId === orderId) {
-        return { ...order, status: newStatus };
-      }
-      return order;
-    });
-    
-    setOrders(updatedOrders);
-    // Also update filtered orders
-    filterOrders(searchQuery, statusFilter);
-    
-    toast.success(`Order ${orderId} status updated to ${newStatus}`);
-  };
-
-  const handlePaymentChange = (orderId: string, isPaid: boolean) => {
-    const updatedOrders = orders.map(order => {
-      if (order.orderId === orderId) {
-        return { ...order, isPaid };
-      }
-      return order;
-    });
-    
-    setOrders(updatedOrders);
-    // Also update filtered orders
-    filterOrders(searchQuery, statusFilter);
-    
-    toast.success(`Order ${orderId} payment status updated to ${isPaid ? 'Paid' : 'Unpaid'}`);
   };
 
   const getTotalPlayers = () => {
-    return orders.reduce((total, order) => total + order.players.length, 0);
+    return filteredOrders.reduce((total, order) => 
+      total + (order.order_players?.length || 0), 0);
   };
 
   const getTotalRevenue = () => {
-    return orders.reduce((total, order) => total + order.total, 0);
+    return filteredOrders.reduce((total, order) => total + (order.total || 0), 0);
   };
+
+  if (error) {
+    return (
+      <div className="p-4 text-center text-red-500">
+        Error loading orders: {error.message}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 bg-white p-4 md:p-6 lg:p-8 min-h-screen text-gray-800">
@@ -88,17 +84,26 @@ const Orders = () => {
         onStatusFilter={handleStatusFilter} 
       />
       
-      <OrdersSummaryCards 
-        totalOrders={orders.length} 
-        totalRevenue={getTotalRevenue()} 
-        totalPlayers={getTotalPlayers()} 
-      />
-      
-      <OrdersTable 
-        orders={filteredOrders} 
-        onStatusChange={handleStatusChange}
-        onPaymentChange={handlePaymentChange}
-      />
+      {isLoading ? (
+        <div className="space-y-4">
+          <Skeleton className="h-[200px] w-full" />
+          <Skeleton className="h-[400px] w-full" />
+        </div>
+      ) : (
+        <>
+          <OrdersSummaryCards 
+            totalOrders={filteredOrders.length} 
+            totalRevenue={getTotalRevenue()} 
+            totalPlayers={getTotalPlayers()} 
+          />
+          
+          <OrdersTable 
+            orders={filteredOrders} 
+            onStatusChange={handleStatusChange}
+            onPaymentChange={handlePaymentChange}
+          />
+        </>
+      )}
     </div>
   );
 };
