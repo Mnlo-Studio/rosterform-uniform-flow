@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -36,6 +35,13 @@ const App = () => (
             <Route path="/form" element={
               <RosterProvider>
                 <StandaloneOrderForm />
+              </RosterProvider>
+            } />
+            
+            {/* Public order forms - must not require auth */}
+            <Route path="/orders/:userId" element={
+              <RosterProvider>
+                <PublicOrderForm />
               </RosterProvider>
             } />
             

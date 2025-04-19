@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link2, Check, ExternalLink } from "lucide-react";
@@ -10,8 +11,8 @@ interface ShareLinkButtonProps {
 const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
   const [copied, setCopied] = useState(false);
   
-  // Updated to use the new share URL format
-  const publicFormURL = shareURL.replace('/orders/', '/orders/');
+  // No need to replace anything, use the shareURL as is
+  const publicFormURL = shareURL;
   
   const copyShareLink = () => {
     navigator.clipboard.writeText(publicFormURL);

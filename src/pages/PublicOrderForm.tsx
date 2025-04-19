@@ -8,11 +8,12 @@ import RosterTable from '@/components/RosterTable';
 import OrderSummary from '@/components/OrderSummary';
 
 const PublicOrderForm: React.FC = () => {
-  const { formId } = useParams<{ formId: string }>();
+  // Now using either userId or formId as param
+  const { formId, userId } = useParams<{ formId?: string; userId?: string }>();
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    console.log(`Loading public form with ID: ${formId}`);
+    console.log(`Loading public form for: ${userId || formId}`);
     
     // Simulate loading data
     const timer = setTimeout(() => {
@@ -20,7 +21,7 @@ const PublicOrderForm: React.FC = () => {
     }, 500);
     
     return () => clearTimeout(timer);
-  }, [formId]);
+  }, [formId, userId]);
 
   if (isLoading) {
     return (
