@@ -1,10 +1,8 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, ClipboardList, Share2, UserCircle, LogOut } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import Logo from "./Logo";
-import LogoutButton from "@/components/auth/LogoutButton";
 
 const MainSidebar = () => {
   const location = useLocation();
@@ -76,15 +74,6 @@ const MainSidebar = () => {
                     <UserCircle size={20} />
                     <span>Account Settings</span>
                   </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <LogoutButton 
-                    variant="ghost" 
-                    className="w-full justify-start px-2 py-2"
-                    iconClassName="mr-2"
-                  />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

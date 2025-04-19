@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle, XCircle, Building, Lock, User, Settings, PhoneCall, Mail, Calendar, Users, CreditCard, ZapIcon } from "lucide-react";
+import LogoutButton from "@/components/auth/LogoutButton";
 
 // Profile form schema
 const profileFormSchema = z.object({
@@ -507,6 +507,13 @@ const Account: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <div className="flex justify-end mt-8">
+        <LogoutButton 
+          variant="destructive"
+          className="w-auto px-8"
+        />
+      </div>
     </div>
   );
 };
