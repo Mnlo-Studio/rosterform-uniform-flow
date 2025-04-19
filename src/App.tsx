@@ -8,6 +8,7 @@ import { RosterProvider } from "@/context/RosterProvider";
 import { LayoutProvider } from "@/context/LayoutContext";
 import { AuthProvider } from "@/context/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Success from "./pages/Success";
 import NotFound from "./pages/NotFound";
@@ -30,22 +31,27 @@ const App = () => (
           <AuthProvider>
             <RosterProvider>
               <Routes>
-                {/* Auth page doesn't use MainLayout */}
-                <Route path="/auth" element={<Auth />} />
+                {/* Make Auth the default route */}
+                <Route path="/" element={<Auth />} />
+                <Route path="/auth" element={<Navigate to="/" replace />} />
+                
+                {/* All other routes protected and using MainLayout */}
                 <Route path="*" element={
-                  <MainLayout>
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/success" element={<Success />} />
-                      <Route path="/orders" element={<Orders />} />
-                      <Route path="/orders/:orderId" element={<OrderDetails />} />
-                      <Route path="/share" element={<ShareEmbed />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/account" element={<Account />} />
-                      {/* Catch-all route */}
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </MainLayout>
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <Routes>
+                        <Route path="/roster" element={<Index />} />
+                        <Route path="/success" element={<Success />} />
+                        <Route path="/orders" element={<Orders />} />
+                        <Route path="/orders/:orderId" element={<OrderDetails />} />
+                        <Route path="/share" element={<ShareEmbed />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/account" element={<Account />} />
+                        {/* Catch-all route */}
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </MainLayout>
+                  </ProtectedRoute>
                 } />
               </Routes>
             </RosterProvider>
