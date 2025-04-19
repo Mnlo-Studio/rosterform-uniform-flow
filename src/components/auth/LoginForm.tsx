@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 // Login form schema
 const loginFormSchema = z.object({
@@ -34,6 +36,8 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [isEmailNotConfirmed, setIsEmailNotConfirmed] = useState(false);
   const { signIn } = useAuth();
 
   // Login form
@@ -49,6 +53,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
   // Handle login submission
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
+    setLoginError(null);
+    setIsEmailNotConfirmed(false);
+    
     try {
       await signIn(data.email, data.password);
       
@@ -58,8 +65,51 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
       } else {
         localStorage.removeItem('rememberedEmail');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login error:", error);
+      
+      if (error.message?.includes("Email not confirmed")) {
+        setIsEmailNotConfirmed(true);
+      } else {
+        setLoginError(error.message || "An error occurred during login");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Function to resend confirmation email
+  const handleResendConfirmation = async () => {
+    const email = form.getValues("email");
+    
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address first",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Confirmation email sent",
+        description: "Please check your inbox and spam folder",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to resend confirmation email",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -77,6 +127,34 @@ const LoginForm: React.FC<LoginFormProps> = ({ isLoading, setIsLoading }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {loginError && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{loginError}</AlertDescription>
+          </Alert>
+        )}
+        
+        {isEmailNotConfirmed && (
+          <Alert variant="destructive" className="bg-amber-50 text-amber-900 border-amber-500">
+            <AlertCircle className="h-4 w-4 text-amber-600" />
+            <AlertTitle className="text-amber-800">Email not confirmed</AlertTitle>
+            <AlertDescription className="text-amber-700">
+              <p>Please check your email and click the confirmation link.</p>
+              <Button 
+                type="button" 
+                variant="outline"
+                size="sm"
+                className="mt-2 border-amber-500 text-amber-700 hover:bg-amber-100"
+                onClick={handleResendConfirmation}
+                disabled={isLoading}
+              >
+                Resend confirmation email
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
         <FormField
           control={form.control}
           name="email"

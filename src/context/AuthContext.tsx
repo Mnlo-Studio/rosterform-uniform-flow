@@ -60,7 +60,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(true);
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       
-      if (error) throw error;
+      if (error) {
+        // Check specifically for email confirmation error
+        if (error.message.includes("Email not confirmed")) {
+          throw new Error("Email not confirmed. Please check your inbox for a confirmation email.");
+        }
+        throw error;
+      }
       
       toast({
         title: "Success",
