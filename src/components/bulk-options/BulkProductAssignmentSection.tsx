@@ -20,6 +20,14 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
     console.log('BulkProductAssignmentSection - Selected ID:', selectedProductId);
   }, [productInfo.products, selectedProductId]);
 
+  // If we have products but no selection, auto-select the first product
+  useEffect(() => {
+    if (productInfo.products.length > 0 && !selectedProductId) {
+      console.log('Auto-selecting first product');
+      onProductSelect(productInfo.products[0].id);
+    }
+  }, [productInfo.products, selectedProductId, onProductSelect]);
+
   return (
     <div>
       <label htmlFor="bulkProductSelection" className="text-sm font-medium mb-2 block">
@@ -31,7 +39,7 @@ const BulkProductAssignmentSection: React.FC<BulkProductAssignmentSectionProps> 
         products={productInfo.products}
         onValueChange={onProductSelect}
         placeholder="Select a product to assign"
-        disabled={players.length === 0 && productInfo.products.length === 0}
+        disabled={productInfo.products.length === 0}
       />
     </div>
   );

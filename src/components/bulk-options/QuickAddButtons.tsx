@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -35,7 +34,10 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
       <label htmlFor="quickAddDropdown" className="text-sm font-medium mb-2 block">
         Quick Add Players
       </label>
-      <Select value={selectedCount?.toString() || ''} onValueChange={handleQuickAddChange}>
+      <Select 
+        value={selectedCount ? selectedCount.toString() : ''} 
+        onValueChange={handleQuickAddChange}
+      >
         <SelectTrigger id="quickAddDropdown" className="w-full">
           <SelectValue placeholder="Add 5 Players" />
         </SelectTrigger>

@@ -109,53 +109,63 @@ export const useBulkOptions = () => {
     let changesMade = false;
     let messages = [];
     
-    // Apply quick add if selected
-    if (quickAddCount && quickAddCount > 0) {
-      console.log(`Adding ${quickAddCount} players`);
-      const newPlayers = addPlayers(quickAddCount);
-      
-      // If there's a selected product, assign it to the newly added players
-      if (selectedProductId) {
-        console.log(`Assigning product ${selectedProductId} to new players`);
+    try {
+      // Apply quick add if selected
+      if (quickAddCount && quickAddCount > 0) {
+        console.log(`Adding ${quickAddCount} players`);
+        const newPlayers = addPlayers(quickAddCount);
+        console.log('New players added:', newPlayers);
+        
+        // If there's a selected product, assign it to the newly added players
+        if (selectedProductId) {
+          console.log(`Assigning product ${selectedProductId} to new players`);
+          bulkAssignProductToPlayers(selectedProductId);
+        }
+        
+        messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
+        setQuickAddCount(null); // Reset after applying
+        changesMade = true;
+      } 
+      // Apply product assignment if selected and there are players
+      else if (selectedProductId && players.length > 0) {
+        console.log(`Assigning product ${selectedProductId} to all players`);
         bulkAssignProductToPlayers(selectedProductId);
+        const productName = productInfo.products.find(p => p.id === selectedProductId)?.name || 'Selected product';
+        messages.push(`${productName} assigned to all players`);
+        changesMade = true;
+      }
+      // Apply bulk options to existing players if no new players are being added
+      else if (players.length > 0) {
+        console.log('Applying bulk options to existing players');
+        applyBulkOptions();
+        messages.push("Bulk options applied to all players");
+        changesMade = true;
+      }
+      // If no actions to apply, show an error message
+      else {
+        console.log('No actions to apply');
+        toast({
+          title: "No actions to apply",
+          description: "Select quick add players, product assignment, or have existing players first.",
+          variant: "destructive"
+        });
+        return;
       }
       
-      messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
-      setQuickAddCount(null); // Reset after applying
-      changesMade = true;
-    } 
-    // Apply product assignment if selected and there are players
-    else if (selectedProductId && players.length > 0) {
-      console.log(`Assigning product ${selectedProductId} to all players`);
-      bulkAssignProductToPlayers(selectedProductId);
-      const productName = productInfo.products.find(p => p.id === selectedProductId)?.name || 'Selected product';
-      messages.push(`${productName} assigned to all players`);
-      changesMade = true;
-    }
-    // Apply bulk options to existing players if no new players are being added
-    else if (players.length > 0) {
-      console.log('Applying bulk options to existing players');
-      applyBulkOptions();
-      messages.push("Bulk options applied to all players");
-      changesMade = true;
-    }
-    // If no actions to apply, show an error message
-    else {
-      console.log('No actions to apply');
+      // Show toast notification
+      if (changesMade) {
+        console.log('Changes made:', messages.join('. '));
+        toast({
+          title: "Changes applied",
+          description: messages.join('. ')
+        });
+      }
+    } catch (error) {
+      console.error('Error applying changes:', error);
       toast({
-        title: "No actions to apply",
-        description: "Select quick add players, product assignment, or have existing players first.",
+        title: "Error applying changes",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive"
-      });
-      return;
-    }
-    
-    // Show toast notification
-    if (changesMade) {
-      console.log('Changes made:', messages.join('. '));
-      toast({
-        title: "Changes applied",
-        description: messages.join('. ')
       });
     }
   };
