@@ -1,8 +1,8 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, ClipboardList, Share2, UserCircle, LogOut } from "lucide-react";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar";
+import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Logo from "./Logo";
 import LogoutButton from "@/components/auth/LogoutButton";
 
@@ -28,13 +28,6 @@ const MainSidebar = () => {
     path: "/share"
   }];
 
-  // Account items (at bottom)
-  const accountItems = [{
-    label: "Account Settings",
-    icon: UserCircle,
-    path: "/account"
-  }];
-
   const isActive = (path: string) => {
     // Special case for the root path
     if (path === "/" && location.pathname === "/") {
@@ -45,7 +38,8 @@ const MainSidebar = () => {
     return path !== "/" && location.pathname.startsWith(path);
   };
 
-  return <Sidebar className="border-r border-gray-200">
+  return (
+    <Sidebar className="border-r border-gray-200">
       <SidebarContent className="bg-white">
         <SidebarGroup>
           <SidebarGroupContent>
@@ -58,14 +52,16 @@ const MainSidebar = () => {
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map(item => <SidebarMenuItem key={item.label}>
+              {navItems.map(item => (
+                <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
                     <Link to={item.path}>
                       <item.icon size={20} />
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
-                </SidebarMenuItem>)}
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -74,26 +70,35 @@ const MainSidebar = () => {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {accountItems.map(item => <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
-                    <Link to={item.path}>
-                      <item.icon size={20} />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <LogoutButton variant="ghost" className="w-full justify-start" />
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                </SidebarMenuItem>)}
+              <SidebarMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuButton asChild isActive={isActive("/account")} tooltip="Account Settings">
+                      <div className="flex items-center gap-2 cursor-pointer w-full">
+                        <UserCircle size={20} />
+                        <span>Account Settings</span>
+                      </div>
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent side="right" align="start" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link to="/account" className="flex items-center gap-2">
+                        <UserCircle className="h-4 w-4" />
+                        <span>Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <LogoutButton variant="ghost" className="w-full justify-start" />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarFooter>
-    </Sidebar>;
+    </Sidebar>
+  );
 };
 
 export default MainSidebar;
