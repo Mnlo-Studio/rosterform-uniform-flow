@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 
 type LayoutContextType = {
   isDashboardLayout: boolean;
+  toggleSidebar: () => void;
 };
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
@@ -16,31 +17,30 @@ export function useLayout() {
   return context;
 }
 
-// These are pages that should always use the clean layout (no sidebar)
-// Note: We're removing "/" from PUBLIC_ROUTES because the Order Form should have the sidebar
 const PUBLIC_ROUTES = ['/success'];
-
-// URLs with these parameters should use the clean layout
 const PUBLIC_PARAMS = ['share=true', 'embed=true'];
 
 export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const [isDashboardLayout, setIsDashboardLayout] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
   
   useEffect(() => {
-    // Check if current path should use dashboard layout
     const isPublicRoute = PUBLIC_ROUTES.includes(location.pathname);
     const hasPublicParam = PUBLIC_PARAMS.some(param => location.search.includes(param));
     const isSharePath = location.pathname.startsWith('/share/');
     
-    // Show dashboard layout unless it's a public route, has public parameters, or is a share path
     const shouldUseDashboardLayout = !isPublicRoute && !hasPublicParam && !isSharePath;
     
     setIsDashboardLayout(shouldUseDashboardLayout);
   }, [location]);
 
   return (
-    <LayoutContext.Provider value={{ isDashboardLayout }}>
+    <LayoutContext.Provider value={{ isDashboardLayout, toggleSidebar }}>
       {children}
     </LayoutContext.Provider>
   );
