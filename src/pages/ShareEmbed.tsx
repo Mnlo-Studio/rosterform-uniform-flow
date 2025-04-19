@@ -15,7 +15,10 @@ const ShareEmbed = () => {
   
   const formId = `roster-form-${userId}`;
   const embedDomain = "embed.rosterform.com";
-  const shareDomain = "www.rosterform.com";
+  
+  // Use absolute URL without www to prevent routing confusion
+  const shareDomain = "rosterform.com";
+  const shareURL = `https://${shareDomain}/order/${formId}`;
   
   const inlineCode = `<div data-form-id="${formId}"></div>
 <script>(function() {
@@ -29,9 +32,6 @@ const ShareEmbed = () => {
   const popupCode = `<script src="https://${embedDomain}/embed.min.js"></script>`;
   const popupUsageCode = `<button data-form-id="${formId}" data-popup-button="true">Open Roster Form</button>`;
   const popupManualCode = `RosterForm.popup('${formId}');`;
-  
-  // Update the share URL to match the new public route format
-  const shareURL = `https://${shareDomain}/order/${formId}`;
 
   return (
     <div className="container mx-auto py-8 px-4">

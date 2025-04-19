@@ -22,7 +22,9 @@ const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
   };
 
   const openShareLink = () => {
-    window.open(shareURL, '_blank');
+    // Open in a new tab
+    window.open(shareURL, '_blank', 'noopener,noreferrer');
+    toast.success("Opening public form in a new tab");
   };
 
   return (
