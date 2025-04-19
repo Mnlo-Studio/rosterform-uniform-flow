@@ -2,7 +2,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Order } from '@/types/orders';
+import { 
+  Order, 
+  mapDbOrderToOrder,
+  mapOrderToDbOrder 
+} from '@/types/orders';
 
 export const useOrder = (orderId: string) => {
   const queryClient = useQueryClient();
@@ -22,18 +26,23 @@ export const useOrder = (orderId: string) => {
         .single();
 
       if (error) throw error;
-      return data;
+      
+      return mapDbOrderToOrder(data);
     },
     enabled: !!orderId,
   });
 
   const updateOrder = useMutation({
     mutationFn: async (orderData: Partial<Order>) => {
-      // Start a transaction to update all related tables
-      const { data, error } = await supabase.rpc('update_order', {
-        order_data: orderData,
-        order_id: orderId
-      });
+      // Convert frontend order to database format
+      const dbOrderData = mapOrderToDbOrder(orderData);
+      
+      // Start a transaction to update the orders table
+      const { data, error } = await supabase
+        .from('orders')
+        .update(dbOrderData)
+        .eq('id', orderId)
+        .select();
 
       if (error) throw error;
       return data;

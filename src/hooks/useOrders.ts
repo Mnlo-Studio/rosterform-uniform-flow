@@ -2,7 +2,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Order } from '@/types/orders';
+import { 
+  Order, 
+  DbOrder, 
+  mapDbOrderToOrder, 
+  mapOrderToDbOrder 
+} from '@/types/orders';
 
 export const useOrders = () => {
   const queryClient = useQueryClient();
@@ -22,21 +27,33 @@ export const useOrders = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data;
+      
+      // Transform database data to frontend format
+      return data.map(order => mapDbOrderToOrder(order));
     },
   });
 
   // Create order
   const createOrder = useMutation({
     mutationFn: async (orderData: Partial<Order>) => {
+      // Convert frontend order to database format
+      const dbOrderData = mapOrderToDbOrder(orderData);
+      
       const { data, error } = await supabase
         .from('orders')
-        .insert([orderData])
+        .insert([dbOrderData])
         .select()
         .single();
 
       if (error) throw error;
-      return data;
+      
+      // Map the response back to frontend format
+      return mapDbOrderToOrder({
+        ...data,
+        customer_info: null,
+        order_products: null,
+        order_players: null
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });
@@ -57,15 +74,25 @@ export const useOrders = () => {
   // Update order
   const updateOrder = useMutation({
     mutationFn: async ({ id, ...orderData }: Partial<Order> & { id: string }) => {
+      // Convert frontend order to database format
+      const dbOrderData = mapOrderToDbOrder(orderData);
+      
       const { data, error } = await supabase
         .from('orders')
-        .update(orderData)
+        .update(dbOrderData)
         .eq('id', id)
         .select()
         .single();
 
       if (error) throw error;
-      return data;
+      
+      // Map the response back to frontend format
+      return mapDbOrderToOrder({
+        ...data,
+        customer_info: null,
+        order_products: null,
+        order_players: null
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });

@@ -34,25 +34,6 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
   onPaymentChange
 }) => {
   const navigate = useNavigate();
-  
-  const getStatusBadgeClass = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getPaymentBadgeClass = (isPaid: boolean) => {
-    return isPaid 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-orange-100 text-orange-800';
-  };
 
   const handleOrderClick = (orderId: string, event: React.MouseEvent) => {
     // Only navigate if the click is not on a dropdown
@@ -86,13 +67,13 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
             ) : (
               orders.map((order, index) => (
                 <TableRow 
-                  key={order.orderId}
+                  key={order.id}
                   className={`cursor-pointer hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
-                  onClick={(e) => handleOrderClick(order.orderId, e)}
+                  onClick={(e) => handleOrderClick(order.id, e)}
                 >
                   <TableCell className="font-medium">{order.orderId}</TableCell>
                   <TableCell>{order.teamName}</TableCell>
-                  <TableCell>{order.date}</TableCell>
+                  <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
                   <TableCell className="text-center">{order.players.length}</TableCell>
                   <TableCell>{formatCurrency(order.total)}</TableCell>
                   <TableCell>
@@ -109,19 +90,19 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" className="w-[120px]">
                           <DropdownMenuItem 
-                            onClick={() => onStatusChange?.(order.orderId, 'Pending')}
+                            onClick={() => onStatusChange?.(order.id, 'Pending')}
                             className="cursor-pointer"
                           >
                             <StatusBadge status="pending" />
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => onStatusChange?.(order.orderId, 'Completed')}
+                            onClick={() => onStatusChange?.(order.id, 'Completed')}
                             className="cursor-pointer"
                           >
                             <StatusBadge status="success" label="Completed" />
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => onStatusChange?.(order.orderId, 'Cancelled')}
+                            onClick={() => onStatusChange?.(order.id, 'Cancelled')}
                             className="cursor-pointer"
                           >
                             <StatusBadge status="error" label="Cancelled" />
@@ -144,13 +125,13 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" className="w-[120px]">
                           <DropdownMenuItem 
-                            onClick={() => onPaymentChange?.(order.orderId, true)}
+                            onClick={() => onPaymentChange?.(order.id, true)}
                             className="cursor-pointer"
                           >
                             <StatusBadge status="paid" />
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => onPaymentChange?.(order.orderId, false)}
+                            onClick={() => onPaymentChange?.(order.id, false)}
                             className="cursor-pointer"
                           >
                             <StatusBadge status="unpaid" />

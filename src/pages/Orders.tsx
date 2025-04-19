@@ -15,8 +15,8 @@ const Orders = () => {
   // Filter orders based on search query and status
   const filteredOrders = orders?.filter(order => {
     const matchesSearch = !searchQuery || 
-      order.team_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.order_id.toLowerCase().includes(searchQuery.toLowerCase());
+      order.teamName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.orderId.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' || 
       order.status.toLowerCase() === statusFilter.toLowerCase();
@@ -49,7 +49,7 @@ const Orders = () => {
     try {
       await updateOrder.mutateAsync({
         id: orderId,
-        is_paid: isPaid
+        isPaid
       });
       
       toast.success(`Order ${orderId} payment status updated to ${isPaid ? 'Paid' : 'Unpaid'}`);
@@ -60,7 +60,7 @@ const Orders = () => {
 
   const getTotalPlayers = () => {
     return filteredOrders.reduce((total, order) => 
-      total + (order.order_players?.length || 0), 0);
+      total + order.players.length, 0);
   };
 
   const getTotalRevenue = () => {
