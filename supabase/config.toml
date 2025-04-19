@@ -48,6 +48,7 @@ additional_redirect_urls = ["https://localhost:3000"]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10
+
 [functions]
 [functions.generate-slug]
 verify_jwt = true

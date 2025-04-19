@@ -159,6 +159,39 @@ export type Database = {
         }
         Relationships: []
       }
+      public_forms: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          form_title: string | null
+          id: string
+          slug: string
+          team_name: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          form_title?: string | null
+          id?: string
+          slug: string
+          team_name: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          form_title?: string | null
+          id?: string
+          slug?: string
+          team_name?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       rosters: {
         Row: {
           address: string | null
@@ -209,7 +242,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_slug: {
+        Args: { team_name: string }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

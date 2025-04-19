@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { usePublicForm } from '@/hooks/usePublicForm';
