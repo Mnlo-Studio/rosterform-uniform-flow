@@ -1,79 +1,231 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useRoster } from '@/context/RosterContext';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { calculateTotalCost, calculateSizeBreakdown, calculateGenderBreakdown, formatCurrency } from '@/utils/calculations';
-import SubmitOrderButton from './SubmitOrderButton';
+import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
-const OrderSummary: React.FC = () => {
-  const { players, productInfo } = useRoster();
-  
-  const totalPlayers = players.length;
-  
-  // Calculate total cost based on all products assigned to players
-  const totalCost = calculateTotalCost(players, productInfo.products);
-  const sizeBreakdown = calculateSizeBreakdown(players);
-  const genderBreakdown = calculateGenderBreakdown(players);
+interface OrderSummaryProps {
+  isPublic?: boolean;
+}
 
-  // Get the average price of all products (for display purposes)
-  const averagePrice = productInfo.products.length 
-    ? productInfo.products.reduce((sum, product) => sum + product.pricePerItem, 0) / productInfo.products.length 
-    : 0;
+const OrderSummary: React.FC<OrderSummaryProps> = ({ isPublic = false }) => {
+  const { customerInfo, products, players, calculateTotalPrice, resetRosterState } = useRoster();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const totalAmount = calculateTotalPrice();
+
+  const handleSubmitOrder = async () => {
+    // Form validation
+    if (!customerInfo.teamName?.trim()) {
+      toast.error('Please enter a team name');
+      return;
+    }
+    if (!customerInfo.contactName?.trim()) {
+      toast.error('Please enter a contact name');
+      return;
+    }
+    if (!customerInfo.email?.trim()) {
+      toast.error('Please enter an email address');
+      return;
+    }
+    if (!customerInfo.phone?.trim()) {
+      toast.error('Please enter a phone number');
+      return;
+    }
+    if (!customerInfo.address?.trim()) {
+      toast.error('Please enter a shipping address');
+      return;
+    }
+    if (!customerInfo.city?.trim()) {
+      toast.error('Please enter a city');
+      return;
+    }
+    if (!customerInfo.state?.trim()) {
+      toast.error('Please enter a state');
+      return;
+    }
+    if (!customerInfo.zipCode?.trim()) {
+      toast.error('Please enter a zip code');
+      return;
+    }
+    if (products.length === 0) {
+      toast.error('Please add at least one product');
+      return;
+    }
+    if (players.length === 0) {
+      toast.error('Please add at least one player');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Generate order ID
+      const orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+      
+      // User ID (use the actual user ID if logged in, or "public" for public forms)
+      const userId = user?.id || 'public';
+      
+      // Create order in Supabase
+      const { data: order, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          order_id: orderId,
+          team_name: customerInfo.teamName,
+          user_id: userId,
+          total: totalAmount,
+          status: 'Pending',
+          date: new Date().toISOString(),
+        })
+        .select()
+        .single();
+      
+      if (orderError) throw new Error(orderError.message);
+      
+      // Create customer info record
+      const { error: customerError } = await supabase
+        .from('customer_info')
+        .insert({
+          order_id: order.id,
+          team_name: customerInfo.teamName,
+          contact_name: customerInfo.contactName,
+          email: customerInfo.email,
+          phone: customerInfo.phone,
+          address: customerInfo.address,
+          city: customerInfo.city,
+          state: customerInfo.state,
+          zip_code: customerInfo.zipCode,
+        });
+      
+      if (customerError) throw new Error(customerError.message);
+      
+      // Create product records
+      if (products.length > 0) {
+        const productsToInsert = products.map(product => ({
+          order_id: order.id,
+          name: product.name,
+          price_per_item: product.pricePerItem,
+          notes: product.notes || null,
+          images: product.images || null,
+        }));
+        
+        const { error: productsError } = await supabase
+          .from('order_products')
+          .insert(productsToInsert);
+        
+        if (productsError) throw new Error(productsError.message);
+      }
+      
+      // Create player records
+      if (players.length > 0) {
+        const playersToInsert = players.map(player => ({
+          order_id: order.id,
+          name: player.name,
+          number: player.number || null,
+          size: player.size || null,
+          gender: player.gender || null,
+        }));
+        
+        const { error: playersError } = await supabase
+          .from('order_players')
+          .insert(playersToInsert);
+        
+        if (playersError) throw new Error(playersError.message);
+      }
+      
+      // Show success message
+      toast.success('Order submitted successfully!');
+      setSubmitted(true);
+      
+      if (!isPublic) {
+        // For logged-in users, redirect to success page
+        setTimeout(() => {
+          resetRosterState();
+          navigate('/success', { 
+            state: { 
+              orderId: orderId,
+              teamName: customerInfo.teamName 
+            } 
+          });
+        }, 1500);
+      }
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      toast.error(`Failed to submit order: ${error.message || 'Unknown error'}`);
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle>Order Summary</CardTitle>
+    <Card className="shadow-sm border-gray-100">
+      <CardHeader>
+        <CardTitle className="text-xl font-semibold">Order Summary</CardTitle>
+        <CardDescription>
+          Review your order details before submitting
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex justify-between items-center border-b pb-2 border-neutral-200">
-            <span className="text-sm text-gray-500">Total Players:</span>
-            <span className="font-semibold">{totalPlayers}</span>
+          <div className="flex flex-col space-y-1.5">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Team Name:</span>
+              <span className="font-medium">{customerInfo.teamName || 'Not specified'}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Contact:</span>
+              <span className="font-medium">{customerInfo.contactName || 'Not specified'}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Total Items:</span>
+              <span className="font-medium">{players.length || 0}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Total Products:</span>
+              <span className="font-medium">{products.length || 0}</span>
+            </div>
+            <div className="flex justify-between font-medium mt-2 text-base">
+              <span>Total Amount:</span>
+              <span className="text-primary">${totalAmount.toFixed(2)}</span>
+            </div>
           </div>
           
-          <div className="flex justify-between items-center border-b pb-2 border-neutral-200">
-            <span className="text-sm text-gray-500">Avg. Price Per Item:</span>
-            <span className="font-semibold">{formatCurrency(averagePrice)}</span>
-          </div>
-          
-          <div className="flex justify-between items-center border-b pb-2 border-neutral-200">
-            <span className="text-sm text-gray-500">Total Cost:</span>
-            <span className="text-lg font-bold text-primary-700">{formatCurrency(totalCost)}</span>
-          </div>
-          
-          {totalPlayers > 0 && (
-            <>
-              <div className="pt-2">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Size Breakdown:</h4>
-                <div className="grid grid-cols-3 gap-2">
-                  {Object.entries(sizeBreakdown).map(([size, count]) => (
-                    <div key={size} className="text-xs bg-gray-50 p-2 rounded flex justify-between border border-neutral-100">
-                      <span>{size}:</span>
-                      <span className="font-medium">{count}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="pt-2">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Gender Breakdown:</h4>
-                <div className="grid grid-cols-3 gap-2">
-                  {Object.entries(genderBreakdown).map(([gender, count]) => (
-                    <div key={gender} className="text-xs bg-gray-50 p-2 rounded flex justify-between border border-neutral-100">
-                      <span>{gender}:</span>
-                      <span className="font-medium">{count}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
+          {submitted ? (
+            <div className="bg-green-50 p-4 rounded-md mt-4 text-center">
+              <CheckCircle className="h-8 w-8 mx-auto text-green-500 mb-2" />
+              <h3 className="font-medium text-green-800">Order Submitted Successfully!</h3>
+              <p className="text-sm text-green-700 mt-1">
+                {isPublic 
+                  ? "Thank you for your order. We'll be in touch soon!"
+                  : "You will be redirected to the confirmation page..."}
+              </p>
+            </div>
+          ) : (
+            <Button 
+              className="w-full" 
+              onClick={handleSubmitOrder}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  Submit Order <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
           )}
         </div>
       </CardContent>
-      <CardFooter>
-        <SubmitOrderButton />
-      </CardFooter>
     </Card>
   );
 };

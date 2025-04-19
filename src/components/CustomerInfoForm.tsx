@@ -9,32 +9,56 @@ import { useParams } from 'react-router-dom';
 
 interface CustomerInfoFormProps {
   isPublic?: boolean;
+  prefillData?: {
+    teamName?: string;
+    contactName?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    formId?: string;
+  };
 }
 
-const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ isPublic = false }) => {
+const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ 
+  isPublic = false,
+  prefillData = {} 
+}) => {
   const { customerInfo, updateCustomerInfo } = useRoster();
+  const { user } = useAuth();
   const { formId } = useParams<{ formId?: string }>();
   
-  // Only try to access useAuth if not in public mode
-  const auth = !isPublic ? useAuth() : null;
-  const user = auth?.user || null;
-
   useEffect(() => {
-    // Set an initial team name based on context
-    if (isPublic) {
-      if (formId && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
-        // For public forms with formId from the URL
-        updateCustomerInfo({ teamName: formId });
-      } else if (!customerInfo.teamName || customerInfo.teamName.trim() === '') {
-        // For standalone public form with no formId
-        updateCustomerInfo({ teamName: 'public-order-form' });
+    // Initialize form with prefill data if available
+    if (Object.keys(prefillData).length > 0) {
+      const updates: Partial<typeof customerInfo> = {};
+      
+      if (prefillData.teamName) updates.teamName = prefillData.teamName;
+      if (prefillData.contactName) updates.contactName = prefillData.contactName;
+      if (prefillData.email) updates.email = prefillData.email;
+      if (prefillData.phone) updates.phone = prefillData.phone;
+      if (prefillData.address) updates.address = prefillData.address;
+      if (prefillData.city) updates.city = prefillData.city;
+      if (prefillData.state) updates.state = prefillData.state;
+      if (prefillData.zipCode) updates.zipCode = prefillData.zipCode;
+      
+      if (Object.keys(updates).length > 0) {
+        updateCustomerInfo(updates);
       }
-    } else if (user && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
-      // For authenticated users, use their userId
-      const defaultTeamName = `roster-form-${user.id}`;
-      updateCustomerInfo({ teamName: defaultTeamName });
     }
-  }, [user, formId, customerInfo.teamName, updateCustomerInfo, isPublic]);
+    // Legacy params support
+    else if (formId) {
+      if (!customerInfo.teamName || customerInfo.teamName === '') {
+        updateCustomerInfo({ teamName: formId });
+      }
+    }
+    // Default behavior for logged in users
+    else if (!isPublic && user && (!customerInfo.teamName || customerInfo.teamName === '')) {
+      updateCustomerInfo({ teamName: 'roster-form' });
+    }
+  }, [prefillData, formId, isPublic, user, updateCustomerInfo]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,10 +77,12 @@ const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ isPublic = false })
             <Input
               id="teamName"
               name="teamName"
-              value={customerInfo.teamName}
+              value={customerInfo.teamName || ''}
               onChange={handleInputChange}
               placeholder="Enter team name"
               required
+              className="w-full"
+              disabled={isPublic && !!prefillData?.teamName}
             />
           </div>
           
@@ -65,10 +91,11 @@ const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ isPublic = false })
             <Input
               id="contactName"
               name="contactName"
-              value={customerInfo.contactName}
+              value={customerInfo.contactName || ''}
               onChange={handleInputChange}
               placeholder="John Smith"
               required
+              className="w-full"
             />
           </div>
           
@@ -78,10 +105,12 @@ const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ isPublic = false })
               id="email"
               name="email"
               type="email"
-              value={customerInfo.email}
+              value={customerInfo.email || ''}
               onChange={handleInputChange}
-              placeholder="coach@team.com"
+              placeholder="example@team.com"
               required
+              className="w-full"
+              disabled={isPublic && !!prefillData?.email}
             />
           </div>
           
@@ -91,65 +120,66 @@ const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ isPublic = false })
               id="phone"
               name="phone"
               type="tel"
-              value={customerInfo.phone}
+              value={customerInfo.phone || ''}
               onChange={handleInputChange}
               placeholder="(555) 123-4567"
               required
+              className="w-full"
             />
           </div>
         </div>
         
-        <h3 className="text-md font-medium mt-6 mb-3 text-gray-700">Shipping Address</h3>
+        <div className="mt-6">
+          <Label htmlFor="address">Shipping Address*</Label>
+          <Input
+            id="address"
+            name="address"
+            value={customerInfo.address || ''}
+            onChange={handleInputChange}
+            placeholder="123 Main St."
+            required
+            className="w-full mt-1"
+          />
+        </div>
         
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <div className="space-y-2">
-            <Label htmlFor="address">Street Address*</Label>
+            <Label htmlFor="city">City*</Label>
             <Input
-              id="address"
-              name="address"
-              value={customerInfo.address}
+              id="city"
+              name="city"
+              value={customerInfo.city || ''}
               onChange={handleInputChange}
-              placeholder="123 Main St."
+              placeholder="City"
               required
+              className="w-full"
             />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="city">City*</Label>
-              <Input
-                id="city"
-                name="city"
-                value={customerInfo.city}
-                onChange={handleInputChange}
-                placeholder="Springfield"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="state">State*</Label>
-              <Input
-                id="state"
-                name="state"
-                value={customerInfo.state}
-                onChange={handleInputChange}
-                placeholder="IL"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="zipCode">Zip Code*</Label>
-              <Input
-                id="zipCode"
-                name="zipCode"
-                value={customerInfo.zipCode}
-                onChange={handleInputChange}
-                placeholder="62704"
-                required
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="state">State*</Label>
+            <Input
+              id="state"
+              name="state"
+              value={customerInfo.state || ''}
+              onChange={handleInputChange}
+              placeholder="State"
+              required
+              className="w-full"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="zipCode">Zip Code*</Label>
+            <Input
+              id="zipCode"
+              name="zipCode"
+              value={customerInfo.zipCode || ''}
+              onChange={handleInputChange}
+              placeholder="12345"
+              required
+              className="w-full"
+            />
           </div>
         </div>
       </CardContent>

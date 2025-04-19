@@ -1,6 +1,6 @@
-import React from 'react';
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+
+import React from "react";
+import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -8,17 +8,22 @@ import { RosterProvider } from "@/context/RosterContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { LayoutProvider } from "@/context/LayoutContext";
 import MainLayout from "@/components/layout/MainLayout";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import Index from "./pages/Index";
-import Success from "./pages/Success";
-import NotFound from "./pages/NotFound";
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
+import NotFound from "./pages/NotFound";
 import ShareEmbed from "./pages/ShareEmbed";
-import Dashboard from "./pages/Dashboard";
 import Account from "./pages/Account";
-import Auth from "./pages/Auth";
-import PublicOrderForm from "./pages/PublicOrderForm"; // ✅ Make sure this file exists
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+
+// Import Order Form Pages
+import OrderForm from "./pages/Index";
+import PublicOrderForm from "./pages/PublicOrderForm";
+import Success from "./pages/Success";
+
+// Import Public Form Page
+import PublicFormPage from "./pages/PublicFormPage";
 
 const queryClient = new QueryClient();
 
@@ -26,29 +31,29 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
       <BrowserRouter>
         <AuthProvider>
           <LayoutProvider>
             <Routes>
-              {/* ✅ PUBLIC ORDER FORM */}
+              {/* Public Form Routes */}
+              <Route path="/form/:slug" element={
+                <RosterProvider>
+                  <PublicFormPage />
+                </RosterProvider>
+              } />
+              
+              {/* Legacy public form route */}
               <Route path="/form" element={
                 <RosterProvider>
                   <PublicOrderForm />
                 </RosterProvider>
               } />
-
-              {/* ✅ AUTH ROUTE */}
+              
+              {/* Auth Routes */}
               <Route path="/auth" element={<Auth />} />
-
-              {/* ✅ PROTECTED ROUTES */}
+              
+              {/* Protected Routes */}
               <Route path="/" element={
-                <ProtectedRoute>
-                  <Navigate to="/dashboard" replace />
-                </ProtectedRoute>
-              } />
-
-              <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <MainLayout>
                     <Dashboard />
@@ -60,7 +65,7 @@ const App = () => (
                 <ProtectedRoute>
                   <MainLayout>
                     <RosterProvider>
-                      <Index />
+                      <OrderForm />
                     </RosterProvider>
                   </MainLayout>
                 </ProtectedRoute>
@@ -112,7 +117,7 @@ const App = () => (
                 </ProtectedRoute>
               } />
 
-              {/* CATCH ALL */}
+              {/* 404 Not Found */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </LayoutProvider>
