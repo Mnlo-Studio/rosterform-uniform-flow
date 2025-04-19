@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit, PlusIcon } from "lucide-react";
 import OrderStatusOverview from "@/components/dashboard/OrderStatusOverview";
@@ -16,7 +16,6 @@ const Dashboard: React.FC = () => {
   
   const userData = {
     name: user?.user_metadata?.name || "User",
-    email: user?.email || ""
   };
 
   const { orders, isLoading, addSampleOrder } = useOrders();
@@ -46,8 +45,7 @@ const Dashboard: React.FC = () => {
         <CardContent className="pt-6">
           <div className="flex justify-between items-start">
             <div>
-              <h2>{userData.name}</h2>
-              <p className="text-gray-600">{userData.email}</p>
+              <h2>Hello, {userData.name}</h2>
             </div>
             <Button variant="ghost" size="sm" className="gap-2 text-primary-700">
               <Edit className="h-4 w-4" />
