@@ -5,7 +5,7 @@ import { Player } from '@/types';
 
 export const useQuickAdd = () => {
   const [quickAddCount, setQuickAddCount] = useState<number | null>(1); // Set default to 1
-  const { addPlayers, bulkAssignProductToPlayers } = useRoster();
+  const { addPlayers } = useRoster();
 
   const handleQuickAddSelection = (count: number) => {
     console.log('Quick add selection:', count);
@@ -19,14 +19,8 @@ export const useQuickAdd = () => {
     const newPlayers = addPlayers(count);
     console.log('New players added:', newPlayers);
     
-    // If there's a selected product, assign it to the newly added players
-    if (selectedProductId) {
-      console.log(`Assigning product ${selectedProductId} to new players`);
-      bulkAssignProductToPlayers(selectedProductId);
-    }
-    
     return newPlayers || []; // Ensure we always return an array
-  }, [addPlayers, bulkAssignProductToPlayers]);
+  }, [addPlayers]);
 
   return {
     quickAddCount,

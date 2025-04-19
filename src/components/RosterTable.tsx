@@ -81,34 +81,34 @@ const RosterTable: React.FC = () => {
           </div>
         )}
         
-        {isMobile ? (
-          <MobilePlayerList 
-            players={players}
-            showName={bulkOptions.showName}
-            showNumber={bulkOptions.showNumber}
-            showShortsSize={bulkOptions.showShortsSize}
-            showSockSize={bulkOptions.showSockSize}
-            showInitials={bulkOptions.showInitials}
-            onRemove={removePlayer}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
-          />
+        {players.length > 0 ? (
+          isMobile ? (
+            <MobilePlayerList 
+              players={players}
+              showName={bulkOptions.showName}
+              showNumber={bulkOptions.showNumber}
+              showShortsSize={bulkOptions.showShortsSize}
+              showSockSize={bulkOptions.showSockSize}
+              showInitials={bulkOptions.showInitials}
+              onRemove={removePlayer}
+              onInputChange={handleInputChange}
+              onSelectChange={handleSelectChange}
+            />
+          ) : (
+            <DesktopPlayerList 
+              players={players}
+              showName={bulkOptions.showName}
+              showNumber={bulkOptions.showNumber}
+              showShortsSize={bulkOptions.showShortsSize}
+              showSockSize={bulkOptions.showSockSize}
+              showInitials={bulkOptions.showInitials}
+              totalColumns={totalColumns}
+              onRemove={removePlayer}
+              onInputChange={handleInputChange}
+              onSelectChange={handleSelectChange}
+            />
+          )
         ) : (
-          <DesktopPlayerList 
-            players={players}
-            showName={bulkOptions.showName}
-            showNumber={bulkOptions.showNumber}
-            showShortsSize={bulkOptions.showShortsSize}
-            showSockSize={bulkOptions.showSockSize}
-            showInitials={bulkOptions.showInitials}
-            totalColumns={totalColumns}
-            onRemove={removePlayer}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
-          />
-        )}
-        
-        {players.length === 0 && (
           <EmptyRoster 
             totalColumns={totalColumns} 
             isMobile={isMobile}

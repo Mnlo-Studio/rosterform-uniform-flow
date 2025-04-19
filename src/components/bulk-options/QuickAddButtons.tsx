@@ -42,10 +42,15 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
         defaultValue="1"
       >
         <SelectTrigger id="quickAddDropdown" className="w-full">
-          <SelectValue>{getDisplayValue()} Player{getDisplayValue() !== '1' ? 's' : ''}</SelectValue>
+          <SelectValue>
+            <div className="flex items-center">
+              <Plus className="mr-2 h-4 w-4" />
+              Add {getDisplayValue()} Player{getDisplayValue() !== '1' ? 's' : ''}
+            </div>
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="1" defaultChecked>
+          <SelectItem value="1">
             <div className="flex items-center">
               <Plus className="mr-2 h-4 w-4" />
               Add 1 Player

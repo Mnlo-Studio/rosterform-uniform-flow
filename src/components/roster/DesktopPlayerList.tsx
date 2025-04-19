@@ -3,6 +3,7 @@ import React from 'react';
 import { Player } from '@/types';
 import PlayerRow from './PlayerRow';
 import RosterTableHeader from './RosterTableHeader';
+import EmptyRoster from './EmptyRoster';
 import {
   Table,
   TableBody,
@@ -69,11 +70,7 @@ const DesktopPlayerList: React.FC<DesktopPlayerListProps> = ({
                 />
               ))
             ) : (
-              <tr>
-                <td colSpan={totalColumns} className="text-center p-6 text-gray-500">
-                  No players added yet. Use the buttons above to add players.
-                </td>
-              </tr>
+              <EmptyRoster totalColumns={totalColumns} isMobile={false} />
             )}
           </TableBody>
         </Table>
