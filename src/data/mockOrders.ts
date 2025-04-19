@@ -1,3 +1,4 @@
+
 import { Order } from '@/types/orders';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -34,6 +35,7 @@ export const mockOrders: Order[] = [
     players: createRandomPlayers(12),
     customerInfo: {
       id: uuidv4(),
+      teamName: 'Eagles Basketball', // Added teamName property
       contactName: 'John Smith',
       email: 'john@eagles.com',
       phone: '555-123-4567',
@@ -83,6 +85,7 @@ export const mockOrders: Order[] = [
     players: createRandomPlayers(10),
     customerInfo: {
       id: uuidv4(),
+      teamName: 'Tigers Soccer', // Added teamName property
       contactName: 'Jane Doe',
       email: 'jane@tigers.com',
       phone: '555-987-6543',
@@ -134,6 +137,7 @@ export const mockOrders: Order[] = [
     players: createRandomPlayers(14),
     customerInfo: {
       id: uuidv4(),
+      teamName: 'Wolves Baseball', // Added teamName property
       contactName: 'Mike Johnson',
       email: 'mike@wolves.com',
       phone: '555-456-7890',
@@ -183,6 +187,7 @@ export const mockOrders: Order[] = [
     players: createRandomPlayers(8),
     customerInfo: {
       id: uuidv4(),
+      teamName: 'Hawks Volleyball', // Added teamName property
       contactName: 'Sarah Williams',
       email: 'sarah@hawks.com',
       phone: '555-789-0123',
@@ -232,6 +237,7 @@ export const mockOrders: Order[] = [
     players: createRandomPlayers(15),
     customerInfo: {
       id: uuidv4(),
+      teamName: 'Panthers Football', // Added teamName property
       contactName: 'Robert Davis',
       email: 'robert@panthers.com',
       phone: '555-321-6547',

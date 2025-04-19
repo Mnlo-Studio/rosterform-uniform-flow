@@ -47,10 +47,20 @@ export const useOrders = () => {
       // Convert frontend order to database format
       const dbOrderData = mapOrderToDbOrder(orderData);
       
+      // The key issue here was that we need to ensure required fields are provided
+      // For Supabase, order_id and team_name are required fields
+      const preparedData = {
+        ...dbOrderData,
+        // Ensure required fields are provided
+        order_id: dbOrderData.order_id || `ORD-${Date.now()}`,
+        team_name: dbOrderData.team_name || 'Untitled Team',
+        user_id: dbOrderData.user_id || '00000000-0000-0000-0000-000000000000'
+      };
+      
       // Insert single row, not an array
       const { data, error } = await supabase
         .from('orders')
-        .insert(dbOrderData)
+        .insert(preparedData)
         .select()
         .single();
 
