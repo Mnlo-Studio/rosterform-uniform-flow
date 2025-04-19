@@ -26,7 +26,7 @@ export const useRosterState = (): RosterContextType => {
   const [bulkOptions, setBulkOptions] = useState<BulkOptions>(initialBulkOptions);
 
   // Player management functions
-  const addPlayers = useCallback((count: number) => {
+  const addPlayers = useCallback((count: number): Player[] => {
     console.log(`useRosterState: Adding ${count} players with default product ID`);
     const defaultProductId = productInfo.products.length === 1 ? productInfo.products[0].id : undefined;
     console.log('Default product ID:', defaultProductId);

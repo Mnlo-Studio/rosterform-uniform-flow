@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useToast } from '@/hooks/use-toast';
+import { Player } from '@/types';
 
 export const useBulkOptions = () => {
   const {
@@ -105,8 +106,8 @@ export const useBulkOptions = () => {
     setSelectedProductId(productId);
   };
   
-  // Function to add players with the given count
-  const addPlayersWithCount = useCallback((count: number) => {
+  // Function to add players with the given count - explicitly typed to return Player[]
+  const addPlayersWithCount = useCallback((count: number): Player[] => {
     if (count <= 0) return [];
     
     console.log(`Adding ${count} players`);
@@ -119,7 +120,7 @@ export const useBulkOptions = () => {
       bulkAssignProductToPlayers(selectedProductId);
     }
     
-    return newPlayers;
+    return newPlayers || []; // Ensure we always return an array
   }, [addPlayers, bulkAssignProductToPlayers, selectedProductId]);
   
   const handleApplyChanges = () => {
@@ -192,9 +193,9 @@ export const useBulkOptions = () => {
     handleSizeChange,
     handleNumberFillChange,
     handleNamePrefixTypeChange,
+    handleNameCaseChange,
     handleNamePrefixChange,
     handleNumberPrefixChange,
-    handleNameCaseChange,
     toggleOption,
     handleQuickAddSelection,
     handleProductSelection,

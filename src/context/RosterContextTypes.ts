@@ -6,7 +6,7 @@ export interface RosterContextType {
   customerInfo: CustomerInfo;
   productInfo: ProductInfo;
   bulkOptions: BulkOptions;
-  addPlayers: (count: number) => void;
+  addPlayers: (count: number) => Player[];
   removePlayer: (id: string) => void;
   updatePlayer: (id: string, data: Partial<Player>) => void;
   updateCustomerInfo: (data: Partial<CustomerInfo>) => void;
