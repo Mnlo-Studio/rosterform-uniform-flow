@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import EmbedCodeBlock from "@/components/embed/EmbedCodeBlock";
 import TipsAndTroubleshooting from "@/components/embed/TipsAndTroubleshooting";
 import PageHeader from "@/components/embed/PageHeader";
+import ShareLinkButton from "@/components/embed/ShareLinkButton";
 
 const ShareEmbed = () => {
   const { user } = useAuth();
@@ -15,9 +17,9 @@ const ShareEmbed = () => {
   const formId = `roster-form-${userId}`;
   const embedDomain = "embed.rosterform.com";
   
-  // Updated domain and route for sharing
+  // Updated domain and route for sharing - Using direct order path
   const shareDomain = "rosterform.com";
-  const shareURL = `https://${shareDomain}/orders/${userId}`;
+  const shareURL = `https://${shareDomain}/order/${userId}`;
   
   const inlineCode = `<div data-form-id="${formId}"></div>
 <script>(function() {
@@ -38,6 +40,14 @@ const ShareEmbed = () => {
       
       <Card className="mt-6">
         <CardContent className="pt-6">
+          <div className="text-center mb-8">
+            <h3 className="text-lg font-medium mb-2">Your public share link:</h3>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+              <code className="break-all">{shareURL}</code>
+            </div>
+            <ShareLinkButton shareURL={shareURL} />
+          </div>
+          
           <Tabs defaultValue="inline" className="w-full">
             <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="inline">Inline Embed</TabsTrigger>

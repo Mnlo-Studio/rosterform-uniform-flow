@@ -25,12 +25,13 @@ const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
   };
 
   const openShareLink = () => {
+    // Use window.open with "_blank" to ensure it opens in a new tab
     window.open(publicFormURL, '_blank', 'noopener,noreferrer');
     toast.success("Opening order form in a new tab");
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 justify-center">
       <Button 
         variant="outline" 
         className="gap-2" 
