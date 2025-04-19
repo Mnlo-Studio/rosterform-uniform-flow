@@ -1,12 +1,15 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Link2, Check, Copy } from "lucide-react";
+import { Link2, Check } from "lucide-react";
 import { toast } from "sonner";
 
-const ShareLinkButton: React.FC = () => {
+interface ShareLinkButtonProps {
+  shareURL: string;
+}
+
+const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
   const [copied, setCopied] = useState(false);
-  const shareURL = "https://app.rosterform.com/form/roster-order-form";
   
   const copyShareLink = () => {
     navigator.clipboard.writeText(shareURL);

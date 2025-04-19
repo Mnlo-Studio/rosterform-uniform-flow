@@ -2,7 +2,11 @@
 import React from "react";
 import ShareLinkButton from "./ShareLinkButton";
 
-const PageHeader: React.FC = () => {
+interface PageHeaderProps {
+  shareURL: string;
+}
+
+const PageHeader: React.FC<PageHeaderProps> = ({ shareURL }) => {
   return (
     <div className="text-center mb-8">
       <h1>Share & Integrate Your Roster Form</h1>
@@ -10,7 +14,7 @@ const PageHeader: React.FC = () => {
         Choose from different embedding options to integrate your roster form into your website or application.
       </p>
       <div className="mt-4 flex justify-center">
-        <ShareLinkButton />
+        <ShareLinkButton shareURL={shareURL} />
       </div>
     </div>
   );

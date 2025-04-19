@@ -1,32 +1,40 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
 import EmbedCodeBlock from "@/components/embed/EmbedCodeBlock";
 import TipsAndTroubleshooting from "@/components/embed/TipsAndTroubleshooting";
 import PageHeader from "@/components/embed/PageHeader";
 
 const ShareEmbed = () => {
-  const inlineCode = `<div data-form-id="roster-order-form"></div>
+  const { user } = useAuth();
+  const userId = user?.id || '';
+  
+  const formId = `roster-form-${userId}`;
+  const embedDomain = "embed.rosterform.com";
+  const shareDomain = "www.rosterform.com";
+  
+  const inlineCode = `<div data-form-id="${formId}"></div>
 <script>(function() {
   var script = document.createElement("script");
-  script.src = "https://embed.rosterform.com/embed.min.js";
+  script.src = "https://${embedDomain}/embed.min.js";
   document.body.appendChild(script);
 })();</script>`;
 
-  const fullScreenCode = `<iframe src="https://embed.rosterform.com/fullscreen/roster-order-form" width="100%" height="100%" style="border:none;"></iframe>`;
+  const fullScreenCode = `<iframe src="https://${embedDomain}/fullscreen/${formId}" width="100%" height="100%" style="border:none;"></iframe>`;
 
-  const popupCode = `<script src="https://embed.rosterform.com/embed.min.js"></script>`;
-  const popupUsageCode = `<button data-form-id="roster-order-form" data-popup-button="true">Open Roster Form</button>`;
-  const popupManualCode = `RosterForm.popup('roster-order-form');`;
+  const popupCode = `<script src="https://${embedDomain}/embed.min.js"></script>`;
+  const popupUsageCode = `<button data-form-id="${formId}" data-popup-button="true">Open Roster Form</button>`;
+  const popupManualCode = `RosterForm.popup('${formId}');`;
+  
+  const shareURL = `https://${shareDomain}/order/${formId}`;
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <PageHeader />
+      <PageHeader shareURL={shareURL} />
       
       <Card className="mt-6">
         <CardContent className="pt-6">
