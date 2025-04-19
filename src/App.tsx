@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -18,6 +19,7 @@ import ShareEmbed from "./pages/ShareEmbed";
 import Dashboard from "./pages/Dashboard";
 import Account from "./pages/Account";
 import Auth from "./pages/Auth";
+import PublicOrderForm from "./pages/PublicOrderForm";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,9 @@ const App = () => (
                 
                 {/* Auth route */}
                 <Route path="/auth" element={<Auth />} />
+                
+                {/* Public routes that don't require authentication */}
+                <Route path="/order/:formId" element={<PublicOrderForm />} />
                 
                 {/* All other routes protected and using MainLayout */}
                 <Route path="*" element={

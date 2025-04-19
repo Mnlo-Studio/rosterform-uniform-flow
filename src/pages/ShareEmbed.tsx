@@ -30,6 +30,7 @@ const ShareEmbed = () => {
   const popupUsageCode = `<button data-form-id="${formId}" data-popup-button="true">Open Roster Form</button>`;
   const popupManualCode = `RosterForm.popup('${formId}');`;
   
+  // Update the share URL to match the new public route format
   const shareURL = `https://${shareDomain}/order/${formId}`;
 
   return (

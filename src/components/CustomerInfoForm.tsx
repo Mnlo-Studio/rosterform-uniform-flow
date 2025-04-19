@@ -1,20 +1,31 @@
+
 import React, { useEffect } from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { useAuth } from '@/context/AuthContext';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useParams } from 'react-router-dom';
 
-const CustomerInfoForm: React.FC = () => {
+interface CustomerInfoFormProps {
+  isPublic?: boolean;
+}
+
+const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ isPublic = false }) => {
   const { customerInfo, updateCustomerInfo } = useRoster();
   const { user } = useAuth();
+  const { formId } = useParams<{ formId?: string }>();
 
   useEffect(() => {
-    if (user && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
+    if (isPublic && formId && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
+      // For public forms, use the formId from the URL
+      updateCustomerInfo({ teamName: formId });
+    } else if (user && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
+      // For authenticated users, use their userId
       const defaultTeamName = `roster-form-${user.id}`;
       updateCustomerInfo({ teamName: defaultTeamName });
     }
-  }, [user, customerInfo.teamName, updateCustomerInfo]);
+  }, [user, formId, customerInfo.teamName, updateCustomerInfo, isPublic]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
