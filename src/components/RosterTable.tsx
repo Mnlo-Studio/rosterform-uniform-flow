@@ -8,13 +8,11 @@ import { AlertTriangle } from 'lucide-react';
 import MobilePlayerList from './roster/MobilePlayerList';
 import DesktopPlayerList from './roster/DesktopPlayerList';
 import EmptyRoster from './roster/EmptyRoster';
-import { Button } from '@/components/ui/button';
 
 const RosterTable: React.FC = () => {
   const { 
     players, 
     bulkOptions, 
-    addPlayers, 
     removePlayer, 
     updatePlayer,
     productInfo,
@@ -29,12 +27,6 @@ const RosterTable: React.FC = () => {
 
   const handleSelectChange = (id: string, field: keyof Player, value: string) => {
     updatePlayer(id, { [field]: value });
-  };
-
-  const handleAddPlayers = (count: number = 5) => {
-    console.log(`RosterTable: Adding ${count} players`);
-    const newPlayers = addPlayers(count);
-    console.log('RosterTable: New players:', newPlayers);
   };
 
   // Calculate the additional columns
@@ -63,12 +55,7 @@ const RosterTable: React.FC = () => {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-xl font-semibold text-gray-800">Team Roster</CardTitle>
-          <Button onClick={() => handleAddPlayers(5)} variant="default">
-            Add 5 Players
-          </Button>
-        </div>
+        <CardTitle className="text-xl font-semibold text-gray-800">Team Roster</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
         {showNoProductsWarning && (
@@ -119,8 +106,7 @@ const RosterTable: React.FC = () => {
         {players.length === 0 && (
           <EmptyRoster 
             totalColumns={totalColumns} 
-            isMobile={isMobile} 
-            onAddPlayers={handleAddPlayers}
+            isMobile={isMobile}
           />
         )}
       </CardContent>
@@ -129,3 +115,4 @@ const RosterTable: React.FC = () => {
 };
 
 export default RosterTable;
+
