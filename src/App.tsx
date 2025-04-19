@@ -31,7 +31,7 @@ const App = () => (
       <BrowserRouter>
         <LayoutProvider>
           <Routes>
-            {/* Public order form route outside of auth context */}
+            {/* Public order form route - completely separate from auth routes */}
             <Route 
               path="/order/:formId" 
               element={
@@ -41,39 +41,46 @@ const App = () => (
               } 
             />
 
-            {/* All other routes with AuthProvider */}
-            <Route path="*" element={
-              <AuthProvider>
-                <Routes>
-                  {/* Make Auth the default route */}
-                  <Route path="/" element={<Navigate to="/auth" replace />} />
-                  
-                  {/* Auth route */}
-                  <Route path="/auth" element={<Auth />} />
-                  
-                  {/* All other routes protected and using MainLayout */}
-                  <Route path="*" element={
-                    <ProtectedRoute>
-                      <MainLayout>
-                        <RosterProvider>
-                          <Routes>
-                            <Route path="/order-form" element={<Index />} />
-                            <Route path="/success" element={<Success />} />
-                            <Route path="/orders" element={<Orders />} />
-                            <Route path="/orders/:orderId" element={<OrderDetails />} />
-                            <Route path="/share" element={<ShareEmbed />} />
-                            <Route path="/dashboard" element={<Dashboard />} />
-                            <Route path="/account" element={<Account />} />
-                            {/* Catch-all route */}
-                            <Route path="*" element={<NotFound />} />
-                          </Routes>
-                        </RosterProvider>
-                      </MainLayout>
-                    </ProtectedRoute>
-                  } />
-                </Routes>
-              </AuthProvider>
-            } />
+            {/* Auth route - completely public */}
+            <Route path="/auth" element={<Auth />} />
+
+            {/* Protected routes with auth check */}
+            <Route 
+              path="/*" 
+              element={
+                <AuthProvider>
+                  <Routes>
+                    {/* Redirect root to dashboard if authenticated, otherwise to auth */}
+                    <Route path="/" element={
+                      <ProtectedRoute>
+                        <Navigate to="/dashboard" replace />
+                      </ProtectedRoute>
+                    } />
+                    
+                    {/* All protected routes using MainLayout */}
+                    <Route path="*" element={
+                      <ProtectedRoute>
+                        <MainLayout>
+                          <RosterProvider>
+                            <Routes>
+                              <Route path="/order-form" element={<Index />} />
+                              <Route path="/success" element={<Success />} />
+                              <Route path="/orders" element={<Orders />} />
+                              <Route path="/orders/:orderId" element={<OrderDetails />} />
+                              <Route path="/share" element={<ShareEmbed />} />
+                              <Route path="/dashboard" element={<Dashboard />} />
+                              <Route path="/account" element={<Account />} />
+                              {/* Catch-all route */}
+                              <Route path="*" element={<NotFound />} />
+                            </Routes>
+                          </RosterProvider>
+                        </MainLayout>
+                      </ProtectedRoute>
+                    } />
+                  </Routes>
+                </AuthProvider>
+              }
+            />
           </Routes>
         </LayoutProvider>
       </BrowserRouter>

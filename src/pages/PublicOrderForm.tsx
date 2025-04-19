@@ -12,12 +12,14 @@ const PublicOrderForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    // You could load specific form data based on formId here
     console.log(`Loading public form with ID: ${formId}`);
-    // Simulate fetching data
-    setTimeout(() => {
+    
+    // Simulate loading data
+    const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500);
+    
+    return () => clearTimeout(timer);
   }, [formId]);
 
   if (isLoading) {
