@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,8 +15,8 @@ const ShareEmbed = () => {
   const formId = `roster-form-${userId}`;
   const embedDomain = "embed.rosterform.com";
   
-  // Use absolute URL without www to prevent routing confusion
-  const shareDomain = "rosterform.com";
+  // Update the domain to the correct production domain
+  const shareDomain = "rosterform.com"; // This should match your actual production domain
   const shareURL = `https://${shareDomain}/order/${formId}`;
   
   const inlineCode = `<div data-form-id="${formId}"></div>
