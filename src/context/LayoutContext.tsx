@@ -5,6 +5,8 @@ import { useLocation } from 'react-router-dom';
 type LayoutContextType = {
   isDashboardLayout: boolean;
   toggleSidebar: () => void;
+  isSidebarOpen: boolean;
+  closeSidebar: () => void;
 };
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
@@ -22,11 +24,15 @@ const PUBLIC_PARAMS = ['share=true', 'embed=true'];
 
 export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isDashboardLayout, setIsDashboardLayout] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+  
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
   };
   
   useEffect(() => {
@@ -37,10 +43,15 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const shouldUseDashboardLayout = !isPublicRoute && !hasPublicParam && !isSharePath;
     
     setIsDashboardLayout(shouldUseDashboardLayout);
+    
+    // Close the sidebar when changing routes on mobile
+    if (window.innerWidth < 768) {
+      closeSidebar();
+    }
   }, [location]);
 
   return (
-    <LayoutContext.Provider value={{ isDashboardLayout, toggleSidebar }}>
+    <LayoutContext.Provider value={{ isDashboardLayout, toggleSidebar, isSidebarOpen, closeSidebar }}>
       {children}
     </LayoutContext.Provider>
   );

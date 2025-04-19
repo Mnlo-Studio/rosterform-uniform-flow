@@ -44,15 +44,15 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 rounded-lg">
-      <h1 className="mb-2">Dashboard</h1>
-      <p className="text-gray-600 mb-6">Manage your orders, statistics, and roster tools.</p>
+    <div className="max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
+      <h1 className="mb-2 text-xl sm:text-2xl">Dashboard</h1>
+      <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Manage your orders, statistics, and roster tools.</p>
       
-      <Card className="mb-6 shadow-card">
-        <CardContent className="pt-6">
+      <Card className="mb-4 sm:mb-6 shadow-card">
+        <CardContent className="pt-4 sm:pt-6">
           <div className="flex justify-between items-start">
             <div>
-              <h2>Hello, {userData.name}</h2>
+              <h2 className="text-lg sm:text-xl">Hello, {userData.name}</h2>
             </div>
             <Button 
               variant="ghost" 
@@ -61,16 +61,16 @@ const Dashboard: React.FC = () => {
               onClick={handleEditProfile}
             >
               <Edit className="h-4 w-4" />
-              <span>Edit Profile</span>
+              <span className="hidden sm:inline">Edit Profile</span>
             </Button>
           </div>
         </CardContent>
       </Card>
       
       {isLoading ? (
-        <div className="space-y-6">
-          <Skeleton className="h-[200px] w-full" />
-          <Skeleton className="h-[400px] w-full" />
+        <div className="space-y-4 sm:space-y-6">
+          <Skeleton className="h-[150px] sm:h-[200px] w-full" />
+          <Skeleton className="h-[300px] sm:h-[400px] w-full" />
         </div>
       ) : orders && orders.length > 0 ? (
         <>
@@ -85,19 +85,19 @@ const Dashboard: React.FC = () => {
           <SummaryStatistics orders={orders} />
         </>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-10 text-center">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 p-4 sm:p-10 text-center">
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="bg-gray-50 rounded-full p-4">
               <PlusIcon className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium">No orders yet</h3>
-            <p className="text-gray-500 max-w-md mb-4">
+            <h3 className="text-base sm:text-lg font-medium">No orders yet</h3>
+            <p className="text-gray-500 text-sm sm:text-base max-w-md mb-4">
               You haven't created any orders yet. Create your first order or add a sample order to get started.
             </p>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               <Button 
                 onClick={handleCreateNewOrder} 
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 <PlusIcon className="h-4 w-4" />
                 Create New Order
@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
               <Button 
                 variant="outline"
                 onClick={handleCreateSampleOrder}
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 Add Sample Order
               </Button>

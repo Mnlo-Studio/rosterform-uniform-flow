@@ -3,14 +3,17 @@ import React from "react";
 import { SidebarProvider, SidebarRail } from "@/components/ui/sidebar";
 import MobileHeader from "./MobileHeader";
 import MainSidebar from "./Sidebar";
+import { useLayout } from "@/context/LayoutContext";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+  const { isSidebarOpen } = useLayout();
+  
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={isSidebarOpen}>
       <div className="flex min-h-screen w-full flex-col">
         <MobileHeader />
         <div className="flex flex-1">
