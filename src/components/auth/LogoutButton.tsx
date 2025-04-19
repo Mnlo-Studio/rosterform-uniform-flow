@@ -6,9 +6,10 @@ import { useAuth } from '@/context/AuthContext';
 
 interface LogoutButtonProps {
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  className?: string;
 }
 
-const LogoutButton: React.FC<LogoutButtonProps> = ({ variant = 'outline' }) => {
+const LogoutButton: React.FC<LogoutButtonProps> = ({ variant = 'outline', className }) => {
   const { signOut, isLoading } = useAuth();
   
   const handleLogout = async () => {
@@ -24,7 +25,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ variant = 'outline' }) => {
       variant={variant} 
       onClick={handleLogout} 
       disabled={isLoading}
-      className="flex items-center gap-2"
+      className={`flex items-center gap-2 ${className || ''}`}
     >
       <LogOut className="h-4 w-4" />
       <span>Sign Out</span>
