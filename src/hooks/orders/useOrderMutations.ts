@@ -12,13 +12,15 @@ export const useOrderMutations = () => {
 
   const createOrder = useMutation({
     mutationFn: async (orderData: Partial<Order>) => {
+      if (!userId) throw new Error("User not authenticated");
+      
       const dbOrderData = mapOrderToDbOrder(orderData);
       
       const preparedData = {
         ...dbOrderData,
         order_id: dbOrderData.order_id || `ORD-${Date.now()}`,
         team_name: dbOrderData.team_name || 'Untitled Team',
-        user_id: userId || '00000000-0000-0000-0000-000000000000'
+        user_id: userId
       };
       
       console.log('Creating order with data:', preparedData);
@@ -61,6 +63,8 @@ export const useOrderMutations = () => {
 
   const updateOrder = useMutation({
     mutationFn: async ({ id, ...orderData }: Partial<Order> & { id: string }) => {
+      if (!userId) throw new Error("User not authenticated");
+      
       const dbOrderData = mapOrderToDbOrder(orderData);
       
       console.log('Updating order:', id, 'with data:', dbOrderData);
