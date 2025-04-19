@@ -42,7 +42,7 @@ export const useBulkOptions = () => {
       if (quickAddCount && quickAddCount > 0) {
         const newPlayers = addPlayersWithCount(quickAddCount, selectedProductId);
         
-        if (newPlayers.length > 0) {
+        if (newPlayers && newPlayers.length > 0) {
           messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
           handleQuickAddSelection(0); // Reset after applying
           changesMade = true;

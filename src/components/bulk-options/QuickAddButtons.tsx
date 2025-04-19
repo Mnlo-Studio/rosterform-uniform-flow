@@ -20,13 +20,9 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
 }) => {
   const handleQuickAddChange = (value: string) => {
     console.log('Quick add selected:', value);
-    // Convert the string value to a number or null if empty/invalid
-    const numValue = value ? parseInt(value, 10) : null;
-    if (numValue !== null && !isNaN(numValue)) {
-      onSelectQuickAdd(numValue);
-    } else {
-      onSelectQuickAdd(0); // Use 0 to represent no selection
-    }
+    // Convert the string value to a number
+    const numValue = value ? parseInt(value, 10) : 0;
+    onSelectQuickAdd(numValue);
   };
 
   // Format the display value for the select

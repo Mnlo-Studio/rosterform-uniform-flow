@@ -9,11 +9,11 @@ export const useQuickAdd = () => {
 
   const handleQuickAddSelection = (count: number) => {
     console.log('Quick add selection:', count);
-    setQuickAddCount(count);
+    setQuickAddCount(count === 0 ? null : count);
   };
 
   const addPlayersWithCount = useCallback((count: number, selectedProductId?: string): Player[] => {
-    if (count <= 0) return [];
+    if (!count || count <= 0) return [];
     
     console.log(`Adding ${count} players`);
     const newPlayers = addPlayers(count);
