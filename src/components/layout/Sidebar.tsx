@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, ClipboardList, Share2, UserCircle } from "lucide-react";
@@ -7,7 +8,7 @@ import Logo from "./Logo";
 const MainSidebar = () => {
   const location = useLocation();
 
-  // Navigation items - removed Login/Register item
+  // Navigation items - updated Order Form path to /roster
   const navItems = [{
     label: "Dashboard",
     icon: LayoutDashboard,
@@ -15,7 +16,7 @@ const MainSidebar = () => {
   }, {
     label: "Order Form",
     icon: ClipboardList,
-    path: "/"
+    path: "/roster"
   }, {
     label: "Orders",
     icon: ClipboardList,
