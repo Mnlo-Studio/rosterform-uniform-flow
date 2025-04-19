@@ -61,6 +61,9 @@ const App = () => (
                 </ProtectedRoute>
               } />
 
+              {/* Make /dashboard route redirect to / */}
+              <Route path="/dashboard" element={<Navigate to="/" replace />} />
+
               <Route path="/order-form" element={
                 <ProtectedRoute>
                   <MainLayout>
