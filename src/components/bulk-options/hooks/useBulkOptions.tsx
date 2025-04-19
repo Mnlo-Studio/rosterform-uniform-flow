@@ -40,11 +40,11 @@ export const useBulkOptions = () => {
     try {
       // Apply quick add if selected
       if (quickAddCount && quickAddCount > 0) {
+        console.log(`Adding ${quickAddCount} players with product ID: ${selectedProductId}`);
         const newPlayers = addPlayersWithCount(quickAddCount, selectedProductId);
         
         if (newPlayers && newPlayers.length > 0) {
           messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
-          handleQuickAddSelection(0); // Reset after applying
           changesMade = true;
         }
       } 
@@ -98,7 +98,6 @@ export const useBulkOptions = () => {
     productInfo.products,
     applyBulkOptions,
     toast,
-    handleQuickAddSelection,
     bulkAssignProductToPlayers
   ]);
 

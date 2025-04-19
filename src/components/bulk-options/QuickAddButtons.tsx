@@ -28,7 +28,7 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
   // Format the display value for the select
   const getDisplayValue = () => {
     // Default to 1 if no selection or null
-    return (selectedCount || 1).toString();
+    return selectedCount ? selectedCount.toString() : "1";
   };
 
   return (
@@ -39,6 +39,7 @@ const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
       <Select 
         value={getDisplayValue()} 
         onValueChange={handleQuickAddChange}
+        defaultValue="1"
       >
         <SelectTrigger id="quickAddDropdown" className="w-full">
           <SelectValue>{getDisplayValue()} Player{getDisplayValue() !== '1' ? 's' : ''}</SelectValue>

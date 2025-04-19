@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useRoster } from '@/context/RosterContext';
 import { Player } from '@/types';
@@ -29,6 +30,10 @@ const RosterTable: React.FC = () => {
     updatePlayer(id, { [field]: value });
   };
 
+  const handleAddPlayers = (count: number) => {
+    addPlayers(count);
+  };
+
   // Calculate the additional columns
   const additionalColumnsCount = 
     (bulkOptions.showShortsSize ? 1 : 0) + 
@@ -36,11 +41,12 @@ const RosterTable: React.FC = () => {
     (bulkOptions.showInitials ? 1 : 0);
 
   // Calculate total columns (base columns + additional columns)
-  const baseColumnsCount = 4 + 
+  // Base depends on whether name and number are shown
+  const baseColumnsCount = 4 + // # (index), size, gender, product
     (bulkOptions.showName ? 1 : 0) +
     (bulkOptions.showNumber ? 1 : 0);
   
-  const totalColumns = baseColumnsCount + additionalColumnsCount + 1;
+  const totalColumns = baseColumnsCount + additionalColumnsCount + 1; // +1 for action column
 
   // Determine if we need to show warnings
   const showProductWarning = players.length > 0 && productInfo.products.length > 0 && !areAllPlayersAssignedProducts();

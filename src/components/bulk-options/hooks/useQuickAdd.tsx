@@ -4,7 +4,7 @@ import { useRoster } from '@/context/RosterContext';
 import { Player } from '@/types';
 
 export const useQuickAdd = () => {
-  const [quickAddCount, setQuickAddCount] = useState<number | null>(null);
+  const [quickAddCount, setQuickAddCount] = useState<number | null>(1); // Set default to 1
   const { addPlayers, bulkAssignProductToPlayers } = useRoster();
 
   const handleQuickAddSelection = (count: number) => {
