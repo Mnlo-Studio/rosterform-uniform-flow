@@ -7,7 +7,7 @@ import { useQuickAdd } from './useQuickAdd';
 import { useProductSelection } from './useProductSelection';
 
 export const useBulkOptions = () => {
-  const { bulkOptions, players, productInfo, applyBulkOptions } = useRoster();
+  const { bulkOptions, players, productInfo, applyBulkOptions, bulkAssignProductToPlayers } = useRoster();
   const { toast } = useToast();
   
   const {
@@ -98,7 +98,8 @@ export const useBulkOptions = () => {
     productInfo.products,
     applyBulkOptions,
     toast,
-    handleQuickAddSelection
+    handleQuickAddSelection,
+    bulkAssignProductToPlayers
   ]);
 
   return {
