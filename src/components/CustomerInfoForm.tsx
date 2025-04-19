@@ -20,9 +20,15 @@ const CustomerInfoForm: React.FC<CustomerInfoFormProps> = ({ isPublic = false })
   const user = auth?.user || null;
 
   useEffect(() => {
-    if (isPublic && formId && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
-      // For public forms, use the formId from the URL
-      updateCustomerInfo({ teamName: formId });
+    // Set an initial team name based on context
+    if (isPublic) {
+      if (formId && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
+        // For public forms with formId from the URL
+        updateCustomerInfo({ teamName: formId });
+      } else if (!customerInfo.teamName || customerInfo.teamName.trim() === '') {
+        // For standalone public form with no formId
+        updateCustomerInfo({ teamName: 'public-order-form' });
+      }
     } else if (user && (!customerInfo.teamName || customerInfo.teamName.trim() === '')) {
       // For authenticated users, use their userId
       const defaultTeamName = `roster-form-${user.id}`;

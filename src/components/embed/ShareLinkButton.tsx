@@ -11,8 +11,11 @@ interface ShareLinkButtonProps {
 const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
   const [copied, setCopied] = useState(false);
   
+  // Replace /order/ with /form for the public standalone form
+  const publicFormURL = shareURL.replace('/order/', '/form');
+  
   const copyShareLink = () => {
-    navigator.clipboard.writeText(shareURL);
+    navigator.clipboard.writeText(publicFormURL);
     setCopied(true);
     toast.success("Share link copied to clipboard!");
     
@@ -23,7 +26,7 @@ const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ shareURL }) => {
 
   const openShareLink = () => {
     // Open in a new tab
-    window.open(shareURL, '_blank', 'noopener,noreferrer');
+    window.open(publicFormURL, '_blank', 'noopener,noreferrer');
     toast.success("Opening public form in a new tab");
   };
 
