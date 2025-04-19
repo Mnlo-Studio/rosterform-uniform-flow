@@ -1,71 +1,71 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, ChevronDown } from 'lucide-react';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Plus } from 'lucide-react';
 
 interface QuickAddButtonsProps {
   onSelectQuickAdd: (count: number) => void;
   selectedCount: number | null;
 }
 
-const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({ onSelectQuickAdd, selectedCount }) => {
-  const quickAddOptions = [
-    { count: 1, label: '1' },
-    { count: 5, label: '5' },
-    { count: 10, label: '10' },
-    { count: 25, label: '25' }
-  ];
-  
-  // Set default selection to 1 player on component mount
-  useEffect(() => {
-    if (selectedCount === null) {
-      onSelectQuickAdd(1);
+const QuickAddButtons: React.FC<QuickAddButtonsProps> = ({
+  onSelectQuickAdd,
+  selectedCount
+}) => {
+  const handleQuickAddChange = (value: string) => {
+    console.log('Quick add selected:', value);
+    // Convert the string value to a number or null if empty/invalid
+    const numValue = value ? parseInt(value, 10) : null;
+    if (numValue !== null && !isNaN(numValue)) {
+      onSelectQuickAdd(numValue);
+    } else {
+      onSelectQuickAdd(0); // Use 0 to represent no selection
     }
-  }, []);
-  
-  // Default to 1 player if no count is selected
-  const selectedOption = quickAddOptions.find(opt => opt.count === (selectedCount || 1));
-  const selectedOptionLabel = `Add ${selectedOption?.label || '1'} Player${(selectedCount || 1) > 1 ? 's' : ''}`;
-  
-  const handleButtonClick = () => {
-    // When the button is clicked directly, add the currently selected count (or default to 1)
-    onSelectQuickAdd(selectedCount || 1);
   };
-  
+
   return (
     <div>
-      <p className="text-sm font-medium mb-2">Quick Add Players</p>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button 
-            variant="outline" 
-            className="border-neutral-200 w-full"
-            onClick={handleButtonClick}
-          >
-            <Plus className="h-3.5 w-3.5 mr-1" />
-            {selectedOptionLabel}
-            <ChevronDown className="h-3.5 w-3.5 ml-auto" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="bg-white">
-          {quickAddOptions.map(option => (
-            <DropdownMenuItem
-              key={option.count}
-              onClick={() => onSelectQuickAdd(option.count)}
-              className="cursor-pointer"
-            >
-              <Plus className="h-3.5 w-3.5 mr-1" />
-              Add {option.label} Player{option.count > 1 ? 's' : ''}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <label htmlFor="quickAddDropdown" className="text-sm font-medium mb-2 block">
+        Quick Add Players
+      </label>
+      <Select value={selectedCount?.toString() || ''} onValueChange={handleQuickAddChange}>
+        <SelectTrigger id="quickAddDropdown" className="w-full">
+          <SelectValue placeholder="Add 5 Players" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="1">
+            <div className="flex items-center">
+              <Plus className="mr-2 h-4 w-4" />
+              Add 1 Player
+            </div>
+          </SelectItem>
+          <SelectItem value="5">
+            <div className="flex items-center">
+              <Plus className="mr-2 h-4 w-4" />
+              Add 5 Players
+            </div>
+          </SelectItem>
+          <SelectItem value="10">
+            <div className="flex items-center">
+              <Plus className="mr-2 h-4 w-4" />
+              Add 10 Players
+            </div>
+          </SelectItem>
+          <SelectItem value="25">
+            <div className="flex items-center">
+              <Plus className="mr-2 h-4 w-4" />
+              Add 25 Players
+            </div>
+          </SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 };

@@ -95,6 +95,7 @@ export const useBulkOptions = () => {
   };
   
   const handleQuickAddSelection = (count: number) => {
+    console.log('Quick add selection:', count);
     setQuickAddCount(count);
   };
   
@@ -104,12 +105,43 @@ export const useBulkOptions = () => {
   };
   
   const handleApplyChanges = () => {
+    console.log('Apply changes clicked with quickAddCount:', quickAddCount);
     let changesMade = false;
     let messages = [];
-    let applyBulkOptionsToExisting = false;
     
-    // Check if there are any selections or actions to apply
-    if (!quickAddCount && !selectedProductId && players.length === 0) {
+    // Apply quick add if selected
+    if (quickAddCount && quickAddCount > 0) {
+      console.log(`Adding ${quickAddCount} players`);
+      const newPlayers = addPlayers(quickAddCount);
+      
+      // If there's a selected product, assign it to the newly added players
+      if (selectedProductId) {
+        console.log(`Assigning product ${selectedProductId} to new players`);
+        bulkAssignProductToPlayers(selectedProductId);
+      }
+      
+      messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
+      setQuickAddCount(null); // Reset after applying
+      changesMade = true;
+    } 
+    // Apply product assignment if selected and there are players
+    else if (selectedProductId && players.length > 0) {
+      console.log(`Assigning product ${selectedProductId} to all players`);
+      bulkAssignProductToPlayers(selectedProductId);
+      const productName = productInfo.products.find(p => p.id === selectedProductId)?.name || 'Selected product';
+      messages.push(`${productName} assigned to all players`);
+      changesMade = true;
+    }
+    // Apply bulk options to existing players if no new players are being added
+    else if (players.length > 0) {
+      console.log('Applying bulk options to existing players');
+      applyBulkOptions();
+      messages.push("Bulk options applied to all players");
+      changesMade = true;
+    }
+    // If no actions to apply, show an error message
+    else {
+      console.log('No actions to apply');
       toast({
         title: "No actions to apply",
         description: "Select quick add players, product assignment, or have existing players first.",
@@ -118,47 +150,9 @@ export const useBulkOptions = () => {
       return;
     }
     
-    // Check if the user wants to apply bulk options to existing players
-    if (players.length > 0 && !quickAddCount) {
-      applyBulkOptionsToExisting = true;
-    }
-    
-    // Apply quick add if selected (without modifying existing players)
-    if (quickAddCount) {
-      // Add players with the selected product ID
-      const newPlayers = addPlayers(quickAddCount);
-      
-      // If there's a selected product, assign it to the newly added players
-      if (selectedProductId) {
-        // We're using setTimeout to ensure the players are added first
-        setTimeout(() => {
-          bulkAssignProductToPlayers(selectedProductId);
-        }, 0);
-      }
-      
-      messages.push(`Added ${quickAddCount} player${quickAddCount > 1 ? 's' : ''}`);
-      setQuickAddCount(null); // Reset after applying
-      changesMade = true;
-    }
-    
-    // Apply bulk product assignment if selected and there are players
-    if (selectedProductId && players.length > 0) {
-      bulkAssignProductToPlayers(selectedProductId);
-      const productName = productInfo.products.find(p => p.id === selectedProductId)?.name || 'Selected product';
-      messages.push(`${productName} assigned to all players`);
-      changesMade = true;
-    }
-    
-    // Apply other bulk options to existing players ONLY if explicitly requested
-    // (no new players are being added)
-    if (applyBulkOptionsToExisting) {
-      applyBulkOptions();
-      messages.push("Bulk options applied to all players");
-      changesMade = true;
-    }
-    
     // Show toast notification
     if (changesMade) {
+      console.log('Changes made:', messages.join('. '));
       toast({
         title: "Changes applied",
         description: messages.join('. ')
