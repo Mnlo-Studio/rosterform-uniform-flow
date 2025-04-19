@@ -2,9 +2,9 @@
 export type Player = {
   id: string;
   name: string;
-  number: string;
-  size: string;
-  gender: string;
+  number: string | null;
+  size: string | null;
+  gender: string | null;
   shortsSize?: string;
   sockSize?: string;
   initials?: string;
@@ -12,22 +12,22 @@ export type Player = {
 };
 
 export type CustomerInfo = {
-  teamName: string;
+  id?: string;
   contactName: string;
   email: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
+  phone: string | null;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  zipCode: string | null;
 };
 
 export type Product = {
   id: string;
   name: string;
   pricePerItem: number;
-  notes: string;
-  images: string[];
+  notes: string | null;
+  images: string[] | null;
 };
 
 export type ProductInfo = {

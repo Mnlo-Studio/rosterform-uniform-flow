@@ -29,7 +29,12 @@ export const useOrders = () => {
       if (error) throw error;
       
       // Transform database data to frontend format
-      return data.map(order => mapDbOrderToOrder(order));
+      return data.map(order => mapDbOrderToOrder({
+        ...order,
+        customer_info: Array.isArray(order.customer_info) ? order.customer_info : null,
+        order_products: Array.isArray(order.order_products) ? order.order_products : [],
+        order_players: Array.isArray(order.order_players) ? order.order_players : []
+      }));
     },
   });
 
@@ -51,8 +56,8 @@ export const useOrders = () => {
       return mapDbOrderToOrder({
         ...data,
         customer_info: null,
-        order_products: null,
-        order_players: null
+        order_products: [],
+        order_players: []
       });
     },
     onSuccess: () => {
@@ -90,8 +95,8 @@ export const useOrders = () => {
       return mapDbOrderToOrder({
         ...data,
         customer_info: null,
-        order_products: null,
-        order_players: null
+        order_products: [],
+        order_players: []
       });
     },
     onSuccess: () => {

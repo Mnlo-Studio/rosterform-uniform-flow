@@ -27,7 +27,13 @@ export const useOrder = (orderId: string) => {
 
       if (error) throw error;
       
-      return mapDbOrderToOrder(data);
+      // Handle the case where relations might not be properly set up yet
+      return mapDbOrderToOrder({
+        ...data,
+        customer_info: Array.isArray(data.customer_info) ? data.customer_info : null,
+        order_products: Array.isArray(data.order_products) ? data.order_products : [],
+        order_players: Array.isArray(data.order_players) ? data.order_players : []
+      });
     },
     enabled: !!orderId,
   });

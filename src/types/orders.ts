@@ -53,6 +53,9 @@ export interface Order {
   customerInfo: CustomerInfo | null;
   products: ProductInfo[];
   players: Player[];
+  productInfo: {
+    products: ProductInfo[];
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -92,6 +95,14 @@ export const mapDbOrderToOrder = (
     order_players: DbOrderPlayer[] | null;
   }
 ): Order => {
+  const products = (dbOrder.order_products || []).map(product => ({
+    id: product.id,
+    name: product.name,
+    pricePerItem: product.price_per_item,
+    notes: product.notes,
+    images: product.images,
+  }));
+
   return {
     id: dbOrder.id,
     orderId: dbOrder.order_id,
@@ -115,13 +126,8 @@ export const mapDbOrderToOrder = (
           zipCode: dbOrder.customer_info[0].zip_code,
         }
       : null,
-    products: (dbOrder.order_products || []).map(product => ({
-      id: product.id,
-      name: product.name,
-      pricePerItem: product.price_per_item,
-      notes: product.notes,
-      images: product.images,
-    })),
+    products: products,
+    productInfo: { products: products },
     players: (dbOrder.order_players || []).map(player => ({
       id: player.id,
       name: player.name,
