@@ -5,6 +5,7 @@ export interface RosterContextType {
   players: Player[];
   customerInfo: CustomerInfo;
   productInfo: ProductInfo;
+  products: Product[]; // Add this property
   bulkOptions: BulkOptions;
   addPlayers: (count: number) => Player[];
   removePlayer: (id: string) => void;
@@ -24,5 +25,7 @@ export interface RosterContextType {
   resetRoster: () => void;
   resetCustomerInfo: () => void;
   resetProductInfo: () => void;
+  resetRosterState: () => void; // Add this function
+  calculateTotalPrice: () => number; // Add this function
   areAllPlayersAssignedProducts: () => boolean;
 }

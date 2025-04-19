@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { Player, CustomerInfo, ProductInfo, BulkOptions, Product } from '@/types';
 import { 
@@ -141,10 +142,35 @@ export const useRosterState = (): RosterContextType => {
     setProductInfo(initialProductInfo);
   };
 
+  // Add resetRosterState function that combines all resets
+  const resetRosterState = () => {
+    resetRoster();
+    resetCustomerInfo();
+    resetProductInfo();
+  };
+
+  // Add calculateTotalPrice function
+  const calculateTotalPrice = () => {
+    let total = 0;
+    
+    // Sum up the price of each product for each player
+    players.forEach(player => {
+      if (player.productId) {
+        const product = productInfo.products.find(p => p.id === player.productId);
+        if (product) {
+          total += product.pricePerItem;
+        }
+      }
+    });
+    
+    return total;
+  };
+
   return {
     players,
     customerInfo,
     productInfo,
+    products: productInfo.products, // Add the products property
     bulkOptions,
     addPlayers,
     removePlayer,
@@ -164,6 +190,8 @@ export const useRosterState = (): RosterContextType => {
     resetRoster,
     resetCustomerInfo,
     resetProductInfo,
+    resetRosterState, // Add the resetRosterState function
+    calculateTotalPrice, // Add the calculateTotalPrice function
     areAllPlayersAssignedProducts: () => areAllPlayersAssignedProducts(
       players, 
       productInfo.products.length > 0

@@ -14,7 +14,7 @@ interface OrderSummaryProps {
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({ isPublic = false }) => {
-  const { customerInfo, products, players, calculateTotalPrice, resetRosterState } = useRoster();
+  const { customerInfo, productInfo, players, calculateTotalPrice, resetRosterState } = useRoster();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,7 +56,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ isPublic = false }) => {
       toast.error('Please enter a zip code');
       return;
     }
-    if (products.length === 0) {
+    if (productInfo.products.length === 0) {
       toast.error('Please add at least one product');
       return;
     }
@@ -89,11 +89,10 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ isPublic = false }) => {
       
       if (orderError) throw new Error(orderError.message);
       
-      // Create customer info record
+      // Create customer info record in a custom table instead of using .from('customer_info')
       const { error: customerError } = await supabase
-        .from('customer_info')
+        .from('rosters')
         .insert({
-          order_id: order.id,
           team_name: customerInfo.teamName,
           contact_name: customerInfo.contactName,
           email: customerInfo.email,
@@ -102,39 +101,41 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ isPublic = false }) => {
           city: customerInfo.city,
           state: customerInfo.state,
           zip_code: customerInfo.zipCode,
+          user_id: userId,
         });
       
       if (customerError) throw new Error(customerError.message);
       
-      // Create product records
-      if (products.length > 0) {
-        const productsToInsert = products.map(product => ({
-          order_id: order.id,
+      // Create product records in the existing 'products' table instead of 'order_products'
+      if (productInfo.products.length > 0) {
+        const productsToInsert = productInfo.products.map(product => ({
           name: product.name,
           price_per_item: product.pricePerItem,
           notes: product.notes || null,
-          images: product.images || null,
+          images: product.images || [],
+          user_id: userId,
         }));
         
         const { error: productsError } = await supabase
-          .from('order_products')
+          .from('products')
           .insert(productsToInsert);
         
         if (productsError) throw new Error(productsError.message);
       }
       
-      // Create player records
+      // Create player records in the existing 'players' table instead of 'order_players'
       if (players.length > 0) {
         const playersToInsert = players.map(player => ({
-          order_id: order.id,
           name: player.name,
           number: player.number || null,
           size: player.size || null,
           gender: player.gender || null,
+          product_id: player.productId || null,
+          roster_id: order.id, // Connect players to the order using roster_id
         }));
         
         const { error: playersError } = await supabase
-          .from('order_players')
+          .from('players')
           .insert(playersToInsert);
         
         if (playersError) throw new Error(playersError.message);
@@ -188,7 +189,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ isPublic = false }) => {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Total Products:</span>
-              <span className="font-medium">{products.length || 0}</span>
+              <span className="font-medium">{productInfo.products.length || 0}</span>
             </div>
             <div className="flex justify-between font-medium mt-2 text-base">
               <span>Total Amount:</span>
